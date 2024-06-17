@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native'
 
-export default function TabTwoScreen() {
+export default function Profile() {
   return (
     <View>
-      <Text>Favoritos</Text>
+      <Text>Perfil</Text>
     </View>
   )
 }

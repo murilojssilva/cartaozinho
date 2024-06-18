@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -18,13 +17,54 @@ export default function HomeScreen() {
             <Ionicons name='chevron-down' />
           </TouchableOpacity>
         </View>
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
-        <CardItem name='Murilo Silva' office='Desenvolvedor' />
+        <CardItem
+          name='Joana Silva'
+          office='Cabeleireira'
+          officeType='Prestador de serviço'
+          category={['Beleza', 'Saúde', 'Bem-estar', 'Cabelo', 'Unha']}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={[
+            'Informática',
+            'Desenvolvimento',
+            'Website',
+            'Aplicativos',
+            'Mobile',
+          ]}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={['Informática']}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={['Informática']}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={['Informática']}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={['Informática']}
+        />
+        <CardItem
+          name='Murilo Silva'
+          office='Desenvolvedor'
+          officeType='Prestador de serviço'
+          category={['Informática']}
+        />
       </ScrollView>
     </View>
   )

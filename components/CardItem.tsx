@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native'
 import { useNavigation } from 'expo-router'
+import { SocialButton } from './SocialButton'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -61,28 +62,26 @@ export function CardItem({
         ))}
       </ScrollView>
       <View className='flex-1 justify-center flex-row gap-2'>
-        <TouchableOpacity
+        <SocialButton
+          text='Telefone'
+          color='gray-300'
+          icon='phone'
           onPress={() => navigation.navigate('details')}
-          className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'
-        >
-          <Ionicons name='call' size={14} color='gray-300' />
-          <Text className='font-bold text-sm'> Telefone</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('details')}
-          className='flex-1 flex-row items-center justify-center rounded-xl bg-green-300 p-2'
-        >
-          <FontAwesome name='whatsapp' size={14} color='gray-300' />
-          <Text className='font-bold text-sm'> WhatsApp</Text>
-        </TouchableOpacity>
+        />
 
-        <TouchableOpacity
+        <SocialButton
+          text='WhatsApp'
+          color='green-300'
+          icon='whatsapp'
           onPress={() => navigation.navigate('details')}
-          className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'
-        >
-          <FontAwesome name='envelope' size={14} color='gray-300' />
-          <Text className='font-bold text-sm'> E-mail</Text>
-        </TouchableOpacity>
+        />
+
+        <SocialButton
+          text='E-mail'
+          color='gray-300'
+          icon='envelope'
+          onPress={() => navigation.navigate('details')}
+        />
       </View>
     </TouchableOpacity>
   )

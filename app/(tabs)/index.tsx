@@ -22,7 +22,7 @@ export default function HomeScreen() {
         <View className='flex-2 flex-row justify-around'>
           <TouchableOpacity
             onPress={() => navigation.navigate('new')}
-            className='flex-2 flex-col items-center justify-center bg-gray-200 p-6 rounded-xl'
+            className='flex-2 flex-col items-center justify-center w-36 bg-gray-200 p-6 rounded-xl'
           >
             <FontAwesome5 name='plus' size={32} />
             <Text className='text-lg font-bold text-center'>
@@ -31,7 +31,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('profile')}
-            className='flex-2 flex-col items-center justify-center bg-gray-200 p-6 rounded-xl'
+            className='flex-2 flex-col items-center justify-center w-36 bg-gray-200 p-6 rounded-xl'
           >
             <FontAwesome5 name='user' size={32} />
             <Text className='text-lg font-bold text-center'>

@@ -4,6 +4,7 @@ import { Topic } from '@/components/Topic'
 import { Ionicons } from '@expo/vector-icons'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
+import { SocialButton } from '@/components/SocialButton'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -79,19 +80,26 @@ export default function TabTwoScreen() {
           <Text className='font-bold text-xl mb-4'>Contato</Text>
 
           <View className='flex-1 justify-center flex-row gap-2'>
-            <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'>
-              <Ionicons name='call' size={14} color='gray-300' />
-              <Text className='font-bold text-sm'>Telefone</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-green-300 p-2'>
-              <FontAwesome name='whatsapp' size={14} color='gray-300' />
-              <Text className='font-bold text-sm'> WhatsApp</Text>
-            </TouchableOpacity>
+            <SocialButton
+              text='Telefone'
+              color='gray-300'
+              icon='phone'
+              onPress={() => navigation.navigate('details')}
+            />
 
-            <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'>
-              <FontAwesome name='envelope' size={14} color='gray-300' />
-              <Text className='font-bold text-sm'> E-mail</Text>
-            </TouchableOpacity>
+            <SocialButton
+              text='WhatsApp'
+              color='green-300'
+              icon='whatsapp'
+              onPress={() => navigation.navigate('details')}
+            />
+
+            <SocialButton
+              text='E-mail'
+              color='gray-300'
+              icon='envelope'
+              onPress={() => navigation.navigate('details')}
+            />
           </View>
         </View>
 

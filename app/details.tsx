@@ -3,6 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Topic } from '@/components/Topic'
 import { Ionicons } from '@expo/vector-icons'
 import mapa from '@/assets/images/mapa.jpg'
+import { useNavigation } from 'expo-router'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -22,20 +23,21 @@ export default function TabTwoScreen() {
     'Presencial',
     'Remoto',
   ]
+
+  const navigation = useNavigation()
   return (
     <ScrollView className='flex-1 flex-col bg-white'>
       <View className='flex-2 flex-row justify-between items-center bg-gray-100 p-8 rounded-xl'>
-        <FontAwesome name='chevron-left' size={14} color='gray-300' />
-
-        <Text className='text-xl text-gray-700 font-semibold'>
-          Mais informações
-        </Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <FontAwesome name='chevron-left' size={14} color='gray-300' />
+        </TouchableOpacity>
+        <Text className='text-xl text-gray-700 font-semibold'>Detalhes</Text>
       </View>
       <View className='flex-1 p-4'>
-        <Text className='font-bold text-xl mb-4'>Mais informações</Text>
+        <Text className='font-bold text-xl mb-4'>Detalhes</Text>
 
-        <View className='flex-2 bg-gray-200 p-4 items-center rounded-xl mb-4'>
-          <FontAwesome name='user' size={60} color='gray-300' />
+        <View className='flex-2 justify-center bg-gray-200 p-4 items-center rounded-xl mb-4'>
+          <FontAwesome name='user' size={120} color='gray-300' />
         </View>
         <View className='bg-gray-200 p-4 rounded-xl mb-4'>
           <Text className='font-bold text-xl mb-4'>Perfil</Text>
@@ -85,9 +87,10 @@ export default function TabTwoScreen() {
               <FontAwesome name='whatsapp' size={14} color='gray-300' />
               <Text className='font-bold text-sm'> WhatsApp</Text>
             </TouchableOpacity>
-            <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-blue-300 p-2'>
-              <FontAwesome name='telegram' size={14} color='gray-300' />
-              <Text className='font-bold text-sm'> Telegram</Text>
+
+            <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'>
+              <FontAwesome name='envelope' size={14} color='gray-300' />
+              <Text className='font-bold text-sm'> E-mail</Text>
             </TouchableOpacity>
           </View>
         </View>

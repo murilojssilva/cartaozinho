@@ -1,9 +1,16 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from 'react-native'
+import { useNavigation } from 'expo-router'
 
-interface ICardItemProps {
+interface ICardItemProps extends TouchableOpacityProps {
   name: string
   office: string
   officeType: string
@@ -16,13 +23,18 @@ export function CardItem({
   office,
   officeType,
   category,
+  ...props
 }: ICardItemProps) {
+  const navigation = useNavigation()
   return (
-    <View className='flex-1 flex-col gap-0 bg-gray-200 p-4 mb-4 w-full'>
+    <TouchableOpacity
+      {...props}
+      className='flex-2 flex-col gap-0 bg-gray-200 p-4 mb-4 w-full'
+    >
       <View className='flex-1 flex-row'>
-        <View className='flex-1 flex-row justify-between items-center'>
+        <View className='flex-1 flex-row justify-between items-start'>
           <View className='flex-1 flex-row gap-2'>
-            <View className='flex-2 items-center justify-center bg-gray-300 p-2 rounded-xl'>
+            <View className='flex-2 items-center justify-center bg-gray-300 p-4 rounded-xl'>
               <Ionicons name='person' size={32} color='gray-300' />
             </View>
             <View className='flex-1 flex-col'>
@@ -49,19 +61,29 @@ export function CardItem({
         ))}
       </ScrollView>
       <View className='flex-1 justify-center flex-row gap-2'>
-        <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('details')}
+          className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'
+        >
           <Ionicons name='call' size={14} color='gray-300' />
-          <Text className='font-bold text-sm'>Telefone</Text>
+          <Text className='font-bold text-sm'> Telefone</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-green-300 p-2'>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('details')}
+          className='flex-1 flex-row items-center justify-center rounded-xl bg-green-300 p-2'
+        >
           <FontAwesome name='whatsapp' size={14} color='gray-300' />
           <Text className='font-bold text-sm'> WhatsApp</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='flex-1 flex-row items-center justify-center rounded-xl bg-blue-300 p-2'>
-          <FontAwesome name='telegram' size={14} color='gray-300' />
-          <Text className='font-bold text-sm'> Telegram</Text>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('details')}
+          className='flex-1 flex-row items-center justify-center rounded-xl bg-gray-300 p-2'
+        >
+          <FontAwesome name='envelope' size={14} color='gray-300' />
+          <Text className='font-bold text-sm'> E-mail</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }

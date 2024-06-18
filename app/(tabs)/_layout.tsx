@@ -28,12 +28,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='explore'
+        name='favorites'
         options={{
-          title: 'Explore',
+          title: 'Favoritos',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
+              name={focused ? 'bookmark' : 'bookmark-outline'}
               color={color}
             />
           ),
@@ -46,18 +46,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'person' : 'person-outline'}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='favorites'
-        options={{
-          title: 'Favoritos',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'bookmark' : 'bookmark-outline'}
               color={color}
             />
           ),

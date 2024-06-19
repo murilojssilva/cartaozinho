@@ -21,7 +21,7 @@ export default function TabTwoScreen() {
   ]
   const service: IMoreInformationsProps = [
     'À domicílio',
-    'Presencial',
+    'No estabelecimento',
     'Remoto',
   ]
 
@@ -30,7 +30,7 @@ export default function TabTwoScreen() {
     <ScrollView className='flex-1 flex-col bg-white'>
       <View className='flex-2 flex-row justify-between items-center bg-gray-100 p-8 rounded-xl'>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome name='chevron-left' size={14} color='gray-300' />
+          <FontAwesome name='chevron-left' size={24} color='gray-300' />
         </TouchableOpacity>
         <Text className='text-xl text-gray-700 font-semibold'>Detalhes</Text>
       </View>

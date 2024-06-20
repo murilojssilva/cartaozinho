@@ -22,13 +22,22 @@ export default function Profile() {
             <Topic icon='phone' name='Telefone' content='(21) 99999-9999' />
             <Topic icon='envelope' name='E-mail' content='email@email.com' />
           </View>
-          <ActionButton
-            text='Editar perfil'
-            icon='pen'
-            backgroundColor='cyan-700'
-            textColor='gray-100'
-            onPress={() => navigation.navigate('editProfile')}
-          />
+          <View className='flex-2 flex-row justify-around'>
+            <ActionButton
+              text='Editar perfil'
+              icon='pen'
+              backgroundColor='cyan-800'
+              textColor='gray-100'
+              onPress={() => navigation.navigate('editProfile')}
+            />
+            <ActionButton
+              backgroundColor='cyan-800'
+              textColor='gray-100'
+              text='Alterar senha'
+              icon='lock'
+              onPress={() => navigation.navigate('editPassword')}
+            />
+          </View>
 
           <View className='flex-2 flex-col'>
             <Title text='Geral' />
@@ -49,22 +58,49 @@ export default function Profile() {
               showsHorizontalScrollIndicator={false}
               className='flex-2 p-2 gap-2'
             >
-              <MyItemCard name='Murilo' office='Teste' officeType='Teste' />
-              <MyItemCard name='Murilo' office='Teste' officeType='Teste' />
-              <MyItemCard name='Murilo' office='Teste' officeType='Teste' />
-              <MyItemCard name='Murilo' office='Teste' officeType='Teste' />
-              <MyItemCard name='Murilo' office='Teste' officeType='Teste' />
+              <MyItemCard
+                name='Murilo'
+                office='Teste'
+                officeType='Teste'
+                onPress={() => navigation.navigate('details')}
+              />
+              <MyItemCard
+                name='Murilo'
+                office='Teste'
+                officeType='Teste'
+                onPress={() => navigation.navigate('details')}
+              />
+              <MyItemCard
+                name='Murilo'
+                office='Teste'
+                officeType='Teste'
+                onPress={() => navigation.navigate('details')}
+              />
+              <MyItemCard
+                name='Murilo'
+                office='Teste'
+                officeType='Teste'
+                onPress={() => navigation.navigate('details')}
+              />
+              <MyItemCard
+                name='Murilo'
+                office='Teste'
+                officeType='Teste'
+                onPress={() => navigation.navigate('details')}
+              />
             </ScrollView>
           </View>
-
-          <ActionButton
-            text='Sair da conta'
-            icon='sign-out-alt'
-            backgroundColor='red-500'
-            textColor='gray-100'
-          />
         </View>
       </ScrollView>
+      <View className='p-4'>
+        <ActionButton
+          text='Sair da conta'
+          icon='sign-out-alt'
+          backgroundColor='red-500'
+          textColor='gray-100'
+          onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
+        />
+      </View>
     </View>
   )
 }

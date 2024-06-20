@@ -37,6 +37,7 @@ export default function RootLayout() {
         <Stack.Screen name='new' options={{ headerShown: false }} />
         <Stack.Screen name='details' options={{ headerShown: false }} />
         <Stack.Screen name='editProfile' options={{ headerShown: false }} />
+        <Stack.Screen name='editPassword' options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   )

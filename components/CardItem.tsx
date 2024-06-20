@@ -61,7 +61,7 @@ export function CardItem({
           </View>
         ))}
       </ScrollView>
-      <View className='flex-1 justify-center flex-row gap-2'>
+      <View className='flex-1 flex-row'>
         <SocialButton
           text='Telefone'
           color='gray-300'

@@ -20,7 +20,7 @@ export function ActionButton({
       {...props}
       className={`flex-2 flex-row justify-center items-center bg-${backgroundColor} p-4 rounded-xl`}
     >
-      <FontAwesome5 size={20} color='white' name={icon} />
+      <FontAwesome5 size={20} color={textColor} name={icon} />
       <Text
         className={`font-bold text-xl text-${textColor}`}
       >{` ${text}`}</Text>

@@ -1,8 +1,7 @@
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
 
 import { useNavigation } from 'expo-router'
-import { FontAwesome5 } from '@expo/vector-icons'
 import { FilterButton } from '@/components/FilterButton'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import { FilterMenu } from '@/components/FilterMenu'
@@ -12,11 +11,14 @@ import useOrderMenu from '@/hooks/useOrderMenu'
 import { Title } from '@/components/Title'
 import { CardAd } from '@/components/CardAd'
 import { TabHeader } from '@/components/TabHeader'
+import BottomSheet from '@/components/BottomSheet'
+import { useState } from 'react'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
   const { filterMenu, setFilterMenu } = useFilterMenu()
   const { setOrderMenu, orderMenu } = useOrderMenu()
+  const [visible, setVisible] = useState(false)
 
   return (
     <View className='flex-1 bg-white'>
@@ -47,7 +49,7 @@ export default function HomeScreen() {
 
         <View className='flex-2 flex-row justify-between'>
           <FilterButton onPress={() => setFilterMenu(false)} />
-          <OrderButton />
+          <OrderButton onPress={() => setVisible(true)} />
         </View>
 
         <CardItem
@@ -109,6 +111,8 @@ export default function HomeScreen() {
 
       <FilterMenu filterMenu={filterMenu} setFilterMenu={setFilterMenu} />
       <OrderMenu orderMenu={orderMenu} setOrderMenu={setOrderMenu} />
+
+      <BottomSheet visible={visible} onClose={() => setVisible(false)} />
     </View>
   )
 }

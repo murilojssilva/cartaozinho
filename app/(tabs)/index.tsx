@@ -1,54 +1,55 @@
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
-import clsx from 'clsx'
 
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from 'expo-router'
-import { useState } from 'react'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { FilterButton } from '@/components/FilterButton'
+import useFilterMenu from '@/hooks/useFilterMenu'
+import { FilterMenu } from '@/components/FilterMenu'
+import { OrderButton } from '@/components/OrderButton'
+import { OrderMenu } from '@/components/OrderMenu'
+import useOrderMenu from '@/hooks/useOrderMenu'
+import { Title } from '@/components/Title'
+import { CardAd } from '@/components/CardAd'
+import { TabHeader } from '@/components/TabHeader'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
-  const [filterMenu, setFilterMenu] = useState(true)
+  const { filterMenu, setFilterMenu } = useFilterMenu()
+  const { setOrderMenu, orderMenu } = useOrderMenu()
+
   return (
     <View className='flex-1 bg-white'>
-      <View className='flex-2 flex-row gap-2 items-center bg-gray-100 p-8 rounded-xl'>
-        <Text className='text-xl text-gray-900 font-bold'>Olá,</Text>
-        <Text className='text-xl text-gray-700 font-semibold'>Murilo</Text>
-      </View>
+      <TabHeader text='Cartãozinho' icon='home' />
 
       <ScrollView className='flex-2 mb-2 p-4'>
-        <Text className='font-bold text-xl mb-4'>Anúncios</Text>
+        <Title text='Anúncios' />
         <View className='flex-2 flex-row justify-around'>
-          <TouchableOpacity
+          <CardAd
             onPress={() => navigation.navigate('new')}
-            className='flex-2 flex-col items-center justify-center w-36 bg-gray-200 p-6 rounded-xl'
-          >
-            <FontAwesome5 name='plus' size={32} />
-            <Text className='text-lg font-bold text-center'>
-              Novo{'\n'}anúncio
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+            text={`Novo\nanúncio`}
+            icon='plus'
+          />
+
+          <CardAd
+            onPress={() => navigation.navigate('favorites')}
+            text={`Meus\nfavoritos`}
+            icon='bookmark'
+          />
+
+          <CardAd
             onPress={() => navigation.navigate('profile')}
-            className='flex-2 flex-col items-center justify-center w-36 bg-gray-200 p-6 rounded-xl'
-          >
-            <FontAwesome5 name='user' size={32} />
-            <Text className='text-lg font-bold text-center'>
-              Meus{'\n'}anúncios
-            </Text>
-          </TouchableOpacity>
+            text={`Meus\nanúncios`}
+            icon='user'
+          />
         </View>
-        <Text className='font-bold text-xl mb-4'>Outros anúncios</Text>
-        <View className='flex-1 flex-row mb-4'>
-          <TouchableOpacity
-            onPress={() => setFilterMenu(false)}
-            className='flex-2 flex-row justify-center items-center bg-gray-200 p-2 rounded-full '
-          >
-            <Text>Filtros </Text>
-            <Ionicons name='chevron-down' />
-          </TouchableOpacity>
+        <Title text='Outros anúncios' />
+
+        <View className='flex-2 flex-row justify-between'>
+          <FilterButton onPress={() => setFilterMenu(false)} />
+          <OrderButton />
         </View>
+
         <CardItem
           name='Joana Silva'
           office='Cabeleireira'
@@ -105,53 +106,9 @@ export default function HomeScreen() {
           onPress={() => navigation.navigate('details')}
         />
       </ScrollView>
-      <View
-        className={`${clsx(
-          filterMenu ? 'hidden' : 'flex-2'
-        )} p-6 bg-gray-300 rounded-t-xl gap-2`}
-      >
-        <View className='flex-2 flex-row justify-between'>
-          <View className='flex-2 flex-row gap-2 items-center'>
-            <Ionicons name='filter' size={32} />
-            <Text className='font-bold text-xl'>Filtros</Text>
-          </View>
-          <TouchableOpacity onPress={() => setFilterMenu(true)}>
-            <Ionicons name='close' size={32} />
-          </TouchableOpacity>
-        </View>
-        <Text className='font-bold text-xl'>Tipo</Text>
-        <View className='flex-2 flex-row w-full gap-2'>
-          <View className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'>
-            <Text className='text-gray-100 text-xs'>Prestador de serviço</Text>
-          </View>
-          <View className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'>
-            <Text className='text-gray-100 text-xs'>Estabelecimento</Text>
-          </View>
-        </View>
-        <Text className='font-bold text-xl'>Atendimento</Text>
-        <View className='flex-2 flex-row w-full gap-2'>
-          <View className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'>
-            <Text className='text-gray-100 text-xs'>À domicílio</Text>
-          </View>
-          <View className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'>
-            <Text className='text-gray-100 text-xs'>No estabelecimento</Text>
-          </View>
-          <View className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'>
-            <Text className='text-gray-100 text-xs'>Remoto</Text>
-          </View>
-        </View>
-        <View className='flex-2 flex-row items-center justify-between'>
-          <TouchableOpacity className='flex-2 flex-row py-2 px-4 rounded-xl bg-red-500'>
-            <Text className='font-bold text-white'>Limpar filtros </Text>
-            <FontAwesome5 name='eraser' size={20} color='white' />
-          </TouchableOpacity>
 
-          <TouchableOpacity className='flex-2 flex-row py-2 px-4 rounded-xl bg-blue-500'>
-            <Text className='font-bold text-white'>Filtrar </Text>
-            <Ionicons name='filter' size={20} color='white' />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <FilterMenu filterMenu={filterMenu} setFilterMenu={setFilterMenu} />
+      <OrderMenu orderMenu={orderMenu} setOrderMenu={setOrderMenu} />
     </View>
   )
 }

@@ -6,7 +6,7 @@ interface ITagProps {
 
 export function Tag({ text }: ITagProps) {
   return (
-    <View className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'>
+    <View className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full mx-1'>
       <Text className='text-gray-100 text-xs'>{text}</Text>
     </View>
   )

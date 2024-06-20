@@ -10,7 +10,7 @@ export function InputText({ text, ...props }: IInputTextProps) {
       {...props}
       placeholder={text}
       textBreakStrategy='highQuality'
-      className='bg-gray-200 p-4 rounded-xl flex-1 font-bold'
+      className='bg-gray-200 p-4 rounded-xl flex-1 font-bold text-gray-900'
     />
   )
 }

@@ -1,10 +1,11 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Topic } from '@/components/Topic'
-import { Ionicons } from '@expo/vector-icons'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
+import { Header } from '@/components/Header'
+import { Title } from '@/components/Title'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -28,14 +29,9 @@ export default function TabTwoScreen() {
   const navigation = useNavigation()
   return (
     <ScrollView className='flex-1 flex-col bg-white'>
-      <View className='flex-2 flex-row justify-between items-center bg-gray-100 p-8 rounded-xl'>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome name='chevron-left' size={24} color='gray-300' />
-        </TouchableOpacity>
-        <Text className='text-xl text-gray-700 font-semibold'>Detalhes</Text>
-      </View>
+      <Header icon='list' title='Detalhes' />
       <View className='flex-1 p-4'>
-        <Text className='font-bold text-xl mb-4'>Detalhes</Text>
+        <Title text='Detalhes' />
 
         <View className='flex-2 justify-center bg-gray-200 p-4 items-center rounded-xl mb-4'>
           <FontAwesome name='user' size={120} color='gray-300' />
@@ -136,7 +132,7 @@ export default function TabTwoScreen() {
           />
 
           <View className='flex-2 p-4'>
-            <Image source={mapa} className='flex-1  w-full h-64' />
+            <Image source={mapa} className='flex-1 w-full h-64' />
           </View>
         </View>
       </View>

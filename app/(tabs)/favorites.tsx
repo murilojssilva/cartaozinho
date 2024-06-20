@@ -1,21 +1,26 @@
 import { CardItem } from '@/components/CardItem'
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { FilterButton } from '@/components/FilterButton'
+import { FilterMenu } from '@/components/FilterMenu'
+import { OrderButton } from '@/components/OrderButton'
+import { OrderMenu } from '@/components/OrderMenu'
+import { TabHeader } from '@/components/TabHeader'
+import useFilterMenu from '@/hooks/useFilterMenu'
+import useOrderMenu from '@/hooks/useOrderMenu'
+import { Ionicons } from '@expo/vector-icons'
+import { ScrollView, Text, View } from 'react-native'
 
 export default function Favorites() {
+  const { setFilterMenu, filterMenu } = useFilterMenu()
+  const { setOrderMenu, orderMenu } = useOrderMenu()
+
   return (
     <View className='flex-1 bg-white'>
-      <View className='flex-2 flex-row justify-center gap-2 items-center bg-gray-100 p-8 rounded-xl'>
-        <Ionicons name='bookmark-outline' size={22} />
-        <Text className='text-xl text-gray-700 font-semibold'>Favoritos</Text>
-      </View>
+      <TabHeader text='Favoritos' icon='bookmark' />
 
-      <ScrollView className='flex-2 mb-2 p-4 '>
-        <View className='flex-1 flex-row mb-4'>
-          <TouchableOpacity className='flex-2 flex-row justify-center items-center bg-gray-200 p-2 rounded-full '>
-            <Text>Filtros </Text>
-            <Ionicons name='chevron-down' />
-          </TouchableOpacity>
+      <ScrollView className='flex-2 mb-2 p-4'>
+        <View className='flex-2 flex-row justify-between'>
+          <FilterButton onPress={() => setFilterMenu(false)} />
+          <OrderButton />
         </View>
         <CardItem
           name='Joana Silva'
@@ -66,6 +71,8 @@ export default function Favorites() {
           category={['Informática']}
         />
       </ScrollView>
+      <FilterMenu filterMenu={filterMenu} setFilterMenu={setFilterMenu} />
+      <OrderMenu orderMenu={orderMenu} setOrderMenu={setOrderMenu} />
     </View>
   )
 }

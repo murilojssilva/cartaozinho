@@ -1,11 +1,12 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
 import { Header } from '@/components/Header'
 import { Title } from '@/components/Title'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { ProfileCard } from '@/components/ProfileCard'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -33,14 +34,23 @@ export default function TabTwoScreen() {
       <View className='flex-1 p-4'>
         <Title text='Detalhes' />
 
-        <View className='flex-2 justify-center bg-gray-200 p-4 items-center rounded-xl mb-4'>
-          <FontAwesome name='user' size={120} color='gray-300' />
+        <View className='justify-center bg-gray-200 p-4 self-center items-center mb-4 w-40 h-40 rounded-full border-4 border-gray-300'>
+          <FontAwesome5 name='user' size={50} color='#D1D5DB' />
         </View>
-        <View className='bg-gray-200 p-4 rounded-xl mb-4'>
-          <Text className='font-bold text-xl mb-4'>Perfil</Text>
-          <Topic icon='user' name='Nome' content='Murilo' />
-          <Topic icon='suitcase' name='Cargo' content='Desenvolvedor' />
-          <Topic icon='id-card' name='Tipo' content='Prestador de serviço' />
+
+        <View className='flex-2 flex-row justify-between items-center mb-4'>
+          <ProfileCard icon='user' title='Nome' text={`Murilo\nSilva`} />
+          <ProfileCard
+            icon='suitcase'
+            title='Cargo'
+            text={`Desenvolvedor\nFront-end`}
+          />
+
+          <ProfileCard
+            icon='id-card'
+            title='Tipo'
+            text={`Prestador\nde serviço`}
+          />
         </View>
 
         <View className='bg-gray-200 p-4 rounded-xl mb-4'>

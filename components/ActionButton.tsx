@@ -18,7 +18,7 @@ export function ActionButton({
   return (
     <TouchableOpacity
       {...props}
-      className={`flex-2 flex-row justify-center items-center bg-${backgroundColor} p-4 rounded-xl`}
+      className={`flex-2 flex-row justify-center items-center p-4 rounded-xl bg-${backgroundColor}`}
     >
       <FontAwesome5 size={20} color={textColor} name={icon} />
       <Text

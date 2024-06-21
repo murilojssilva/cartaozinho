@@ -1,5 +1,4 @@
 import { ActionButton } from '@/components/ActionButton'
-import { CardItem } from '@/components/CardItem'
 import { MyItemCard } from '@/components/MyItemCard'
 import { TabHeader } from '@/components/TabHeader'
 import { Title } from '@/components/Title'
@@ -26,13 +25,13 @@ export default function Profile() {
             <ActionButton
               text='Editar perfil'
               icon='pen'
-              backgroundColor='cyan-800'
-              textColor='gray-100'
+              backgroundColor='cyan-700'
+              textColor='white'
               onPress={() => navigation.navigate('editProfile')}
             />
             <ActionButton
-              backgroundColor='cyan-800'
-              textColor='gray-100'
+              backgroundColor='cyan-700'
+              textColor='white'
               text='Alterar senha'
               icon='lock'
               onPress={() => navigation.navigate('editPassword')}
@@ -97,7 +96,7 @@ export default function Profile() {
           text='Sair da conta'
           icon='sign-out-alt'
           backgroundColor='red-500'
-          textColor='gray-100'
+          textColor='red-500'
           onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
         />
       </View>

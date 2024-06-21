@@ -1,4 +1,3 @@
-import BottomSheet from '@/components/BottomSheet'
 import { CardItem } from '@/components/CardItem'
 import { FilterButton } from '@/components/FilterButton'
 import { FilterMenu } from '@/components/FilterMenu'
@@ -11,9 +10,20 @@ import { useState } from 'react'
 import { ScrollView, View } from 'react-native'
 
 export default function Favorites() {
-  const { setFilterMenu, filterMenu } = useFilterMenu()
-  const { setOrderMenu, orderMenu } = useOrderMenu()
-  const [visible, setVisible] = useState(false)
+  const { filterMenu, setFilterMenu } = useFilterMenu()
+  const { orderMenu, setOrderMenu } = useOrderMenu()
+
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false)
+  const [orderMenuVisible, setOrderMenuVisible] = useState(false)
+
+  function fetchFilterMenu() {
+    setFilterMenuVisible(true)
+    setOrderMenuVisible(false)
+  }
+  function fetchOrderMenu() {
+    setOrderMenuVisible(true)
+    setFilterMenuVisible(false)
+  }
 
   return (
     <View className='flex-1 bg-white'>
@@ -21,8 +31,8 @@ export default function Favorites() {
 
       <ScrollView className='flex-2 mb-2 p-4'>
         <View className='flex-2 flex-row justify-between'>
-          <FilterButton onPress={() => setFilterMenu(false)} />
-          <OrderButton onPress={() => setVisible(true)} />
+          <FilterButton onPress={fetchFilterMenu} />
+          <OrderButton onPress={fetchOrderMenu} />
         </View>
         <CardItem
           name='Joana Silva'
@@ -73,10 +83,19 @@ export default function Favorites() {
           category={['Informática']}
         />
       </ScrollView>
-      <FilterMenu filterMenu={filterMenu} setFilterMenu={setFilterMenu} />
-      <OrderMenu orderMenu={orderMenu} setOrderMenu={setOrderMenu} />
+      <FilterMenu
+        filterMenu={filterMenu}
+        setFilterMenu={setFilterMenu}
+        visible={filterMenuVisible}
+        onClose={() => setFilterMenuVisible(false)}
+      />
 
-      <BottomSheet visible={visible} onClose={() => setVisible(false)} />
+      <OrderMenu
+        orderMenu={orderMenu}
+        setOrderMenu={setOrderMenu}
+        visible={orderMenuVisible}
+        onClose={() => setOrderMenuVisible(false)}
+      />
     </View>
   )
 }

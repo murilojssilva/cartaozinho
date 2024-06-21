@@ -1,5 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Ionicons } from '@expo/vector-icons'
 
 import {
   ScrollView,
@@ -10,6 +9,7 @@ import {
 } from 'react-native'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from './SocialButton'
+import { Tag } from './Tag'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -32,7 +32,7 @@ export function CardItem({
       {...props}
       className='flex-2 flex-col gap-0 bg-gray-200 p-4 mb-4 w-full'
     >
-      <View className='flex-1 flex-row'>
+      <View className='flex-1 flex-row my-4'>
         <View className='flex-1 flex-row justify-between items-start'>
           <View className='flex-1 flex-row gap-2'>
             <View className='flex-2 items-center justify-center bg-gray-300 p-4 rounded-xl'>
@@ -50,15 +50,10 @@ export function CardItem({
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
-        className='flex-2 flex-row gap-2'
+        className='flex-2 flex-row gap-2 my-4'
       >
         {category.map((cat, index) => (
-          <View
-            key={index}
-            className='flex-2  flex-row py-2 px-4 bg-gray-600 rounded-full'
-          >
-            <Text className='text-gray-100 text-xs'>{cat}</Text>
-          </View>
+          <Tag key={index} text={cat} />
         ))}
       </ScrollView>
       <View className='flex-1 flex-row'>

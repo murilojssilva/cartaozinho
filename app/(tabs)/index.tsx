@@ -3,22 +3,32 @@ import { CardItem } from '../../components/CardItem'
 
 import { useNavigation } from 'expo-router'
 import { FilterButton } from '@/components/FilterButton'
-import useFilterMenu from '@/hooks/useFilterMenu'
 import { FilterMenu } from '@/components/FilterMenu'
 import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
-import useOrderMenu from '@/hooks/useOrderMenu'
 import { Title } from '@/components/Title'
 import { CardAd } from '@/components/CardAd'
 import { TabHeader } from '@/components/TabHeader'
-import BottomSheet from '@/components/BottomSheet'
 import { useState } from 'react'
+import useFilterMenu from '@/hooks/useFilterMenu'
+import useOrderMenu from '@/hooks/useOrderMenu'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
   const { filterMenu, setFilterMenu } = useFilterMenu()
-  const { setOrderMenu, orderMenu } = useOrderMenu()
-  const [visible, setVisible] = useState(false)
+  const { orderMenu, setOrderMenu } = useOrderMenu()
+
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false)
+  const [orderMenuVisible, setOrderMenuVisible] = useState(false)
+
+  function fetchFilterMenu() {
+    setFilterMenuVisible(true)
+    setOrderMenuVisible(false)
+  }
+  function fetchOrderMenu() {
+    setOrderMenuVisible(true)
+    setFilterMenuVisible(false)
+  }
 
   return (
     <View className='flex-1 bg-white'>
@@ -48,8 +58,8 @@ export default function HomeScreen() {
         <Title text='Outros anúncios' />
 
         <View className='flex-2 flex-row justify-between'>
-          <FilterButton onPress={() => setFilterMenu(false)} />
-          <OrderButton onPress={() => setVisible(true)} />
+          <FilterButton onPress={fetchFilterMenu} />
+          <OrderButton onPress={fetchOrderMenu} />
         </View>
 
         <CardItem
@@ -109,10 +119,19 @@ export default function HomeScreen() {
         />
       </ScrollView>
 
-      <FilterMenu filterMenu={filterMenu} setFilterMenu={setFilterMenu} />
-      <OrderMenu orderMenu={orderMenu} setOrderMenu={setOrderMenu} />
+      <FilterMenu
+        filterMenu={filterMenu}
+        setFilterMenu={setFilterMenu}
+        visible={filterMenuVisible}
+        onClose={() => setFilterMenuVisible(false)}
+      />
 
-      <BottomSheet visible={visible} onClose={() => setVisible(false)} />
+      <OrderMenu
+        orderMenu={orderMenu}
+        setOrderMenu={setOrderMenu}
+        visible={orderMenuVisible}
+        onClose={() => setOrderMenuVisible(false)}
+      />
     </View>
   )
 }

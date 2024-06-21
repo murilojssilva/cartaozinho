@@ -1,14 +1,19 @@
 import { ActionButton } from '@/components/ActionButton'
 import { MyItemCard } from '@/components/MyItemCard'
+import { SkeletonCardAd } from '@/components/Skeletons/SkeletonCardAd'
+import { SkeletonMyItemCard } from '@/components/Skeletons/SkeletonMyItemCard'
+import { SkeletonText } from '@/components/Skeletons/SkeletonText'
 import { TabHeader } from '@/components/TabHeader'
 import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
+import { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
 export default function Profile() {
   const navigation = useNavigation()
+  const [isLoading, setIsLoading] = useState(true)
   return (
     <View className='flex-1 bg-white'>
       <TabHeader text='Perfil' icon='user' />
@@ -17,9 +22,21 @@ export default function Profile() {
         <View className='flex-2 p-4 flex-col h-full'>
           <View className='flex-2 mb-4 flex-col'>
             <Title text='Informações pessoais' />
-            <Topic icon='user' name='Nome' content='Murilo' />
-            <Topic icon='phone' name='Telefone' content='(21) 99999-9999' />
-            <Topic icon='envelope' name='E-mail' content='email@email.com' />
+            {isLoading ? (
+              <SkeletonText />
+            ) : (
+              <Topic icon='user' name='Nome' content='Murilo' />
+            )}
+            {isLoading ? (
+              <SkeletonText />
+            ) : (
+              <Topic icon='phone' name='Telefone' content='(21) 99999-9999' />
+            )}
+            {isLoading ? (
+              <SkeletonText />
+            ) : (
+              <Topic icon='envelope' name='E-mail' content='email@email.com' />
+            )}
           </View>
           <View className='flex-2 flex-row justify-around'>
             <ActionButton
@@ -57,36 +74,46 @@ export default function Profile() {
               showsHorizontalScrollIndicator={false}
               className='flex-2 p-2 gap-2'
             >
-              <MyItemCard
-                name='Murilo'
-                office='Teste'
-                officeType='Teste'
-                onPress={() => navigation.navigate('details')}
-              />
-              <MyItemCard
-                name='Murilo'
-                office='Teste'
-                officeType='Teste'
-                onPress={() => navigation.navigate('details')}
-              />
-              <MyItemCard
-                name='Murilo'
-                office='Teste'
-                officeType='Teste'
-                onPress={() => navigation.navigate('details')}
-              />
-              <MyItemCard
-                name='Murilo'
-                office='Teste'
-                officeType='Teste'
-                onPress={() => navigation.navigate('details')}
-              />
-              <MyItemCard
-                name='Murilo'
-                office='Teste'
-                officeType='Teste'
-                onPress={() => navigation.navigate('details')}
-              />
+              {isLoading ? (
+                <View className='flex-2 flex-row justify-around w-full'>
+                  <SkeletonMyItemCard />
+                  <SkeletonMyItemCard />
+                  <SkeletonMyItemCard />
+                </View>
+              ) : (
+                <>
+                  <MyItemCard
+                    name='Murilo'
+                    office='Teste'
+                    officeType='Teste'
+                    onPress={() => navigation.navigate('details')}
+                  />
+                  <MyItemCard
+                    name='Murilo'
+                    office='Teste'
+                    officeType='Teste'
+                    onPress={() => navigation.navigate('details')}
+                  />
+                  <MyItemCard
+                    name='Murilo'
+                    office='Teste'
+                    officeType='Teste'
+                    onPress={() => navigation.navigate('details')}
+                  />
+                  <MyItemCard
+                    name='Murilo'
+                    office='Teste'
+                    officeType='Teste'
+                    onPress={() => navigation.navigate('details')}
+                  />
+                  <MyItemCard
+                    name='Murilo'
+                    office='Teste'
+                    officeType='Teste'
+                    onPress={() => navigation.navigate('details')}
+                  />
+                </>
+              )}
             </ScrollView>
           </View>
         </View>
@@ -95,8 +122,8 @@ export default function Profile() {
         <ActionButton
           text='Sair da conta'
           icon='sign-out-alt'
-          backgroundColor='red-500'
-          textColor='red-500'
+          backgroundColor='transparent'
+          textColor='red-500 | red'
           onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
         />
       </View>

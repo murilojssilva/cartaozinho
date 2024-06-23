@@ -19,8 +19,8 @@ export default function EditPassword() {
       </ScrollView>
       <View className='p-4'>
         <ActionButton
-          backgroundColor='cyan-800'
-          textColor='gray-100'
+          backgroundColor='cyan-700'
+          textColor='white'
           text='Alterar senha'
           icon='lock'
         />

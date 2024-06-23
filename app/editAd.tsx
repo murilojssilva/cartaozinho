@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native'
 
-export default function New() {
+export default function EditAd() {
   const categories = [
     'Beleza',
     'Saúde',
@@ -32,7 +32,7 @@ export default function New() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className='flex-1 bg-white'
     >
-      <Header title='Novo anúncio' icon='plus' />
+      <Header title='Editar anúncio' icon='pen' />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
@@ -97,7 +97,7 @@ export default function New() {
         <ActionButton
           backgroundColor='cyan-700'
           textColor='white'
-          text='Anunciar'
+          text='Editar anúncio'
           icon='id-card'
         />
       </View>

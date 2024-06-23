@@ -23,7 +23,7 @@ export default function HomeScreen() {
 
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)

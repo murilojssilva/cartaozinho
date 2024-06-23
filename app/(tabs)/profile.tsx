@@ -13,7 +13,7 @@ import { ScrollView, Text, View } from 'react-native'
 
 export default function Profile() {
   const navigation = useNavigation()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <View className='flex-1 bg-white'>
       <TabHeader text='Perfil' icon='user' />
@@ -86,31 +86,31 @@ export default function Profile() {
                     name='Murilo'
                     office='Teste'
                     officeType='Teste'
-                    onPress={() => navigation.navigate('details')}
+                    onPress={() => navigation.navigate('myAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
                     officeType='Teste'
-                    onPress={() => navigation.navigate('details')}
+                    onPress={() => navigation.navigate('myAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
                     officeType='Teste'
-                    onPress={() => navigation.navigate('details')}
+                    onPress={() => navigation.navigate('myAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
                     officeType='Teste'
-                    onPress={() => navigation.navigate('details')}
+                    onPress={() => navigation.navigate('myAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
                     officeType='Teste'
-                    onPress={() => navigation.navigate('details')}
+                    onPress={() => navigation.navigate('myAd')}
                   />
                 </>
               )}
@@ -122,8 +122,8 @@ export default function Profile() {
         <ActionButton
           text='Sair da conta'
           icon='sign-out-alt'
-          backgroundColor='transparent'
-          textColor='red-500 | red'
+          backgroundColor='red-500 | red'
+          textColor='white'
           onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
         />
       </View>

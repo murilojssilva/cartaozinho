@@ -85,7 +85,8 @@ export default function HomeScreen() {
       <TabHeader
         text='Cartãozinho'
         icon='home'
-        iconAction='plus'
+        iconAction='pluscircleo'
+        iconActionColor='#0e7490'
         onPress={() => navigation.navigate('new')}
       />
 

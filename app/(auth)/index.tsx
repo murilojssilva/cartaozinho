@@ -11,8 +11,11 @@ import {
   Text,
   View,
 } from 'react-native'
+import { SpinnerButton } from '@/components/SpinnerButton'
+import { useState } from 'react'
 
 export default function Login() {
+  const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
   return (
     <KeyboardAvoidingView
@@ -42,14 +45,18 @@ export default function Login() {
           />
         </View>
         <View className='p-4'>
-          <ActionButton
-            backgroundColor='cyan-700'
-            textColor='gray-100'
-            iconColor='white'
-            text='Acessar'
-            icon='log-in'
-            onPress={() => navigation.navigate('(tabs)')}
-          />
+          {isLoading ? (
+            <SpinnerButton />
+          ) : (
+            <ActionButton
+              backgroundColor='cyan-700'
+              textColor='gray-100'
+              iconColor='white'
+              text='Acessar'
+              icon='log-in'
+              onPress={() => navigation.navigate('(tabs)')}
+            />
+          )}
         </View>
       </View>
     </KeyboardAvoidingView>

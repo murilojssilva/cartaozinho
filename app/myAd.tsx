@@ -3,7 +3,6 @@ import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
-import { Title } from '@/components/Title'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ProfileCard } from '@/components/ProfileCard'
 import { ActionButton } from '@/components/ActionButton'
@@ -13,6 +12,7 @@ import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCar
 import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
 import { Header } from '@/components/Header'
+import { SpinnerButton } from '@/components/SpinnerButton'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -35,6 +35,8 @@ export default function MyAd() {
 
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false)
+  const [isLoadingRemove, setIsLoadingRemove] = useState(false)
   return (
     <View className='flex-1 flex-col bg-white'>
       <Header title='Meu anúncio' icon='newspaper' />
@@ -195,19 +197,29 @@ export default function MyAd() {
         </View>
       ) : (
         <View className='p-4 gap-2'>
-          <ActionButton
-            text='Editar anúncio'
-            icon='pen'
-            backgroundColor='cyan-700'
-            textColor='white'
-            onPress={() => navigation.navigate('editAd')}
-          />
-          <ActionButton
-            text='Apagar anúncio'
-            icon='trash'
-            backgroundColor='transparent'
-            textColor='red-500 | red'
-          />
+          {isLoadingEdit ? (
+            <SpinnerButton />
+          ) : (
+            <ActionButton
+              text='Editar anúncio'
+              icon='pencil'
+              backgroundColor='cyan-700'
+              textColor='white'
+              iconColor='white'
+              onPress={() => navigation.navigate('editAd')}
+            />
+          )}
+          {isLoadingRemove ? (
+            <SpinnerButton />
+          ) : (
+            <ActionButton
+              text='Apagar anúncio'
+              icon='trash'
+              iconColor='red'
+              backgroundColor='transparent'
+              textColor='red-500'
+            />
+          )}
         </View>
       )}
     </View>

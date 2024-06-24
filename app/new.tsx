@@ -1,8 +1,10 @@
 import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
+import { SpinnerButton } from '@/components/SpinnerButton'
 import { Tag } from '@/components/Tag'
 import { useNavigation } from 'expo-router'
+import { useState } from 'react'
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -13,20 +15,23 @@ import {
 
 export default function New() {
   const categories = [
+    'Administração',
+    'Alimentação',
     'Beleza',
-    'Saúde',
     'Educação',
     'Entretenimento',
-    'Internet',
-    'Games',
-    'Tecnologia',
-    'Cabelo',
+    'Limpeza',
+    'Manutenção',
+    'Pet',
+    'Saúde',
     'Serviço',
-    'Reciclagem',
-    'Jornalismo',
-    'Evento',
+    'Tecnologia',
+    'Transporte',
   ]
   const navigation = useNavigation()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSelected, setIsSelected] = useState(false)
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -53,9 +58,21 @@ export default function New() {
           </View>
           <Text className='font-bold text-xl my-4'>Atendimento</Text>
           <View className='flex-row gap-2'>
-            <Tag text='À domicílio' />
-            <Tag text='No estabelecimento' />
-            <Tag text='Remoto' />
+            <Tag
+              text='À domicílio'
+              onPress={() => setIsSelected(!isSelected)}
+              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+            />
+            <Tag
+              text='No estabelecimento'
+              onPress={() => setIsSelected(!isSelected)}
+              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+            />
+            <Tag
+              text='Remoto'
+              onPress={() => setIsSelected(!isSelected)}
+              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+            />
           </View>
 
           <Text className='font-bold text-xl my-4'>Categoria</Text>
@@ -65,7 +82,12 @@ export default function New() {
             className='flex-row'
           >
             {categories.map((categorie, index) => (
-              <Tag key={index} text={categorie} />
+              <Tag
+                key={index}
+                text={categorie}
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
             ))}
           </ScrollView>
           <Text className='font-bold text-xl my-4'>Contato</Text>
@@ -94,12 +116,18 @@ export default function New() {
         </View>
       </ScrollView>
       <View className='p-4'>
-        <ActionButton
-          backgroundColor='cyan-700'
-          textColor='white'
-          text='Anunciar'
-          icon='id-card'
-        />
+        {isLoading ? (
+          <SpinnerButton />
+        ) : (
+          <ActionButton
+            iconColor='white'
+            backgroundColor='cyan-700'
+            textColor='white'
+            onPress={() => setIsLoading(!isLoading)}
+            text='Anunciar'
+            icon='id-card'
+          />
+        )}
       </View>
     </KeyboardAvoidingView>
   )

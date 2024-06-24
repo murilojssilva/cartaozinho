@@ -17,21 +17,22 @@ import {
 
 export default function EditAd() {
   const categories = [
+    'Administração',
+    'Alimentação',
     'Beleza',
-    'Saúde',
     'Educação',
     'Entretenimento',
-    'Internet',
-    'Games',
-    'Tecnologia',
-    'Cabelo',
+    'Limpeza',
+    'Manutenção',
+    'Pet',
+    'Saúde',
     'Serviço',
-    'Reciclagem',
-    'Jornalismo',
-    'Evento',
+    'Tecnologia',
+    'Transporte',
   ]
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSelected, setIsSelected] = useState(false)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -77,9 +78,21 @@ export default function EditAd() {
             </View>
           ) : (
             <View className='flex-row gap-2'>
-              <Tag text='À domicílio' />
-              <Tag text='No estabelecimento' />
-              <Tag text='Remoto' />
+              <Tag
+                text='À domicílio'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+              <Tag
+                text='No estabelecimento'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+              <Tag
+                text='Remoto'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
             </View>
           )}
 
@@ -97,7 +110,12 @@ export default function EditAd() {
               className='flex-row'
             >
               {categories.map((categorie, index) => (
-                <Tag key={index} text={categorie} />
+                <Tag
+                  key={index}
+                  text={categorie}
+                  onPress={() => setIsSelected(!isSelected)}
+                  backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+                />
               ))}
             </ScrollView>
           )}
@@ -167,6 +185,7 @@ export default function EditAd() {
           <SkeletonActionButton />
         ) : (
           <ActionButton
+            iconColor='white'
             backgroundColor='cyan-700'
             textColor='white'
             text='Editar anúncio'

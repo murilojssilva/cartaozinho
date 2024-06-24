@@ -27,8 +27,8 @@ export function TabHeader({
       } gap-2 items-center bg-gray-100 p-8 rounded-xl`}
     >
       <View className='flex-2 flex-row items-center'>
-        <FontAwesome5 name={icon} size={18} color='#0e7490' />
-        <Text className='text-xl text-gray-700 font-semibold'>{` ${text}`}</Text>
+        <FontAwesome5 name={icon} size={22} color='#0e7490' />
+        <Text className='text-2xl text-gray-700 font-semibold'>{` ${text}`}</Text>
       </View>
       <TouchableOpacity {...props}>
         <AntDesign name={iconAction} size={22} color={iconActionColor} />

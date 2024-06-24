@@ -1,4 +1,4 @@
-import { Text, TextInput, TextInputProps } from 'react-native'
+import { TextInput, TextInputProps } from 'react-native'
 
 interface IInputTextProps extends TextInputProps {
   text: string

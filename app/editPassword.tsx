@@ -1,9 +1,12 @@
 import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
+import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
+import { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
 export default function EditPassword() {
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <View className='flex-1 bg-white'>
       <Header title='Alterar senha' icon='lock' />
@@ -18,12 +21,16 @@ export default function EditPassword() {
         </View>
       </ScrollView>
       <View className='p-4'>
-        <ActionButton
-          backgroundColor='cyan-700'
-          textColor='white'
-          text='Alterar senha'
-          icon='lock'
-        />
+        {isLoading ? (
+          <SkeletonActionButton />
+        ) : (
+          <ActionButton
+            backgroundColor='cyan-700'
+            textColor='white'
+            text='Alterar senha'
+            icon='lock'
+          />
+        )}
       </View>
     </View>
   )

@@ -1,14 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import {
-  ScrollView,
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
 } from 'react-native'
-import { useNavigation } from 'expo-router'
-import { SocialButton } from './SocialButton'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -19,7 +16,7 @@ export function MyItemCard({ name, office, ...props }: ICardItemProps) {
   return (
     <TouchableOpacity
       {...props}
-      className='flex-2 flex-col bg-gray-200 p-4 border-2 border-gray-300 rounded-xl'
+      className='flex-2 flex-col bg-gray-200 p-2 border-2 border-gray-300 rounded-xl'
     >
       <View className='flex-2 items-center justify-center p-4 rounded-xl'>
         <Ionicons name='person' size={24} color='gray-300' />
@@ -30,7 +27,7 @@ export function MyItemCard({ name, office, ...props }: ICardItemProps) {
       </View>
       <TouchableOpacity className='flex-2 flex-row justify-center items-center p-2 rounded-xl'>
         <Ionicons name='trash' size={24} color='red' />
-        <Text className='text-lg font-bold text-red-500'> Remover</Text>
+        <Text className='text-lg font-bold text-red-500'> {'Remover'}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   )

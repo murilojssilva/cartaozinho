@@ -1,5 +1,6 @@
 import { ActionButton } from '@/components/ActionButton'
 import { MyItemCard } from '@/components/MyItemCard'
+import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
 import { SkeletonCardAd } from '@/components/Skeletons/SkeletonCardAd'
 import { SkeletonMyItemCard } from '@/components/Skeletons/SkeletonMyItemCard'
 import { SkeletonText } from '@/components/Skeletons/SkeletonText'
@@ -38,33 +39,48 @@ export default function Profile() {
               <Topic icon='envelope' name='E-mail' content='email@email.com' />
             )}
           </View>
-          <View className='flex-2 flex-row justify-around'>
-            <ActionButton
-              text='Editar perfil'
-              icon='pen'
-              backgroundColor='cyan-700'
-              textColor='white'
-              onPress={() => navigation.navigate('editProfile')}
-            />
-            <ActionButton
-              backgroundColor='cyan-700'
-              textColor='white'
-              text='Alterar senha'
-              icon='lock'
-              onPress={() => navigation.navigate('editPassword')}
-            />
-          </View>
+          {isLoading ? (
+            <View className='flex-2 flex-row justify-between'>
+              <SkeletonActionButton />
+              <SkeletonActionButton />
+            </View>
+          ) : (
+            <View className='flex-2 flex-row justify-around'>
+              <ActionButton
+                text='Editar perfil'
+                icon='pen'
+                backgroundColor='cyan-700'
+                textColor='white'
+                onPress={() => navigation.navigate('editProfile')}
+              />
+              <ActionButton
+                backgroundColor='cyan-700'
+                textColor='white'
+                text='Alterar senha'
+                icon='lock'
+                onPress={() => navigation.navigate('editPassword')}
+              />
+            </View>
+          )}
 
           <View className='flex-2 flex-col'>
             <Title text='Geral' />
-            <View className='flex-2 flex-row justify-between'>
-              <Text className='text-lg'>Tema</Text>
-              <Entypo name='switch' size={32} />
-            </View>
-            <View className='flex-2 flex-row justify-between'>
-              <Text className='text-lg'>Biometria</Text>
-              <Entypo name='switch' size={32} />
-            </View>
+            {isLoading ? (
+              <SkeletonText />
+            ) : (
+              <View className='flex-2 flex-row justify-between'>
+                <Text className='text-lg'>Tema</Text>
+                <Entypo name='switch' size={32} />
+              </View>
+            )}
+            {isLoading ? (
+              <SkeletonText />
+            ) : (
+              <View className='flex-2 flex-row justify-between'>
+                <Text className='text-lg'>Biometria</Text>
+                <Entypo name='switch' size={32} />
+              </View>
+            )}
           </View>
 
           <View className='flex-2 flex-col'>
@@ -119,13 +135,17 @@ export default function Profile() {
         </View>
       </ScrollView>
       <View className='p-4'>
-        <ActionButton
-          text='Sair da conta'
-          icon='sign-out-alt'
-          backgroundColor='red-500 | red'
-          textColor='white'
-          onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
-        />
+        {isLoading ? (
+          <SkeletonActionButton />
+        ) : (
+          <ActionButton
+            text='Sair da conta'
+            icon='sign-out-alt'
+            backgroundColor='transparent'
+            textColor='red-500 | red'
+            onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
+          />
+        )}
       </View>
     </View>
   )

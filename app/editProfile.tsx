@@ -1,6 +1,8 @@
 import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
+import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
+import { useState } from 'react'
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -10,6 +12,7 @@ import {
 } from 'react-native'
 
 export default function EditProfile() {
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -54,13 +57,17 @@ export default function EditProfile() {
         </View>
       </ScrollView>
       <View className='p-4'>
-        <ActionButton
-          backgroundColor='cyan-800'
-          textColor='gray-100'
-          text='Editar perfil'
-          icon='save'
-          className='mt-4'
-        />
+        {isLoading ? (
+          <SkeletonActionButton />
+        ) : (
+          <ActionButton
+            backgroundColor='cyan-700'
+            textColor='white'
+            text='Editar perfil'
+            icon='save'
+            className='mt-4'
+          />
+        )}
       </View>
     </KeyboardAvoidingView>
   )

@@ -33,8 +33,8 @@ export default function Login() {
       <View className='flex-2 bg-white'>
         <View className='p-4'>
           <ActionButton
-            backgroundColor='cyan-800'
-            textColor='gray-900'
+            backgroundColor='white'
+            textColor='black'
             text='Criar conta'
             icon='sign-in-alt'
             onPress={() => navigation.navigate('signUp')}
@@ -42,7 +42,7 @@ export default function Login() {
         </View>
         <View className='p-4'>
           <ActionButton
-            backgroundColor='blue-500'
+            backgroundColor='cyan-700'
             textColor='white'
             text='Acessar'
             icon='sign-in-alt'

@@ -3,7 +3,6 @@ import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
-import { Header } from '@/components/Header'
 import { Title } from '@/components/Title'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ProfileCard } from '@/components/ProfileCard'
@@ -12,6 +11,8 @@ import { useState } from 'react'
 import { SkeletonProfileIcon } from '@/components/Skeletons/SkeletonProfileIcon'
 import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCard'
 import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
+import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
+import { Header } from '@/components/Header'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -36,9 +37,8 @@ export default function MyAd() {
   const [isLoading, setIsLoading] = useState(false)
   return (
     <View className='flex-1 flex-col bg-white'>
+      <Header title='Meu anúncio' icon='newspaper' />
       <ScrollView showsVerticalScrollIndicator={false} className='flex-2 p-4'>
-        <Title text='Meu anúncio' />
-
         {isLoading ? (
           <SkeletonProfileIcon />
         ) : (
@@ -187,21 +187,29 @@ export default function MyAd() {
           </View>
         )}
       </ScrollView>
-      <View className='p-4 gap-2'>
-        <ActionButton
-          text='Editar anúncio'
-          icon='pen'
-          backgroundColor='cyan-700'
-          textColor='white'
-          onPress={() => navigation.navigate('editAd')}
-        />
-        <ActionButton
-          text='Apagar anúncio'
-          icon='trash'
-          backgroundColor='red-500 | red'
-          textColor='white'
-        />
-      </View>
+      {isLoading ? (
+        <View className='flex-2 flex-col p-4'>
+          <SkeletonActionButton />
+          <View className='my-2' />
+          <SkeletonActionButton />
+        </View>
+      ) : (
+        <View className='p-4 gap-2'>
+          <ActionButton
+            text='Editar anúncio'
+            icon='pen'
+            backgroundColor='cyan-700'
+            textColor='white'
+            onPress={() => navigation.navigate('editAd')}
+          />
+          <ActionButton
+            text='Apagar anúncio'
+            icon='trash'
+            backgroundColor='transparent'
+            textColor='red-500 | red'
+          />
+        </View>
+      )}
     </View>
   )
 }

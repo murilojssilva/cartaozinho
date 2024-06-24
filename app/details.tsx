@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { SkeletonProfileIcon } from '@/components/Skeletons/SkeletonProfileIcon'
 import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCard'
+import { ActionButton } from '@/components/ActionButton'
 
 interface IMoreInformationsProps {
   category: string[]
@@ -34,6 +35,7 @@ export default function Details() {
   const navigation = useNavigation()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
   return (
     <ScrollView className='flex-1 flex-col bg-white'>
@@ -185,6 +187,16 @@ export default function Details() {
             </View>
           </View>
         )}
+      </View>
+      <View className='p-4'>
+        <ActionButton
+          onPress={() => setIsFavorite(!isFavorite)}
+          icon={isFavorite ? 'bookmark-outline' : 'bookmark'}
+          text={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
+          textColor={isFavorite ? 'cyan-700' : 'white'}
+          iconColor={isFavorite ? '#0e7490' : 'white'}
+          backgroundColor={isFavorite ? 'white' : 'cyan-700' || '#0e7490'}
+        />
       </View>
     </ScrollView>
   )

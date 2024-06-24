@@ -1,4 +1,4 @@
-import { FontAwesome5 } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 
 interface IActionButtonProps extends TouchableOpacityProps {
@@ -6,6 +6,7 @@ interface IActionButtonProps extends TouchableOpacityProps {
   icon: string
   backgroundColor: string
   textColor: string
+  iconColor: string
 }
 
 export function ActionButton({
@@ -13,6 +14,7 @@ export function ActionButton({
   text,
   backgroundColor,
   textColor,
+  iconColor,
   ...props
 }: IActionButtonProps) {
   return (
@@ -20,7 +22,7 @@ export function ActionButton({
       {...props}
       className={`flex-2 flex-row justify-center items-center p-4 rounded-xl bg-${backgroundColor}`}
     >
-      <FontAwesome5 size={20} color={textColor} name={icon} />
+      <Ionicons size={20} color={iconColor} name={icon} />
       <Text
         className={`font-bold text-xl text-${textColor}`}
       >{` ${text}`}</Text>

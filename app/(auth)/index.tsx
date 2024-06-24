@@ -36,16 +36,18 @@ export default function Login() {
             backgroundColor='white'
             textColor='black'
             text='Criar conta'
-            icon='sign-in-alt'
+            icon='log-in-outline'
+            iconColor='black'
             onPress={() => navigation.navigate('signUp')}
           />
         </View>
         <View className='p-4'>
           <ActionButton
             backgroundColor='cyan-700'
-            textColor='white'
+            textColor='gray-100'
+            iconColor='white'
             text='Acessar'
-            icon='sign-in-alt'
+            icon='log-in'
             onPress={() => navigation.navigate('(tabs)')}
           />
         </View>

@@ -53,7 +53,8 @@ export default function Profile() {
             <View className='flex-2 flex-row justify-around'>
               <ActionButton
                 text='Editar perfil'
-                icon='pen'
+                icon='pencil'
+                iconColor='white'
                 backgroundColor='cyan-700'
                 textColor='white'
                 onPress={() => navigation.navigate('editProfile')}
@@ -61,8 +62,9 @@ export default function Profile() {
               <ActionButton
                 backgroundColor='cyan-700'
                 textColor='white'
+                iconColor='white'
                 text='Alterar senha'
-                icon='lock'
+                icon='lock-open'
                 onPress={() => navigation.navigate('editPassword')}
               />
             </View>

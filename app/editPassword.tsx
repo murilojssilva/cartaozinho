@@ -27,8 +27,9 @@ export default function EditPassword() {
           <ActionButton
             backgroundColor='cyan-700'
             textColor='white'
+            iconColor='white'
             text='Alterar senha'
-            icon='lock'
+            icon='lock-open'
           />
         )}
       </View>

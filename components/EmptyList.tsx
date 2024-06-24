@@ -9,7 +9,10 @@ export function EmptyList() {
       <FontAwesome5 name='clipboard-list' size={32} color='#0e7490' />
       <Text className='font-bold text-xl'>Não há anúncios cadastrados</Text>
       <TouchableOpacity onPress={() => navigation.navigate('new')}>
-        <Text className='font-normal text-sm'>Faça um novo anúncio</Text>
+        <View className='flex-2 flex-row items-center'>
+          <FontAwesome5 size={10} name='plus' />
+          <Text className='font-normal text-lg'> Crie um novo anúncio</Text>
+        </View>
       </TouchableOpacity>
     </View>
   )

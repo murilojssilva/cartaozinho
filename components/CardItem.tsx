@@ -10,6 +10,7 @@ import {
 import { useNavigation } from 'expo-router'
 import { SocialButton } from './SocialButton'
 import { Tag } from './Tag'
+import { useState } from 'react'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -26,6 +27,8 @@ export function CardItem({
   ...props
 }: ICardItemProps) {
   const navigation = useNavigation()
+
+  const [isFavorited, setIsFavorited] = useState(false)
   return (
     <TouchableOpacity
       {...props}
@@ -43,7 +46,13 @@ export function CardItem({
               <Text className='font-normal text-xs'>{officeType}</Text>
             </View>
           </View>
-          <Ionicons name='bookmark' size={28} color='gray-300' />
+          <TouchableOpacity onPress={() => setIsFavorited(!isFavorited)}>
+            <Ionicons
+              name='bookmark'
+              size={28}
+              color={isFavorited ? '#0e7490' : '#9ca3af'}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView

@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  VirtualizedList,
-} from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
 
 import { useNavigation } from 'expo-router'
@@ -14,14 +7,12 @@ import { FilterMenu } from '@/components/FilterMenu'
 import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
 import { Title } from '@/components/Title'
-import { CardAd } from '@/components/CardAd'
 import { TabHeader } from '@/components/TabHeader'
 import { useState } from 'react'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
-import { SkeletonCardAd } from '@/components/Skeletons/SkeletonCardAd'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { ChangeCityButton } from '@/components/ChangeCityButton'

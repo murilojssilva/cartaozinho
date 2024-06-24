@@ -63,6 +63,7 @@ export default function EditProfile() {
           <ActionButton
             backgroundColor='cyan-700'
             textColor='white'
+            iconColor='white'
             text='Editar perfil'
             icon='save'
             className='mt-4'

@@ -9,9 +9,13 @@ export function EmptyFavoriteList() {
       <FontAwesome5 name='list' size={32} color='#0e7490' />
       <Text className='font-bold text-xl'>Não há anúncios favoritados</Text>
       <TouchableOpacity onPress={() => navigation.navigate('index')}>
-        <Text className='font-normal text-sm'>
-          Veja os anúncios disponíveis
-        </Text>
+        <View className='flex-2 flex-row items-center'>
+          <FontAwesome5 size={10} name='eye' />
+          <Text className='font-normal text-lg'>
+            {' '}
+            Veja os anúncios disponíveis
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   )

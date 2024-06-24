@@ -84,7 +84,7 @@ export default function Category() {
 
   return (
     <View className='flex-1 flex-col'>
-      <Header title={category} icon={categoryIcon} />
+      <Header title={category as string} icon={categoryIcon as string} />
       <View className='flex-2 p-4'>
         {isLoading ? (
           <View className='flex-2'>

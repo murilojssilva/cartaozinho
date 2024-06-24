@@ -35,7 +35,7 @@ export default function SignUp() {
         </View>
         <View className='p-4'>
           <ActionButton
-            backgroundColor='blue-500'
+            backgroundColor='cyan-700'
             textColor='white'
             text='Criar conta'
             icon='sign-in-alt'

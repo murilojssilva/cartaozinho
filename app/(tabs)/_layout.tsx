@@ -28,6 +28,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name='categories'
+        options={{
+          title: 'Categorias',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'list' : 'list-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name='favorites'
         options={{
           title: 'Favoritos',

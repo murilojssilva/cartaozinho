@@ -1,14 +1,24 @@
 import { CardItem } from '@/components/CardItem'
+import { EmptyFavoriteList } from '@/components/EmptyFavoriteList'
 import { FilterButton } from '@/components/FilterButton'
 import { FilterMenu } from '@/components/FilterMenu'
 import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
+import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { TabHeader } from '@/components/TabHeader'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
+import { useNavigation } from 'expo-router'
 import { useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { FlatList, View } from 'react-native'
+
+interface IAdProps {
+  name: string
+  office: string
+  officeType: string
+  categories: string[]
+}
 
 export default function Favorites() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
@@ -17,7 +27,82 @@ export default function Favorites() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [ad, setAd] = useState<IAdProps[]>([
+    {
+      name: 'Murilo Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+    {
+      name: 'Murilo Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+    {
+      name: 'Murilo Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+    {
+      name: 'Murilo Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+    {
+      name: 'Murilo Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+    {
+      name: 'Peter Silva',
+      office: 'Desenvolvedor',
+      officeType: 'Prestador de serviço',
+      categories: [
+        'Informática',
+        'Desenvolvimento',
+        'Website',
+        'Aplicativos',
+        'Mobile',
+      ],
+    },
+  ] as IAdProps[])
+
+  const [isLoading, setIsLoading] = useState(false)
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
@@ -28,114 +113,63 @@ export default function Favorites() {
     setFilterMenuVisible(false)
   }
 
+  const navigation = useNavigation()
+
   return (
     <View className='flex-1 bg-white'>
       <TabHeader text='Favoritos' icon='bookmark' />
 
-      <ScrollView className='flex-2 mb-2 p-4'>
-        <View className='flex-2 flex-row justify-between'>
-          <FilterButton onPress={fetchFilterMenu} />
-          <OrderButton onPress={fetchOrderMenu} />
-        </View>
-
-        {isLoading ? (
-          <View className='flex-2 my-2'>
-            <SkeletonCardItem />
-            <SkeletonCardItem />
-            <SkeletonCardItem />
-            <SkeletonCardItem />
+      {isLoading ? (
+        <View className='flex-2 flex-col p-4'>
+          <View className='flex-2 flex-row justify-between'>
+            <SkeletonFilterButton />
+            <SkeletonFilterButton />
           </View>
-        ) : (
-          <>
-            <CardItem
-              name='Joana Silva'
-              office='Cabeleireira'
-              officeType='Prestador de serviço'
-              category={['Beleza', 'Saúde', 'Bem-estar', 'Cabelo', 'Unha']}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={[
-                'Informática',
-                'Desenvolvimento',
-                'Website',
-                'Aplicativos',
-                'Mobile',
-              ]}
-            />
-            <CardItem
-              name='Joana Silva'
-              office='Cabeleireira'
-              officeType='Prestador de serviço'
-              category={['Beleza', 'Saúde', 'Bem-estar', 'Cabelo', 'Unha']}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={[
-                'Informática',
-                'Desenvolvimento',
-                'Website',
-                'Aplicativos',
-                'Mobile',
-              ]}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={['Informática']}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={['Informática']}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={['Informática']}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo Silva'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={['Informática']}
-              onPress={() => navigation.navigate('details')}
-            />
-            <CardItem
-              name='Murilo'
-              office='Desenvolvedor'
-              officeType='Prestador de serviço'
-              category={['Informática']}
-              onPress={() => navigation.navigate('details')}
-            />
-          </>
-        )}
-      </ScrollView>
-      <FilterMenu
-        filterMenu={filterMenu}
-        setFilterMenu={setFilterMenu}
-        visible={filterMenuVisible}
-        onClose={() => setFilterMenuVisible(false)}
-      />
+          <SkeletonCardItem />
+          <SkeletonCardItem />
+          <SkeletonCardItem />
+        </View>
+      ) : (
+        <View className='flex-2 mb-2 p-4'>
+          <View className='flex-2 flex-row justify-between'>
+            <FilterButton onPress={fetchFilterMenu} />
+            <OrderButton onPress={fetchOrderMenu} />
+          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={ad}
+            renderItem={({ item }) => (
+              <CardItem
+                name={item.name}
+                office={item.office}
+                officeType={item.officeType}
+                categories={item.categories}
+                onPress={() => navigation.navigate('details')}
+              />
+            )}
+            ListEmptyComponent={<EmptyFavoriteList />}
+            ListFooterComponent={<View style={{ height: 130 }} />}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      )}
+      {ad.length > 0 && (
+        <>
+          <FilterMenu
+            filterMenu={filterMenu}
+            setFilterMenu={setFilterMenu}
+            visible={filterMenuVisible}
+            onClose={() => setFilterMenuVisible(false)}
+          />
 
-      <OrderMenu
-        orderMenu={orderMenu}
-        setOrderMenu={setOrderMenu}
-        visible={orderMenuVisible}
-        onClose={() => setOrderMenuVisible(false)}
-      />
+          <OrderMenu
+            orderMenu={orderMenu}
+            setOrderMenu={setOrderMenu}
+            visible={orderMenuVisible}
+            onClose={() => setOrderMenuVisible(false)}
+          />
+        </>
+      )}
     </View>
   )
 }

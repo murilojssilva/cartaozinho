@@ -15,15 +15,14 @@ interface ICardItemProps extends TouchableOpacityProps {
   name: string
   office: string
   officeType: string
-
-  category: string[]
+  categories: string[]
 }
 
 export function CardItem({
   name,
   office,
   officeType,
-  category,
+  categories,
   ...props
 }: ICardItemProps) {
   const navigation = useNavigation()
@@ -52,8 +51,8 @@ export function CardItem({
         horizontal={true}
         className='flex-2 flex-row gap-2 my-4'
       >
-        {category.map((cat, index) => (
-          <Tag key={index} text={cat} />
+        {categories.map((categorie: string, index) => (
+          <Tag key={index} text={categorie} />
         ))}
       </ScrollView>
       <View className='flex-1 flex-row'>

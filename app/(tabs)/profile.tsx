@@ -1,7 +1,6 @@
 import { ActionButton } from '@/components/ActionButton'
 import { MyItemCard } from '@/components/MyItemCard'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
-import { SkeletonCardAd } from '@/components/Skeletons/SkeletonCardAd'
 import { SkeletonMyItemCard } from '@/components/Skeletons/SkeletonMyItemCard'
 import { SkeletonText } from '@/components/Skeletons/SkeletonText'
 import { TabHeader } from '@/components/TabHeader'
@@ -17,7 +16,13 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false)
   return (
     <View className='flex-1 bg-white'>
-      <TabHeader text='Perfil' icon='user' />
+      <TabHeader
+        text='Perfil'
+        icon='user'
+        iconAction='logout'
+        iconActionColor='red'
+        onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
+      />
 
       <ScrollView className='flex-2 flex-col'>
         <View className='flex-2 p-4 flex-col h-full'>
@@ -85,11 +90,7 @@ export default function Profile() {
 
           <View className='flex-2 flex-col'>
             <Title text='Meus anúncios' />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className='flex-2 p-2 gap-2'
-            >
+            <View>
               {isLoading ? (
                 <View className='flex-2 flex-row justify-around w-full'>
                   <SkeletonMyItemCard />
@@ -97,7 +98,11 @@ export default function Profile() {
                   <SkeletonMyItemCard />
                 </View>
               ) : (
-                <>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  className='flex-2 gap-2'
+                >
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
@@ -128,25 +133,12 @@ export default function Profile() {
                     officeType='Teste'
                     onPress={() => navigation.navigate('myAd')}
                   />
-                </>
+                </ScrollView>
               )}
-            </ScrollView>
+            </View>
           </View>
         </View>
       </ScrollView>
-      <View className='p-4'>
-        {isLoading ? (
-          <SkeletonActionButton />
-        ) : (
-          <ActionButton
-            text='Sair da conta'
-            icon='sign-out-alt'
-            backgroundColor='transparent'
-            textColor='red-500 | red'
-            onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
-          />
-        )}
-      </View>
     </View>
   )
 }

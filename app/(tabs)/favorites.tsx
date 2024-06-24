@@ -29,76 +29,22 @@ export default function Favorites() {
 
   const [ad, setAd] = useState<IAdProps[]>([
     {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
+      name: 'Paulo Cesar',
+      office: 'Padeiro',
       officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
+      categories: ['Alimentação'],
     },
     {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
+      name: 'DIB',
+      office: 'Loja de Guloseimas',
+      officeType: 'Estabelecimento',
+      categories: ['Alimentação'],
     },
     {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
+      name: 'Joana Oliveira',
+      office: 'Cabeleireira',
       officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
-    },
-    {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
-    },
-    {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
-    },
-    {
-      name: 'Peter Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: [
-        'Informática',
-        'Desenvolvimento',
-        'Website',
-        'Aplicativos',
-        'Mobile',
-      ],
+      categories: ['Beleza'],
     },
   ] as IAdProps[])
 
@@ -154,7 +100,7 @@ export default function Favorites() {
         </View>
       )}
       {ad.length > 0 && (
-        <>
+        <View>
           <FilterMenu
             filterMenu={filterMenu}
             setFilterMenu={setFilterMenu}
@@ -168,7 +114,7 @@ export default function Favorites() {
             visible={orderMenuVisible}
             onClose={() => setOrderMenuVisible(false)}
           />
-        </>
+        </View>
       )}
     </View>
   )

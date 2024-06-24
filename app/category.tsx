@@ -1,30 +1,20 @@
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  VirtualizedList,
-} from 'react-native'
-import { CardItem } from '../../components/CardItem'
-
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useNavigation } from 'expo-router'
-import { FilterButton } from '@/components/FilterButton'
-import { FilterMenu } from '@/components/FilterMenu'
-import { OrderButton } from '@/components/OrderButton'
-import { OrderMenu } from '@/components/OrderMenu'
-import { Title } from '@/components/Title'
-import { CardAd } from '@/components/CardAd'
-import { TabHeader } from '@/components/TabHeader'
 import { useState } from 'react'
+import { View, FlatList } from 'react-native'
+import { ActionButton } from '@/components/ActionButton'
+import { CardItem } from '@/components/CardItem'
+import { EmptyList } from '@/components/EmptyList'
+import { FilterButton } from '@/components/FilterButton'
+import { Header } from '@/components/Header'
+import { InputText } from '@/components/InputText'
+import { OrderButton } from '@/components/OrderButton'
+import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
+import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
+import { Tag } from '@/components/Tag'
+import { Title } from '@/components/Title'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
-import { SkeletonCardAd } from '@/components/Skeletons/SkeletonCardAd'
-import { EmptyList } from '@/components/EmptyList'
-import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
-import { ChangeCityButton } from '@/components/ChangeCityButton'
 
 interface IAdProps {
   name: string
@@ -33,14 +23,15 @@ interface IAdProps {
   categories: string[]
 }
 
-export default function HomeScreen() {
-  const navigation = useNavigation()
+export default function Category() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
   const { orderMenu, setOrderMenu } = useOrderMenu()
-
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const router = useRouter()
+  const { category, categoryIcon } = useLocalSearchParams()
 
   const [ad, setAd] = useState<IAdProps[]>([
     {
@@ -80,42 +71,21 @@ export default function HomeScreen() {
       categories: ['Beleza'],
     },
   ] as IAdProps[])
+
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
     setOrderMenuVisible(false)
   }
+
   function fetchOrderMenu() {
     setOrderMenuVisible(true)
     setFilterMenuVisible(false)
   }
 
   return (
-    <View className='flex-1 bg-white'>
-      <TabHeader
-        text='Cartãozinho'
-        icon='home'
-        iconAction='plus'
-        onPress={() => navigation.navigate('new')}
-      />
-
-      <View showsVerticalScrollIndicator={false} className='flex-2 mb-2 p-4'>
-        <View className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
-          <View className='flex-1 flex-row justify-between items-center px-6 py-4'>
-            <FontAwesome5 name='map-marker-alt' size={16} />
-            <View className='flex-1 flex-row justify-center'>
-              <Text className='font-bold text-xl'>
-                {isLoading ? '' : 'Petrópolis'}
-              </Text>
-              <Text className='font-bold text-xl'>
-                {isLoading ? ' - ' : ' - RJ'}
-              </Text>
-            </View>
-          </View>
-          <ChangeCityButton />
-        </View>
-
-        <Title text='Anúncios' />
-
+    <View className='flex-1 flex-col'>
+      <Header title={category} icon={categoryIcon} />
+      <View className='flex-2 p-4'>
         {isLoading ? (
           <View className='flex-2'>
             <View className='flex-2 flex-row justify-between'>
@@ -128,14 +98,16 @@ export default function HomeScreen() {
           </View>
         ) : (
           <View>
-            <View className='flex-2 flex-row justify-between'>
-              <FilterButton onPress={fetchFilterMenu} />
-              <OrderButton onPress={fetchOrderMenu} />
-            </View>
+            {ad.filter((a) => a.categories.includes(category)).length > 0 && (
+              <View className='flex-2 flex-row justify-between'>
+                <FilterButton onPress={fetchFilterMenu} />
+                <OrderButton onPress={fetchOrderMenu} />
+              </View>
+            )}
             <FlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
-              data={ad}
+              data={ad.filter((a) => a.categories.includes(category))}
               renderItem={({ item }) => (
                 <CardItem
                   name={item.name}
@@ -152,23 +124,6 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-
-      {ad.length > 0 && (
-        <View>
-          <FilterMenu
-            filterMenu={filterMenu}
-            setFilterMenu={setFilterMenu}
-            visible={filterMenuVisible}
-            onClose={() => setFilterMenuVisible(false)}
-          />
-          <OrderMenu
-            orderMenu={orderMenu}
-            setOrderMenu={setOrderMenu}
-            visible={orderMenuVisible}
-            onClose={() => setOrderMenuVisible(false)}
-          />
-        </View>
-      )}
     </View>
   )
 }

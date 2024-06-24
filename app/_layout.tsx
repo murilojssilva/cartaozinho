@@ -41,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name='editPassword' options={{ headerShown: false }} />
         <Stack.Screen name='myAd' options={{ headerShown: false }} />
         <Stack.Screen name='editAd' options={{ headerShown: false }} />
+        <Stack.Screen name='category' options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   )

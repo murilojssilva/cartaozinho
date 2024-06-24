@@ -1,7 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 
-interface ICardAdProps {
+interface ICardAdProps extends TouchableOpacityProps {
   text: string
   icon: string
 }

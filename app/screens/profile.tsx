@@ -8,13 +8,8 @@ import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
-import { styled } from 'nativewind'
 import { useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
-
-const StyledView = styled(View)
-const StyledScrollView = styled(ScrollView)
-const StyledText = styled(Text)
+import { StyledScrollView, StyledText, StyledView } from '../styled'
 
 export function Profile() {
   const navigation = useNavigation()
@@ -97,7 +92,7 @@ export function Profile() {
 
           <StyledView className='flex-2 flex-col'>
             <Title text='Meus anúncios' />
-            <View>
+            <StyledView>
               {isLoading ? (
                 <StyledView className='flex-2 flex-row justify-around w-full'>
                   <SkeletonMyItemCard />
@@ -137,7 +132,7 @@ export function Profile() {
                   />
                 </StyledScrollView>
               )}
-            </View>
+            </StyledView>
           </StyledView>
         </StyledView>
       </StyledScrollView>

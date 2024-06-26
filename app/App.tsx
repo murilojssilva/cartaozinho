@@ -27,7 +27,7 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <StatusBar
           barStyle='light-content'

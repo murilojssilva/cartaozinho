@@ -1,9 +1,9 @@
-import { Text, View } from 'react-native'
+import { StyledText, StyledView } from '../styled'
 
 export function NotFount() {
   return (
-    <View>
-      <Text>Oi</Text>
-    </View>
+    <StyledView>
+      <StyledText>Oi</StyledText>
+    </StyledView>
   )
 }

@@ -1,24 +1,17 @@
 import React, { useState } from 'react'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native'
-import { styled } from 'nativewind'
+import { Platform } from 'react-native'
 import { ActionButton } from '@/components/ActionButton'
 import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
-import icon from '@/assets/images/icon.png'
+import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
-
-const StyledView = styled(View)
-const StyledImage = styled(Image)
-const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-const StyledText = styled(Text)
-const StyledScrollView = styled(ScrollView)
+import {
+  StyledImage,
+  StyledKeyboardAvoidingView,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
@@ -31,7 +24,7 @@ export default function Login() {
       className='flex-1 bg-gray-100 justify-center'
     >
       <StyledScrollView className='p-4  flex-grow'>
-        <StyledImage source={icon} className='flex-2 w-full h-32' />
+        <StyledImage source={mapa} className='flex-2 w-full h-32' />
         <StyledView className=' flex-col p-4 gap-2'>
           <StyledText className='font-bold text-xl'>
             Acesse sua conta
@@ -48,7 +41,7 @@ export default function Login() {
             text='Criar conta'
             icon='log-in-outline'
             iconColor='black'
-            onPress={() => navigation.navigate('Auth', { screen: 'signUp' })}
+            onPress={() => navigation.navigate('SignUp')}
           />
         </StyledView>
         <StyledView className='p-4'>

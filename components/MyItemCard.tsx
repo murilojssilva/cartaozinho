@@ -1,17 +1,7 @@
+import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-import {
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { Alert, TouchableOpacityProps } from 'react-native'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -33,7 +23,24 @@ export function MyItemCard({ name, office, ...props }: ICardItemProps) {
         </StyledText>
         <StyledText className='text-center text-sm'>{office}</StyledText>
       </StyledView>
-      <StyledTouchableOpacity className='flex-2 flex-row justify-center items-center p-2 rounded-xl'>
+      <StyledTouchableOpacity
+        onPress={() =>
+          Alert.alert(
+            'Remover',
+            'Deseja remover o anúncio?',
+            [
+              {
+                text: 'Não',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'Sim', onPress: () => console.log('OK Pressed') },
+            ],
+            { cancelable: false }
+          )
+        }
+        className='flex-2 flex-row justify-center items-center p-2 rounded-xl'
+      >
         <Ionicons name='trash' size={24} color='red' />
         <StyledText className='text-lg font-bold text-red-500'>
           {' '}

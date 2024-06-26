@@ -1,4 +1,3 @@
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,29 +7,32 @@ import {
   GestureHandlerRootView,
   PanGestureHandler,
 } from 'react-native-gesture-handler'
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import { RadioButton } from './RadioButton'
 
-import { styled } from 'nativewind'
-import { useState } from 'react'
 import { useEffect } from 'react'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
+import { OrderMenuState } from '@/hooks/useOrderMenu'
 
 interface IOrderMenuProps {
   visible: boolean
-  onClose: any
-  orderMenu: boolean
-  setOrderMenu: any
+  onClose: () => void
+  setOrderMenu: (visible: boolean) => void
+  option: string
+  orderMenu: OrderMenuState
+  setOption: (option: string) => void
+  sheetHeight: number
 }
 
-export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
-  const [selectedValue, setSelectedValue] = useState(null)
-
+export function OrderMenu({
+  visible,
+  onClose,
+  option,
+  setOption,
+  orderMenu,
+  sheetHeight,
+}: IOrderMenuProps) {
   const translateY = useSharedValue(0)
-  const sheetHeight = 220
 
   useEffect(() => {
     translateY.value = visible ? withSpring(0) : withSpring(sheetHeight)
@@ -50,7 +52,7 @@ export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
       <PanGestureHandler
         onGestureEvent={(event: any) => {
           if (event.nativeEvent.translationY > 0) {
-            translateY.value = withSpring(event.nativeEvent.translationY)
+            translateY.value = event.nativeEvent.translationY
           }
         }}
         onEnded={(event: any) => {
@@ -73,7 +75,7 @@ export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
             animatedStyle,
           ]}
         >
-          <View
+          <StyledView
             style={{
               height: 4,
               width: 32,
@@ -84,81 +86,41 @@ export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
             }}
           />
 
-          <View
+          <StyledView
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginBottom: 16,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <StyledView style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='swap-vertical-sharp' size={32} />
-              <Text style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}>
+              <StyledText
+                style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}
+              >
                 Ordem
-              </Text>
-            </View>
-            <TouchableOpacity onPress={onClose}>
+              </StyledText>
+            </StyledView>
+            <StyledTouchableOpacity onPress={onClose}>
               <Ionicons size={32} color='#9CA3AF' name='close' />
-            </TouchableOpacity>
-          </View>
+            </StyledTouchableOpacity>
+          </StyledView>
 
           <StyledView className='flex-2 flex-col'>
             <StyledView>
-              {options.map((option) => (
+              {options.map((optionItem) => (
                 <RadioButton
-                  key={option.value}
-                  label={option.label}
-                  value={option.value}
-                  selected={selectedValue === option.value}
-                  onSelect={setSelectedValue}
+                  key={optionItem.value}
+                  label={optionItem.label}
+                  value={optionItem.value}
+                  selected={option === optionItem.value}
+                  onSelect={() => setOption(optionItem.value)}
                 />
               ))}
             </StyledView>
-          </StyledView>
-
-          <StyledView className='flex-2 flex-row justify-center items-end'>
-            <StyledTouchableOpacity
-              className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
-              onPress={() => {}}
-            >
-              <FontAwesome5 name='eraser' size={24} color='black' />
-              <StyledText className='font-bold text-xl text-gray-900'>
-                {'  Ordenar'}
-              </StyledText>
-            </StyledTouchableOpacity>
           </StyledView>
         </Animated.View>
       </PanGestureHandler>
     </GestureHandlerRootView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  radioContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  outerCircle: {
-    height: 24,
-    width: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  innerCircle: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    backgroundColor: '#000',
-  },
-  radioLabel: {
-    fontSize: 16,
-  },
-})

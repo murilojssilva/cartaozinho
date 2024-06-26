@@ -1,4 +1,3 @@
-import { FlatList, ScrollView, Text, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
 
 import { useNavigation } from 'expo-router'
@@ -8,7 +7,7 @@ import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
 import { Title } from '@/components/Title'
 import { TabHeader } from '@/components/TabHeader'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -16,16 +15,10 @@ import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { ChangeCityButton } from '@/components/ChangeCityButton'
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledText = styled(Text)
-const StyledFlatList = styled(FlatList)
-const StyledScrollView = styled(ScrollView)
-
-StyledFlatList
+import { StyledFlatList, StyledText, StyledView } from '../styled'
 
 interface IAdProps {
+  id: number
   name: string
   office: string
   officeType: string
@@ -43,42 +36,61 @@ export function Home() {
 
   const [ad, setAd] = useState<IAdProps[]>([
     {
+      id: 1,
       name: 'Murilo Silva',
       office: 'Desenvolvedor',
       officeType: 'Prestador de serviço',
       categories: ['Tecnologia'],
     },
     {
+      id: 2,
       name: 'Paulo Cesar',
       office: 'Padeiro',
       officeType: 'Prestador de serviço',
       categories: ['Alimentação'],
     },
     {
+      id: 3,
       name: 'DIB',
       office: 'Loja de Guloseimas',
       officeType: 'Estabelecimento',
       categories: ['Alimentação'],
     },
     {
+      id: 4,
       name: 'SerraTech',
       office: 'Loja de Eletrônicos',
       officeType: 'Estabelecimento',
       categories: ['Serviços', 'Tecnologia'],
     },
     {
+      id: 5,
       name: 'Gatos & Só',
       office: 'Clínica Veterinária',
       officeType: 'Estabelecimento',
       categories: ['Pet', 'Serviços'],
     },
     {
+      id: 6,
       name: 'Joana Oliveira',
       office: 'Cabeleireira',
       officeType: 'Prestador de serviço',
       categories: ['Beleza'],
     },
   ] as IAdProps[])
+
+  const [orderOption, setOrderOption] = useState<string>('option1')
+
+  useEffect(() => {
+    if (orderOption === 'option1') {
+      setAd((prevAd) =>
+        [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
+      )
+    } else if (orderOption === 'option2') {
+      setAd((prevAd) => [...prevAd].sort((a, b) => a.id - b.id))
+    }
+  }, [orderOption])
+
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
     setOrderMenuVisible(false)
@@ -98,10 +110,7 @@ export function Home() {
         onPress={() => navigation.navigate('NewAd')}
       />
 
-      <StyledScrollView
-        showsVerticalScrollIndicator={false}
-        className='flex-2 mb-2 p-4'
-      >
+      <StyledView className='flex-2 p-4'>
         <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
           <StyledView className='flex-1 flex-row justify-between items-center px-6 py-4'>
             <FontAwesome5 name='map-marker-alt' size={16} />
@@ -148,13 +157,15 @@ export function Home() {
                   onPress={() => navigation.navigate('Details')}
                 />
               )}
-              ListEmptyComponent={<EmptyList />}
-              ListFooterComponent={<View style={{ height: 350 }} />}
+              ListEmptyComponent={
+                <EmptyList onPress={() => navigation.navigate('NewAd')} />
+              }
+              ListFooterComponent={<StyledView style={{ height: 350 }} />}
               keyExtractor={(item, index) => index.toString()}
             />
           </StyledView>
         )}
-      </StyledScrollView>
+      </StyledView>
 
       {ad.length > 0 && (
         <StyledView>
@@ -163,12 +174,16 @@ export function Home() {
             setFilterMenu={setFilterMenu}
             visible={filterMenuVisible}
             onClose={() => setFilterMenuVisible(false)}
+            sheetHeight={740}
           />
           <OrderMenu
             orderMenu={orderMenu}
             setOrderMenu={setOrderMenu}
             visible={orderMenuVisible}
             onClose={() => setOrderMenuVisible(false)}
+            option={orderOption}
+            setOption={setOrderOption}
+            sheetHeight={550}
           />
         </StyledView>
       )}

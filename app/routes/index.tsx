@@ -4,13 +4,11 @@ import AppRoutes from './app.routes'
 
 const { Navigator, Screen } = createStackNavigator()
 
-export function Routes() {
+export default function Routes() {
   return (
-    <Navigator initialRouteName='Auth' screenOptions={{ headerShown: false }}>
+    <Navigator initialRouteName='App' screenOptions={{ headerShown: false }}>
       <Screen name='Auth' component={AuthRoutes} />
       <Screen name='App' component={AppRoutes} />
     </Navigator>
   )
 }
-
-export default Routes

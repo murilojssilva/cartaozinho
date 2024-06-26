@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useFilterMenu = (initialState = true) => {
+export default function useFilterMenu(initialState = true) {
   const [filterMenu, setFilterMenu] = useState(initialState)
 
   const toggleFilterMenu = () => {
@@ -13,5 +13,3 @@ const useFilterMenu = (initialState = true) => {
     setFilterMenu,
   }
 }
-
-export default useFilterMenu

@@ -1,9 +1,6 @@
+import { StyledText, StyledTouchableOpacity } from '@/app/styled'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { styled } from 'nativewind'
-import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
-
-const StyledText = styled(Text)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { TouchableOpacityProps } from 'react-native'
 
 interface ICardAdProps extends TouchableOpacityProps {
   text: string

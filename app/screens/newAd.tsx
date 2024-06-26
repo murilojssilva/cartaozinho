@@ -5,20 +5,15 @@ import { SpinnerButton } from '@/components/SpinnerButton'
 import { Tag } from '@/components/Tag'
 import { useNavigation } from 'expo-router'
 import { useState } from 'react'
+import { Platform, Alert } from 'react-native'
 import {
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  View,
-  Platform,
-} from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-const StyledScrollView = styled(ScrollView)
-const StyledText = styled(Text)
+  StyledKeyboardAvoidingView,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
+import { TextInputMask } from 'react-native-masked-text'
+import useGetAddress from '@/hooks/useGetAddress'
 
 export default function NewAd() {
   const categories = [
@@ -35,9 +30,12 @@ export default function NewAd() {
     'Tecnologia',
     'Transporte',
   ]
+
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [isSelected, setIsSelected] = useState(false)
+
+  const { address, setAddress, handleCepChange } = useGetAddress()
 
   return (
     <StyledKeyboardAvoidingView
@@ -100,22 +98,34 @@ export default function NewAd() {
               />
             ))}
           </StyledScrollView>
+
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
             <InputText text='Telefone' keyboardType='numeric' />
             <InputText text='WhatsApp' keyboardType='numeric' />
             <InputText text='E-mail' />
           </StyledView>
+
           <StyledText className='font-bold text-xl my-4'>
             Localização
           </StyledText>
           <StyledView className='gap-2 mb-4'>
-            <InputText text='CEP' />
-            <InputText text='Rua' />
-            <InputText text='Número' />
-            <InputText text='Bairro' />
-            <InputText text='Cidade' />
-            <InputText text='Estado' />
+            <TextInputMask
+              type={'zip-code'}
+              value={address.cep}
+              onChangeText={(text) => handleCepChange(text)}
+              placeholder='CEP'
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            />
+            <InputText text='Rua' value={address.rua} editable={false} />
+            <InputText
+              text='Número'
+              value={address.numero}
+              onChangeText={(text) => setAddress({ ...address, numero: text })}
+            />
+            <InputText text='Bairro' value={address.bairro} editable={false} />
+            <InputText text='Cidade' value={address.cidade} editable={false} />
+            <InputText text='Estado' value={address.estado} editable={false} />
           </StyledView>
         </StyledView>
       </StyledScrollView>

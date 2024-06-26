@@ -1,8 +1,4 @@
-import { Text } from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
+import { StyledText } from '@/app/styled'
 
 interface ITextProps {
   text: string

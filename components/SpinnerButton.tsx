@@ -1,15 +1,7 @@
 import { useEffect, useRef } from 'react'
-import {
-  Animated,
-  Easing,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native'
+import { Animated, Easing, TouchableOpacityProps } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
-
-import { styled } from 'nativewind'
-
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { StyledTouchableOpacity } from '@/app/styled'
 
 interface IActionButtonProps extends TouchableOpacityProps {}
 

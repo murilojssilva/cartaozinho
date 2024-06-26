@@ -3,13 +3,13 @@ import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { Title } from '@/components/Title'
 import { useNavigation } from 'expo-router'
-import { styled } from 'nativewind'
 import { useState } from 'react'
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
-
-const StyledView = styled(View)
-const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-const StyledScrollView = styled(ScrollView)
+import { Platform } from 'react-native'
+import {
+  StyledKeyboardAvoidingView,
+  StyledScrollView,
+  StyledView,
+} from '../styled'
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false)

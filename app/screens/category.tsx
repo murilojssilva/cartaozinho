@@ -1,6 +1,5 @@
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
 import { useState } from 'react'
-import { View, FlatList } from 'react-native'
 import { CardItem } from '@/components/CardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { FilterButton } from '@/components/FilterButton'
@@ -10,13 +9,7 @@ import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
-
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledFlatList = styled(FlatList)
-
-StyledFlatList
+import { StyledFlatList, StyledView } from '../styled'
 
 interface IAdProps {
   name: string
@@ -122,8 +115,10 @@ export default function Category() {
                   onPress={() => navigation.navigate('CategoryDetails')}
                 />
               )}
-              ListEmptyComponent={<EmptyList />}
-              ListFooterComponent={<View style={{ height: 350 }} />} // Substitua StyledView com View para React Native
+              ListEmptyComponent={
+                <EmptyList onPress={() => navigation.navigate('NewAd')} />
+              }
+              ListFooterComponent={<StyledView style={{ height: 350 }} />}
               keyExtractor={(item, index) => index.toString()}
             />
           </StyledView>

@@ -1,10 +1,5 @@
-import { useState } from 'react'
-import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { StyledText, StyledTouchableOpacity } from '@/app/styled'
+import { TouchableOpacityProps } from 'react-native'
 
 interface ITagProps extends TouchableOpacityProps {
   text: string
@@ -16,7 +11,6 @@ export function Tag({
   backgroundColor = 'gray-600',
   ...props
 }: ITagProps) {
-  const [isSelected, setIsSelected] = useState(false)
   return (
     <StyledTouchableOpacity
       className={`flex-2 flex-row py-2 px-4 bg-${backgroundColor} rounded-full mx-1`}

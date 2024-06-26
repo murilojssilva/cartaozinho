@@ -1,7 +1,4 @@
-import { View } from 'react-native'
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
+import { StyledView } from '@/app/styled'
 
 export function SkeletonFilterButton() {
   return (

@@ -1,4 +1,3 @@
-import { Image, ScrollView, Text, View } from 'react-native'
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
@@ -11,13 +10,12 @@ import { SkeletonProfileIcon } from '@/components/Skeletons/SkeletonProfileIcon'
 import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCard'
 import { ActionButton } from '@/components/ActionButton'
-
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledScrollView = styled(ScrollView)
-const StyledText = styled(Text)
-const StyledImage = styled(Image)
+import {
+  StyledImage,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
 
 export default function Details() {
   const category: string[] = [
@@ -124,21 +122,24 @@ export default function Details() {
             <StyledView className='flex-1 justify-center flex-row gap-2'>
               <SocialButton
                 text='Telefone'
-                color='gray-300'
+                backgroundColor='gray-300'
+                textColor='white'
                 icon='phone'
                 onPress={() => navigation.navigate('details')}
               />
 
               <SocialButton
                 text='WhatsApp'
-                color='green-300'
+                backgroundColor='gray-300'
+                textColor='white'
                 icon='whatsapp'
                 onPress={() => navigation.navigate('details')}
               />
 
               <SocialButton
                 text='E-mail'
-                color='gray-300'
+                backgroundColor='gray-300'
+                textColor='white'
                 icon='envelope'
                 onPress={() => navigation.navigate('details')}
               />

@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,23 +11,22 @@ import {
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { Title } from './Title'
 import { Tag } from './Tag'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 
 interface IFilterMenuProps {
   visible: boolean
   onClose: any
   filterMenu: boolean
   setFilterMenu: any
+  sheetHeight: number
 }
 
-export function FilterMenu({ visible, onClose }: IFilterMenuProps) {
+export function FilterMenu({
+  visible,
+  onClose,
+  sheetHeight,
+}: IFilterMenuProps) {
   const translateY = useSharedValue(0)
-  const sheetHeight = 360
 
   useEffect(() => {
     translateY.value = visible ? withSpring(0) : withSpring(sheetHeight)
@@ -66,7 +64,7 @@ export function FilterMenu({ visible, onClose }: IFilterMenuProps) {
             animatedStyle,
           ]}
         >
-          <View
+          <StyledView
             style={{
               height: 4,
               width: 32,
@@ -77,23 +75,25 @@ export function FilterMenu({ visible, onClose }: IFilterMenuProps) {
             }}
           />
 
-          <View
+          <StyledView
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginBottom: 16,
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <StyledView style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name='filter' size={32} />
-              <Text style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}>
+              <StyledText
+                style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}
+              >
                 Filtros
-              </Text>
-            </View>
-            <TouchableOpacity onPress={onClose}>
+              </StyledText>
+            </StyledView>
+            <StyledTouchableOpacity onPress={onClose}>
               <Ionicons size={32} color='#9CA3AF' name='close' />
-            </TouchableOpacity>
-          </View>
+            </StyledTouchableOpacity>
+          </StyledView>
 
           <StyledView style={{ flex: 1 }}>
             <Title text='Tipo' />
@@ -108,27 +108,26 @@ export function FilterMenu({ visible, onClose }: IFilterMenuProps) {
               <Tag backgroundColor='gray-600' text='No estabelecimento' />
               <Tag backgroundColor='gray-600' text='Remoto' />
             </StyledView>
-          </StyledView>
-
-          <StyledView className='flex-2 flex-row justify-around'>
-            <StyledTouchableOpacity
-              className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
-              onPress={() => {}}
-            >
-              <FontAwesome5 name='eraser' size={24} color='black' />
-              <StyledText className='font-bold text-xl text-gray-900'>
-                {'  Limpar'}
-              </StyledText>
-            </StyledTouchableOpacity>
-            <StyledTouchableOpacity
-              className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-cyan-700'
-              onPress={() => {}}
-            >
-              <FontAwesome5 name='filter' size={24} color='white' />
-              <StyledText className='font-bold text-xl text-white'>
-                {'  Filtrar'}
-              </StyledText>
-            </StyledTouchableOpacity>
+            <StyledView className='flex-2 flex-row justify-around py-4'>
+              <StyledTouchableOpacity
+                className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
+                onPress={() => {}}
+              >
+                <FontAwesome5 name='eraser' size={24} color='black' />
+                <StyledText className='font-bold text-xl text-gray-900'>
+                  {'  Limpar'}
+                </StyledText>
+              </StyledTouchableOpacity>
+              <StyledTouchableOpacity
+                className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-cyan-700'
+                onPress={() => {}}
+              >
+                <FontAwesome5 name='filter' size={24} color='white' />
+                <StyledText className='font-bold text-xl text-white'>
+                  {'  Filtrar'}
+                </StyledText>
+              </StyledTouchableOpacity>
+            </StyledView>
           </StyledView>
         </Animated.View>
       </PanGestureHandler>

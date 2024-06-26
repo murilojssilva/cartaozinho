@@ -9,7 +9,7 @@ import FavoritesNavigator from './favorites.routes'
 
 const { Navigator, Screen } = createBottomTabNavigator()
 
-export function AppRoutes() {
+export default function AppRoutes() {
   const colorScheme = useColorScheme()
 
   return (
@@ -18,6 +18,7 @@ export function AppRoutes() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
+      initialRouteName='Home'
     >
       <Screen
         name='Home'
@@ -74,5 +75,3 @@ export function AppRoutes() {
     </Navigator>
   )
 }
-
-export default AppRoutes

@@ -10,10 +10,11 @@ import { TabHeader } from '@/components/TabHeader'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { useNavigation } from 'expo-router'
-import { useState } from 'react'
-import { FlatList, View } from 'react-native'
+import { useState, useEffect } from 'react'
+import { StyledFlatList, StyledView } from '../styled'
 
 interface IAdProps {
+  id: number
   name: string
   office: string
   officeType: string
@@ -29,18 +30,21 @@ export function Favorites() {
 
   const [ad, setAd] = useState<IAdProps[]>([
     {
+      id: 1,
       name: 'Paulo Cesar',
       office: 'Padeiro',
       officeType: 'Prestador de serviço',
       categories: ['Alimentação'],
     },
     {
+      id: 3,
       name: 'DIB',
       office: 'Loja de Guloseimas',
       officeType: 'Estabelecimento',
       categories: ['Alimentação'],
     },
     {
+      id: 5,
       name: 'Joana Oliveira',
       office: 'Cabeleireira',
       officeType: 'Prestador de serviço',
@@ -49,6 +53,17 @@ export function Favorites() {
   ] as IAdProps[])
 
   const [isLoading, setIsLoading] = useState(false)
+  const [orderOption, setOrderOption] = useState<string>('option1')
+
+  useEffect(() => {
+    if (orderOption === 'option1') {
+      setAd((prevAd) =>
+        [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
+      )
+    } else if (orderOption === 'option2') {
+      setAd((prevAd) => [...prevAd].sort((a, b) => a.id - b.id))
+    }
+  }, [orderOption])
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
@@ -62,26 +77,26 @@ export function Favorites() {
   const navigation = useNavigation()
 
   return (
-    <View className='flex-1 bg-white'>
+    <StyledView className='flex-1 bg-white'>
       <TabHeader text='Favoritos' icon='bookmark' />
 
       {isLoading ? (
-        <View className='flex-2 flex-col p-4'>
-          <View className='flex-2 flex-row justify-between'>
+        <StyledView className='flex-2 flex-col p-4'>
+          <StyledView className='flex-2 flex-row justify-between'>
             <SkeletonFilterButton />
             <SkeletonFilterButton />
-          </View>
+          </StyledView>
           <SkeletonCardItem />
           <SkeletonCardItem />
           <SkeletonCardItem />
-        </View>
+        </StyledView>
       ) : (
-        <View className='flex-2 mb-2 p-4'>
-          <View className='flex-2 flex-row justify-between'>
+        <StyledView className='flex-2 mb-2 p-4'>
+          <StyledView className='flex-2 flex-row justify-between'>
             <FilterButton onPress={fetchFilterMenu} />
             <OrderButton onPress={fetchOrderMenu} />
-          </View>
-          <FlatList
+          </StyledView>
+          <StyledFlatList
             showsVerticalScrollIndicator={false}
             data={ad}
             renderItem={({ item }) => (
@@ -94,18 +109,19 @@ export function Favorites() {
               />
             )}
             ListEmptyComponent={<EmptyFavoriteList />}
-            ListFooterComponent={<View style={{ height: 130 }} />}
+            ListFooterComponent={<StyledView style={{ height: 130 }} />}
             keyExtractor={(item, index) => index.toString()}
           />
-        </View>
+        </StyledView>
       )}
       {ad.length > 0 && (
-        <View>
+        <StyledView>
           <FilterMenu
             filterMenu={filterMenu}
             setFilterMenu={setFilterMenu}
             visible={filterMenuVisible}
             onClose={() => setFilterMenuVisible(false)}
+            sheetHeight={500}
           />
 
           <OrderMenu
@@ -113,9 +129,12 @@ export function Favorites() {
             setOrderMenu={setOrderMenu}
             visible={orderMenuVisible}
             onClose={() => setOrderMenuVisible(false)}
+            option={orderOption}
+            setOption={setOrderOption}
+            sheetHeight={320}
           />
-        </View>
+        </StyledView>
       )}
-    </View>
+    </StyledView>
   )
 }

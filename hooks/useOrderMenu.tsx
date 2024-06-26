@@ -1,6 +1,12 @@
 import { useState } from 'react'
 
-const useOrderMenu = (initialState = true) => {
+export type OrderMenuState = {
+  orderMenu: boolean
+  toggleOrderMenu: () => void
+  setOrderMenu: (visible: boolean) => void
+}
+
+export default function useOrderMenu(initialState = true): OrderMenuState {
   const [orderMenu, setOrderMenu] = useState(initialState)
 
   const toggleOrderMenu = () => {
@@ -13,5 +19,3 @@ const useOrderMenu = (initialState = true) => {
     setOrderMenu,
   }
 }
-
-export default useOrderMenu

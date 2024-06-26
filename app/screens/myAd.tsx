@@ -1,4 +1,3 @@
-import { Image, ScrollView, Text, View } from 'react-native'
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
@@ -13,13 +12,12 @@ import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
 import { Header } from '@/components/Header'
 import { SpinnerButton } from '@/components/SpinnerButton'
-
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledImage = styled(Image)
-const StyledScrollView = styled(ScrollView)
-const StyledText = styled(Text)
+import {
+  StyledImage,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
 
 export default function MyAd() {
   const category: string[] = [
@@ -129,21 +127,24 @@ export default function MyAd() {
             <StyledView className='flex-2 justify-center flex-row gap-2'>
               <SocialButton
                 text='Telefone'
-                color='gray-300'
+                backgroundColor='gray-300'
+                textColor='black'
                 icon='phone'
                 onPress={() => navigation.navigate('details')}
               />
 
               <SocialButton
                 text='WhatsApp'
-                color='green-300'
+                backgroundColor='gray-300'
+                textColor='black'
                 icon='whatsapp'
                 onPress={() => navigation.navigate('details')}
               />
 
               <SocialButton
                 text='E-mail'
-                color='gray-300'
+                backgroundColor='gray-300'
+                textColor='black'
                 icon='envelope'
                 onPress={() => navigation.navigate('details')}
               />
@@ -203,13 +204,24 @@ export default function MyAd() {
         )}
       </StyledScrollView>
       {isLoading ? (
-        <StyledView className='flex-2 flex-col p-4'>
+        <StyledView className='flex-2 flex-row p-4'>
           <SkeletonActionButton />
           <StyledView className='my-2' />
           <SkeletonActionButton />
         </StyledView>
       ) : (
-        <StyledView className='p-4 gap-2'>
+        <StyledView className='flex-2 flex-row justify-around p-4 gap-2'>
+          {isLoadingRemove ? (
+            <SpinnerButton />
+          ) : (
+            <ActionButton
+              text='Apagar anúncio'
+              icon='trash'
+              iconColor='red'
+              backgroundColor='transparent'
+              textColor='red-500'
+            />
+          )}
           {isLoadingEdit ? (
             <SpinnerButton />
           ) : (
@@ -220,17 +232,6 @@ export default function MyAd() {
               textColor='white'
               iconColor='white'
               onPress={() => navigation.navigate('EditAd')}
-            />
-          )}
-          {isLoadingRemove ? (
-            <SpinnerButton />
-          ) : (
-            <ActionButton
-              text='Apagar anúncio'
-              icon='trash'
-              iconColor='red'
-              backgroundColor='transparent'
-              textColor='red-500'
             />
           )}
         </StyledView>

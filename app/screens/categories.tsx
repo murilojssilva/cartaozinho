@@ -1,11 +1,7 @@
-import { ScrollView, View } from 'react-native'
 import { CardAd } from '@/components/CardAd'
 import { TabHeader } from '@/components/TabHeader'
 import { useNavigation } from 'expo-router'
-import { styled } from 'nativewind'
-
-const StyledView = styled(View)
-const StyledScrollView = styled(ScrollView)
+import { StyledScrollView, StyledView } from '../styled'
 
 export function Categories() {
   const navigation = useNavigation()

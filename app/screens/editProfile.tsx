@@ -3,21 +3,15 @@ import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
 import { useState } from 'react'
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  View,
-  Platform,
-} from 'react-native'
+import { Platform } from 'react-native'
 
-import { styled } from 'nativewind'
 import { useNavigation } from 'expo-router'
-
-const StyledView = styled(View)
-const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-const StyledScrollView = styled(ScrollView)
-const StyledText = styled(Text)
+import {
+  StyledKeyboardAvoidingView,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
 
 export default function EditProfile() {
   const [isLoading, setIsLoading] = useState(false)

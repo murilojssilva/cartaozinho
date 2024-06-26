@@ -1,10 +1,6 @@
+import { StyledText, StyledTouchableOpacity } from '@/app/styled'
 import { useState } from 'react'
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledTouchableOpacity = styled(TouchableOpacity)
 
 interface IChangeCityButtonProps extends TouchableOpacityProps {}
 

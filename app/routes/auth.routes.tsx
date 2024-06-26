@@ -1,16 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from '../screens/login'
 import SignUp from '../screens/signUp'
-import { styled } from 'nativewind'
-import { Text, View } from 'react-native'
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 
-const StyledView = styled(View)
-const StyledText = styled(Text)
+import { FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { StyledText, StyledView } from '../styled'
+import { useNavigation } from 'expo-router'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 export default function AuthRoutes() {
+  const navigation = useNavigation()
   return (
     <Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
       <Screen
@@ -44,7 +43,7 @@ export default function AuthRoutes() {
             <FontAwesome5
               name='chevron-left'
               size={26}
-              //onPress={() => navigation.goBack()}
+              onPress={() => navigation.goBack()}
             />
           ),
         }}

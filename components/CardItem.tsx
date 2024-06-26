@@ -1,23 +1,16 @@
 import { Ionicons } from '@expo/vector-icons'
 
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native'
+import { TouchableOpacityProps } from 'react-native'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from './SocialButton'
 import { Tag } from './Tag'
 import { useState } from 'react'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
-const StyledScrollView = styled(ScrollView)
+import {
+  StyledScrollView,
+  StyledText,
+  StyledTouchableOpacity,
+  StyledView,
+} from '@/app/styled'
 
 interface ICardItemProps extends TouchableOpacityProps {
   name: string
@@ -78,21 +71,24 @@ export function CardItem({
       <StyledView className='flex-1 flex-row'>
         <SocialButton
           text='Telefone'
-          color='gray-300'
+          backgroundColor='gray-300'
+          textColor='black'
           icon='phone'
           onPress={() => navigation.navigate('details')}
         />
 
         <SocialButton
           text='WhatsApp'
-          color='green-300'
+          backgroundColor='gray-300'
+          textColor='black'
           icon='whatsapp'
           onPress={() => navigation.navigate('details')}
         />
 
         <SocialButton
           text='E-mail'
-          color='gray-300'
+          backgroundColor='gray-300'
+          textColor='black'
           icon='envelope'
           onPress={() => navigation.navigate('details')}
         />

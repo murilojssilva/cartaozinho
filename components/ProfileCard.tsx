@@ -1,10 +1,5 @@
+import { StyledText, StyledView } from '@/app/styled'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Text, View } from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
 
 interface IProfileCardProps {
   icon: string

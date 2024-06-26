@@ -16,6 +16,8 @@ import {
 } from 'react-native'
 
 import { styled } from 'nativewind'
+import { TextInputMask } from 'react-native-masked-text'
+import useGetAddress from '@/hooks/useGetAddress'
 
 const StyledView = styled(View)
 const StyledText = styled(Text)
@@ -40,6 +42,9 @@ export default function EditAd() {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [isSelected, setIsSelected] = useState(false)
+
+  const { address, setAddress, handleCepChange } = useGetAddress()
+
   return (
     <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -151,36 +156,22 @@ export default function EditAd() {
             Localização
           </StyledText>
           <StyledView className='gap-2 mb-4'>
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='CEP' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Rua' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Número' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Bairro' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Cidade' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Estado' />
-            )}
+            <TextInputMask
+              type={'zip-code'}
+              value={address.cep}
+              onChangeText={(text) => handleCepChange(text)}
+              placeholder='CEP'
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            />
+            <InputText text='Rua' value={address.rua} editable={false} />
+            <InputText
+              text='Número'
+              value={address.numero}
+              onChangeText={(text) => setAddress({ ...address, numero: text })}
+            />
+            <InputText text='Bairro' value={address.bairro} editable={false} />
+            <InputText text='Cidade' value={address.cidade} editable={false} />
+            <InputText text='Estado' value={address.estado} editable={false} />
           </StyledView>
         </StyledView>
       </StyledScrollView>

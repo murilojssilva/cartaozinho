@@ -1,16 +1,6 @@
+import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
-import {
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { TouchableOpacityProps } from 'react-native'
 
 interface ITabHeaderProps extends TouchableOpacityProps {
   text: string
@@ -30,7 +20,7 @@ export function TabHeader({
     <StyledView
       className={`flex-2 flex-row justify-${
         iconAction ? 'between' : 'center'
-      } gap-2 items-center bg-gray-100 p-8 rounded-xl`}
+      } gap-2 items-center bg-gray-100 p-8`}
     >
       <StyledView className='flex-2 flex-row items-center'>
         <FontAwesome5 name={icon} size={22} color='#0e7490' />

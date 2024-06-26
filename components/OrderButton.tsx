@@ -1,16 +1,6 @@
+import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import { Ionicons } from '@expo/vector-icons'
-import {
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledText = styled(Text)
-const StyledView = styled(View)
-const StyledTouchableOpacity = styled(TouchableOpacity)
+import { TouchableOpacityProps } from 'react-native'
 
 interface IOrderButtonProps extends TouchableOpacityProps {}
 

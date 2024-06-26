@@ -1,8 +1,5 @@
-import { TextInput, TextInputProps } from 'react-native'
-
-import { styled } from 'nativewind'
-
-const StyledTextInput = styled(TextInput)
+import { StyledTextInput } from '@/app/styled'
+import { TextInputProps } from 'react-native'
 
 interface IInputTextProps extends TextInputProps {
   text: string

@@ -1,9 +1,12 @@
 import { View } from 'react-native'
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
 
 export function SkeletonMyItemCard() {
   return (
-    <View className='flex-2 flex-col bg-gray-200 h-40 w-28 border-2 mx-2 border-gray-300 rounded-xl'>
-      <View className='flex-2 flex-col bg-gray-300 animate-pulse mx-2 rounded-xl' />
-    </View>
+    <StyledView className='flex-2 flex-col bg-gray-200 h-40 w-28 border-2 mx-2 border-gray-300 rounded-xl'>
+      <StyledView className='flex-2 flex-col bg-gray-300 animate-pulse mx-2 rounded-xl' />
+    </StyledView>
   )
 }

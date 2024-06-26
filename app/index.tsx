@@ -1,5 +1,4 @@
-import { View } from 'react-native'
+import { registerRootComponent } from 'expo'
+import App from './App'
 
-export function Index() {
-  return <View></View>
-}
+registerRootComponent(App)

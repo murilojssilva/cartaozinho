@@ -15,6 +15,13 @@ import {
   Platform,
 } from 'react-native'
 
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledText = styled(Text)
+const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
+const StyledScrollView = styled(ScrollView)
+
 export default function EditAd() {
   const categories = [
     'Administração',
@@ -34,19 +41,21 @@ export default function EditAd() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSelected, setIsSelected] = useState(false)
   return (
-    <KeyboardAvoidingView
+    <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className='flex-1 bg-white'
     >
       <Header title='Editar anúncio' icon='pen' />
-      <ScrollView
+      <StyledScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
         className='p-4'
       >
-        <View className='flex-col gap-2'>
-          <Text className='font-bold text-xl my-4'>Informações do anúncio</Text>
-          <View className='flex-2 flex-col gap-2'>
+        <StyledView className='flex-col gap-2'>
+          <StyledText className='font-bold text-xl my-4'>
+            Informações do anúncio
+          </StyledText>
+          <StyledView className='flex-2 flex-col gap-2'>
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
@@ -65,19 +74,20 @@ export default function EditAd() {
                 numberOfLines={10}
                 multiline={true}
                 textAlignVertical='top'
-                className='justify-start'
               />
             )}
-          </View>
-          <Text className='font-bold text-xl my-4'>Atendimento</Text>
+          </StyledView>
+          <StyledText className='font-bold text-xl my-4'>
+            Atendimento
+          </StyledText>
           {isLoading ? (
-            <View className='flex-2 flex-row'>
+            <StyledView className='flex-2 flex-row'>
               <SkeletonTag />
               <SkeletonTag />
               <SkeletonTag />
-            </View>
+            </StyledView>
           ) : (
-            <View className='flex-row gap-2'>
+            <StyledView className='flex-row gap-2'>
               <Tag
                 text='À domicílio'
                 onPress={() => setIsSelected(!isSelected)}
@@ -93,18 +103,18 @@ export default function EditAd() {
                 onPress={() => setIsSelected(!isSelected)}
                 backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
               />
-            </View>
+            </StyledView>
           )}
 
-          <Text className='font-bold text-xl my-4'>Categoria</Text>
+          <StyledText className='font-bold text-xl my-4'>Categoria</StyledText>
           {isLoading ? (
-            <View className='flex-2 flex-row'>
+            <StyledView className='flex-2 flex-row'>
               <SkeletonTag />
               <SkeletonTag />
               <SkeletonTag />
-            </View>
+            </StyledView>
           ) : (
-            <ScrollView
+            <StyledScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               className='flex-row'
@@ -117,36 +127,30 @@ export default function EditAd() {
                   backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
                 />
               ))}
-            </ScrollView>
+            </StyledScrollView>
           )}
-          <Text className='font-bold text-xl my-4'>Contato</Text>
-          <View className='gap-2'>
+          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
+          <StyledView className='gap-2'>
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText
-                text='Telefone'
-                keyboardAppearance='number'
-                keyboardType='number'
-              />
+              <InputText text='Telefone' keyboardType='numeric' />
             )}
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText
-                text='WhatsApp'
-                keyboardAppearance='number'
-                keyboardType='number'
-              />
+              <InputText text='WhatsApp' keyboardType='numeric' />
             )}
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
               <InputText text='E-mail' />
             )}
-          </View>
-          <Text className='font-bold text-xl my-4'>Localização</Text>
-          <View className='gap-2 mb-4'>
+          </StyledView>
+          <StyledText className='font-bold text-xl my-4'>
+            Localização
+          </StyledText>
+          <StyledView className='gap-2 mb-4'>
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
@@ -177,10 +181,10 @@ export default function EditAd() {
             ) : (
               <InputText text='Estado' />
             )}
-          </View>
-        </View>
-      </ScrollView>
-      <View className='p-4'>
+          </StyledView>
+        </StyledView>
+      </StyledScrollView>
+      <StyledView className='p-4'>
         {isLoading ? (
           <SkeletonActionButton />
         ) : (
@@ -190,9 +194,10 @@ export default function EditAd() {
             textColor='white'
             text='Editar anúncio'
             icon='id-card'
+            onPress={() => navigation.navigate('Profile')}
           />
         )}
-      </View>
-    </KeyboardAvoidingView>
+      </StyledView>
+    </StyledKeyboardAvoidingView>
   )
 }

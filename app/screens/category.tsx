@@ -1,20 +1,22 @@
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useNavigation } from 'expo-router'
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { View, FlatList } from 'react-native'
-import { ActionButton } from '@/components/ActionButton'
 import { CardItem } from '@/components/CardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { FilterButton } from '@/components/FilterButton'
 import { Header } from '@/components/Header'
-import { InputText } from '@/components/InputText'
 import { OrderButton } from '@/components/OrderButton'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
-import { Tag } from '@/components/Tag'
-import { Title } from '@/components/Title'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
+
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledFlatList = styled(FlatList)
+
+StyledFlatList
 
 interface IAdProps {
   name: string
@@ -33,7 +35,9 @@ export default function Category() {
   const router = useRouter()
   const { category, categoryIcon } = useLocalSearchParams()
 
-  const [ad, setAd] = useState<IAdProps[]>([
+  const navigation = useNavigation()
+
+  const ad: IAdProps[] = [
     {
       name: 'Murilo Silva',
       office: 'Desenvolvedor',
@@ -70,7 +74,7 @@ export default function Category() {
       officeType: 'Prestador de serviço',
       categories: ['Beleza'],
     },
-  ] as IAdProps[])
+  ] as IAdProps[]
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
@@ -83,47 +87,48 @@ export default function Category() {
   }
 
   return (
-    <View className='flex-1 flex-col bg-white'>
+    <StyledView className='flex-1 flex-col bg-white'>
       <Header title={category as string} icon={categoryIcon as string} />
-      <View className='flex-2 p-4'>
+      <StyledView className='flex-2 p-4'>
         {isLoading ? (
-          <View className='flex-2'>
-            <View className='flex-2 flex-row justify-between'>
+          <StyledView className='flex-2'>
+            <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
               <SkeletonFilterButton />
-            </View>
+            </StyledView>
             <SkeletonCardItem />
             <SkeletonCardItem />
             <SkeletonCardItem />
-          </View>
+          </StyledView>
         ) : (
-          <View>
-            {ad.filter((a) => a.categories.includes(category)).length > 0 && (
-              <View className='flex-2 flex-row justify-between'>
+          <StyledView>
+            {ad.filter((a) => a.categories.includes(category as string))
+              .length > 0 && (
+              <StyledView className='flex-2 flex-row justify-between'>
                 <FilterButton onPress={fetchFilterMenu} />
                 <OrderButton onPress={fetchOrderMenu} />
-              </View>
+              </StyledView>
             )}
-            <FlatList
+            <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
-              data={ad.filter((a) => a.categories.includes(category))}
-              renderItem={({ item }) => (
+              data={ad.filter((a) => a.categories.includes(category as string))}
+              renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
                   name={item.name}
                   office={item.office}
                   officeType={item.officeType}
                   categories={item.categories}
-                  onPress={() => navigation.navigate('details')}
+                  onPress={() => navigation.navigate('CategoryDetails')}
                 />
               )}
               ListEmptyComponent={<EmptyList />}
-              ListFooterComponent={<View style={{ height: 350 }} />}
+              ListFooterComponent={<View style={{ height: 350 }} />} // Substitua StyledView com View para React Native
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+          </StyledView>
         )}
-      </View>
-    </View>
+      </StyledView>
+    </StyledView>
   )
 }

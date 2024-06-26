@@ -1,16 +1,22 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
+import { styled } from 'nativewind'
+
+const StyledText = styled(Text)
+const StyledView = styled(View)
+const StyledTouchableOpacity = styled(TouchableOpacity)
+
 export function RadioButton({ label, value, selected, onSelect }) {
   return (
-    <TouchableOpacity
+    <StyledTouchableOpacity
       style={styles.radioContainer}
       onPress={() => onSelect(value)}
     >
-      <View style={styles.outerCircle}>
+      <StyledView style={styles.outerCircle}>
         {selected && <View style={styles.innerCircle} />}
-      </View>
-      <Text style={styles.radioLabel}>{label}</Text>
-    </TouchableOpacity>
+      </StyledView>
+      <StyledText style={styles.radioLabel}>{label}</StyledText>
+    </StyledTouchableOpacity>
   )
 }
 

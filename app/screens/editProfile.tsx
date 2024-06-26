@@ -11,52 +11,57 @@ import {
   Platform,
 } from 'react-native'
 
+import { styled } from 'nativewind'
+import { useNavigation } from 'expo-router'
+
+const StyledView = styled(View)
+const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
+
 export default function EditProfile() {
   const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigation()
   return (
-    <KeyboardAvoidingView
+    <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className='flex-1 bg-white'
     >
       <Header title='Editar perfil' icon='user' />
 
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-        className='p-4'
-      >
-        <View className='flex-col gap-2'>
-          <Text className='font-bold text-xl my-4'>Informações de perfil</Text>
-          <View className='gap-2'>
+      <StyledScrollView className='p-4  flex-grow'>
+        <StyledView className='flex-col gap-2 '>
+          <StyledText className='font-bold text-xl my-4'>
+            Informações de perfil
+          </StyledText>
+          <StyledView className='gap-2'>
             <InputText text='Nome' placeholder='Nome' />
             <InputText
               text='Descrição'
-              numberOfLines={4}
+              numberOfLines={3}
               multiline={true}
               textAlignVertical='top'
-              className='justify-start'
               placeholder='Descrição'
             />
-          </View>
+          </StyledView>
 
-          <Text className='font-bold text-xl my-4'>Contato</Text>
-          <View className='gap-2'>
+          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
+          <StyledView className='gap-2'>
             <InputText
               text='Telefone'
-              keyboardAppearance='number'
-              keyboardType='number'
+              keyboardType='numeric'
               placeholder='(21)9999-9999'
             />
             <InputText
               text='WhatsApp'
-              keyboardAppearance='number'
-              keyboardType='number'
+              keyboardType='numeric'
               placeholder='(21)9999-9999'
             />
             <InputText text='E-mail' placeholder='email@email.com' />
-          </View>
-        </View>
-      </ScrollView>
-      <View className='p-4'>
+          </StyledView>
+        </StyledView>
+      </StyledScrollView>
+      <StyledView className='p-4'>
         {isLoading ? (
           <SkeletonActionButton />
         ) : (
@@ -65,11 +70,11 @@ export default function EditProfile() {
             textColor='white'
             iconColor='white'
             text='Editar perfil'
+            onPress={() => navigation.navigate('Profile')}
             icon='save'
-            className='mt-4'
           />
         )}
-      </View>
-    </KeyboardAvoidingView>
+      </StyledView>
+    </StyledKeyboardAvoidingView>
   )
 }

@@ -8,25 +8,30 @@ import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
+import { styled } from 'nativewind'
 import { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
-export default function Profile() {
+const StyledView = styled(View)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
+
+export function Profile() {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   return (
-    <View className='flex-1 bg-white'>
+    <StyledView className='flex-1 bg-white'>
       <TabHeader
         text='Perfil'
         icon='user'
         iconAction='logout'
         iconActionColor='red'
-        onPress={() => navigation.navigate('(auth)', { screen: 'index' })}
+        onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
       />
 
-      <ScrollView className='flex-2 flex-col'>
-        <View className='flex-2 p-4 flex-col h-full'>
-          <View className='flex-2 mb-4 flex-col'>
+      <StyledScrollView className='flex-2 flex-col'>
+        <StyledView className='flex-2 p-4 flex-col h-full'>
+          <StyledView className='flex-2 mb-4 flex-col'>
             <Title text='Informações pessoais' />
             {isLoading ? (
               <SkeletonText />
@@ -43,21 +48,21 @@ export default function Profile() {
             ) : (
               <Topic icon='envelope' name='E-mail' content='email@email.com' />
             )}
-          </View>
+          </StyledView>
           {isLoading ? (
-            <View className='flex-2 flex-row justify-between'>
+            <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonActionButton />
               <SkeletonActionButton />
-            </View>
+            </StyledView>
           ) : (
-            <View className='flex-2 flex-row justify-around'>
+            <StyledView className='flex-2 flex-row justify-around'>
               <ActionButton
                 text='Editar perfil'
                 icon='pencil'
                 iconColor='white'
                 backgroundColor='cyan-700'
                 textColor='white'
-                onPress={() => navigation.navigate('editProfile')}
+                onPress={() => navigation.navigate('EditProfile')}
               />
               <ActionButton
                 backgroundColor='cyan-700'
@@ -65,42 +70,42 @@ export default function Profile() {
                 iconColor='white'
                 text='Alterar senha'
                 icon='lock-open'
-                onPress={() => navigation.navigate('editPassword')}
+                onPress={() => navigation.navigate('EditPassword')}
               />
-            </View>
+            </StyledView>
           )}
 
-          <View className='flex-2 flex-col'>
+          <StyledView className='flex-2 flex-col'>
             <Title text='Geral' />
             {isLoading ? (
               <SkeletonText />
             ) : (
-              <View className='flex-2 flex-row justify-between'>
-                <Text className='text-lg'>Tema</Text>
+              <StyledView className='flex-2 flex-row justify-between'>
+                <StyledText className='text-lg'>Tema</StyledText>
                 <Entypo name='switch' size={32} />
-              </View>
+              </StyledView>
             )}
             {isLoading ? (
               <SkeletonText />
             ) : (
-              <View className='flex-2 flex-row justify-between'>
-                <Text className='text-lg'>Biometria</Text>
+              <StyledView className='flex-2 flex-row justify-between'>
+                <StyledText className='text-lg'>Biometria</StyledText>
                 <Entypo name='switch' size={32} />
-              </View>
+              </StyledView>
             )}
-          </View>
+          </StyledView>
 
-          <View className='flex-2 flex-col'>
+          <StyledView className='flex-2 flex-col'>
             <Title text='Meus anúncios' />
             <View>
               {isLoading ? (
-                <View className='flex-2 flex-row justify-around w-full'>
+                <StyledView className='flex-2 flex-row justify-around w-full'>
                   <SkeletonMyItemCard />
                   <SkeletonMyItemCard />
                   <SkeletonMyItemCard />
-                </View>
+                </StyledView>
               ) : (
-                <ScrollView
+                <StyledScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   className='flex-2 gap-2'
@@ -108,39 +113,34 @@ export default function Profile() {
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
-                    officeType='Teste'
-                    onPress={() => navigation.navigate('myAd')}
+                    onPress={() => navigation.navigate('MyAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
-                    officeType='Teste'
-                    onPress={() => navigation.navigate('myAd')}
+                    onPress={() => navigation.navigate('MyAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
-                    officeType='Teste'
-                    onPress={() => navigation.navigate('myAd')}
+                    onPress={() => navigation.navigate('MyAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
-                    officeType='Teste'
-                    onPress={() => navigation.navigate('myAd')}
+                    onPress={() => navigation.navigate('MyAd')}
                   />
                   <MyItemCard
                     name='Murilo'
                     office='Teste'
-                    officeType='Teste'
-                    onPress={() => navigation.navigate('myAd')}
+                    onPress={() => navigation.navigate('MyAd')}
                   />
-                </ScrollView>
+                </StyledScrollView>
               )}
             </View>
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+          </StyledView>
+        </StyledView>
+      </StyledScrollView>
+    </StyledView>
   )
 }

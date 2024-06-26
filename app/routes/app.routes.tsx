@@ -1,22 +1,27 @@
-import { Tabs } from 'expo-router'
-import React from 'react'
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { TabBarIcon } from '@/components/navigation/TabBarIcon'
 import { Colors } from '@/constants/Colors'
 import { useColorScheme } from '@/hooks/useColorScheme'
+import ProfileNavigator from './profile.routes'
+import HomeNavigator from './home.routes'
+import CategoriesNavigator from './categories.routes'
+import FavoritesNavigator from './favorites.routes'
 
-export default function TabLayout() {
+const { Navigator, Screen } = createBottomTabNavigator()
+
+export function AppRoutes() {
   const colorScheme = useColorScheme()
 
   return (
-    <Tabs
+    <Navigator
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
     >
-      <Tabs.Screen
-        name='index'
+      <Screen
+        name='Home'
+        component={HomeNavigator}
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
@@ -27,8 +32,9 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name='categories'
+      <Screen
+        name='Categories'
+        component={CategoriesNavigator}
         options={{
           title: 'Categorias',
           tabBarIcon: ({ color, focused }) => (
@@ -39,8 +45,9 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name='favorites'
+      <Screen
+        name='Favorites'
+        component={FavoritesNavigator}
         options={{
           title: 'Favoritos',
           tabBarIcon: ({ color, focused }) => (
@@ -51,8 +58,9 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name='profile'
+      <Screen
+        name='Profile'
+        component={ProfileNavigator}
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, focused }) => (
@@ -63,6 +71,8 @@ export default function TabLayout() {
           ),
         }}
       />
-    </Tabs>
+    </Navigator>
   )
 }
+
+export default AppRoutes

@@ -1,10 +1,9 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, Text, View } from 'react-native'
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
 import { Header } from '@/components/Header'
-import { Title } from '@/components/Title'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ProfileCard } from '@/components/ProfileCard'
 import { useState } from 'react'
@@ -13,24 +12,22 @@ import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCard'
 import { ActionButton } from '@/components/ActionButton'
 
-interface IMoreInformationsProps {
-  category: string[]
-  service: string[]
-}
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
+const StyledImage = styled(Image)
 
 export default function Details() {
-  const category: IMoreInformationsProps = [
+  const category: string[] = [
     'Informática',
     'Desenvolvimento',
     'Website',
     'Aplicativos',
     'Mobile',
   ]
-  const service: IMoreInformationsProps = [
-    'À domicílio',
-    'No estabelecimento',
-    'Remoto',
-  ]
+  const service: string[] = ['À domicílio', 'No estabelecimento', 'Remoto']
 
   const navigation = useNavigation()
 
@@ -38,17 +35,17 @@ export default function Details() {
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <ScrollView className='flex-1 flex-col bg-white'>
+    <StyledScrollView className='flex-1 flex-col bg-white'>
       <Header icon='list' title='Detalhes' />
-      <View className='flex-1 p-4'>
+      <StyledView className='flex-1 p-4'>
         {isLoading ? (
           <SkeletonProfileIcon />
         ) : (
-          <View className='justify-center bg-gray-200 p-4 self-center items-center mb-4 w-40 h-40 rounded-full border-4 border-gray-300'>
+          <StyledView className='justify-center bg-gray-200 p-4 self-center items-center mb-4 w-40 h-40 rounded-full border-4 border-gray-300'>
             <FontAwesome5 name='user' size={50} color='#D1D5DB' />
-          </View>
+          </StyledView>
         )}
-        <View className='flex-2 flex-row justify-between items-center mb-4'>
+        <StyledView className='flex-2 flex-row justify-between items-center mb-4'>
           {isLoading ? (
             <SkeletonProfileCard />
           ) : (
@@ -73,52 +70,58 @@ export default function Details() {
               text={`Prestador\nde serviço`}
             />
           )}
-        </View>
+        </StyledView>
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={40} />
         ) : (
-          <View className='bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Descrição</Text>
-            <Text className='text-sm text-gray-700 '>
+          <StyledView className='bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Descrição
+            </StyledText>
+            <StyledText className='text-sm text-gray-700 '>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad,
               itaque, cumque eius, obcaecati quia aliquid ipsa ratione expedita
               perspiciatis veniam atque quisquam! Recusandae eaque expedita
               soluta tempora hic vitae dolore.
-            </Text>
-          </View>
+            </StyledText>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Categorias</Text>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Categorias
+            </StyledText>
 
-            <ScrollView
+            <StyledScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {category.map((cat, index) => (
-                <View
+              {category.map((cat: string, index: number) => (
+                <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
-                  <Text className='text-gray-100 text-xs'>{cat}</Text>
-                </View>
+                  <StyledText className='text-gray-100 text-xs'>
+                    {cat}
+                  </StyledText>
+                </StyledView>
               ))}
-            </ScrollView>
-          </View>
+            </StyledScrollView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Contato</Text>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>Contato</StyledText>
 
-            <View className='flex-1 justify-center flex-row gap-2'>
+            <StyledView className='flex-1 justify-center flex-row gap-2'>
               <SocialButton
                 text='Telefone'
                 color='gray-300'
@@ -139,38 +142,44 @@ export default function Details() {
                 icon='envelope'
                 onPress={() => navigation.navigate('details')}
               />
-            </View>
-          </View>
+            </StyledView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Atendimento</Text>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Atendimento
+            </StyledText>
 
-            <ScrollView
+            <StyledScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {service.map((serv, index) => (
-                <View
+              {service.map((serv: string, index: number) => (
+                <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
-                  <Text className='text-gray-100 text-xs'>{serv}</Text>
-                </View>
+                  <StyledText className='text-gray-100 text-xs'>
+                    {serv}
+                  </StyledText>
+                </StyledView>
               ))}
-            </ScrollView>
-          </View>
+            </StyledScrollView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={60} />
         ) : (
-          <View className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Localização</Text>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Localização
+            </StyledText>
 
             <Topic icon='map-pin' name='CEP' content='25655-100' />
             <Topic icon='map' name='Rua' content='Murilo' />
@@ -182,13 +191,13 @@ export default function Details() {
               content='Rio de Janeiro - RJ'
             />
 
-            <View className='flex-2 p-4'>
-              <Image source={mapa} className='flex-1 w-full h-64' />
-            </View>
-          </View>
+            <StyledView className='flex-2 p-4'>
+              <StyledImage source={mapa} className='flex-1 w-full h-64' />
+            </StyledView>
+          </StyledView>
         )}
-      </View>
-      <View className='p-4'>
+      </StyledView>
+      <StyledView className='p-4'>
         <ActionButton
           onPress={() => setIsFavorite(!isFavorite)}
           icon={isFavorite ? 'bookmark-outline' : 'bookmark'}
@@ -197,7 +206,7 @@ export default function Details() {
           iconColor={isFavorite ? '#0e7490' : 'white'}
           backgroundColor={isFavorite ? 'white' : 'cyan-700' || '#0e7490'}
         />
-      </View>
-    </ScrollView>
+      </StyledView>
+    </StyledScrollView>
   )
 }

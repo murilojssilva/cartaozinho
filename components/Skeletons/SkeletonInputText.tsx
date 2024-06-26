@@ -1,4 +1,7 @@
 import { View } from 'react-native'
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
 
 interface ISkeletonInputTextProps {
   inputSize: number
@@ -6,8 +9,8 @@ interface ISkeletonInputTextProps {
 
 export function SkeletonInputText({ inputSize }: ISkeletonInputTextProps) {
   return (
-    <View className={`flex-1 bg-gray-300 p-${inputSize} rounded-xl my-2`}>
-      <View className='flex-1 bg-gray-200 animate-pulse  rounded-xl' />
-    </View>
+    <StyledView className={`flex-1 bg-gray-300 p-${inputSize} rounded-xl my-2`}>
+      <StyledView className='flex-1 bg-gray-200 animate-pulse  rounded-xl' />
+    </StyledView>
   )
 }

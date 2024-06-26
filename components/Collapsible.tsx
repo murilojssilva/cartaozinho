@@ -17,7 +17,7 @@ export function Collapsible({
     <ThemedView>
       <TouchableOpacity
         style={styles.heading}
-        onPress={() => setIsOpen((value) => !value)}
+        onPress={() => setIsOpen((value: boolean) => !value)}
         activeOpacity={0.8}
       >
         <Ionicons

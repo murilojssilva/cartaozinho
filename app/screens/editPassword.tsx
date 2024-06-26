@@ -5,22 +5,29 @@ import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButto
 import { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
+import { styled } from 'nativewind'
+import { useNavigation } from 'expo-router'
+
+const StyledView = styled(View)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
+
 export default function EditPassword() {
   const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigation()
   return (
-    <View className='flex-1 bg-white'>
+    <StyledView className='flex-1 justify-center bg-white'>
       <Header title='Alterar senha' icon='lock' />
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-        className='p-4'
-      >
-        <View className=' flex-col p-4 gap-2'>
-          <Text className='font-bold text-xl'>Digite sua senha</Text>
+      <StyledScrollView className='p-4  flex-grow'>
+        <StyledView className=' flex-col p-4 gap-2'>
+          <StyledText className='font-bold text-xl'>
+            Digite sua senha
+          </StyledText>
           <InputText text='Senha antiga' />
           <InputText text='Nova senha' />
-        </View>
-      </ScrollView>
-      <View className='p-4'>
+        </StyledView>
+      </StyledScrollView>
+      <StyledView className='p-4'>
         {isLoading ? (
           <SkeletonActionButton />
         ) : (
@@ -30,9 +37,10 @@ export default function EditPassword() {
             iconColor='white'
             text='Alterar senha'
             icon='lock-open'
+            onPress={() => navigation.navigate('Profile')}
           />
         )}
-      </View>
-    </View>
+      </StyledView>
+    </StyledView>
   )
 }

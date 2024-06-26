@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -11,6 +10,14 @@ import {
 } from 'react-native-gesture-handler'
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { RadioButton } from './RadioButton'
+
+import { styled } from 'nativewind'
+import { useState } from 'react'
+import { useEffect } from 'react'
+
+const StyledText = styled(Text)
+const StyledView = styled(View)
+const StyledTouchableOpacity = styled(TouchableOpacity)
 
 interface IOrderMenuProps {
   visible: boolean
@@ -95,8 +102,8 @@ export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
             </TouchableOpacity>
           </View>
 
-          <View className='flex-2 flex-col'>
-            <View>
+          <StyledView className='flex-2 flex-col'>
+            <StyledView>
               {options.map((option) => (
                 <RadioButton
                   key={option.value}
@@ -106,20 +113,20 @@ export function OrderMenu({ visible, onClose }: IOrderMenuProps) {
                   onSelect={setSelectedValue}
                 />
               ))}
-            </View>
-          </View>
+            </StyledView>
+          </StyledView>
 
-          <View className='flex-2 flex-row justify-center items-end'>
-            <TouchableOpacity
+          <StyledView className='flex-2 flex-row justify-center items-end'>
+            <StyledTouchableOpacity
               className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
               onPress={() => {}}
             >
               <FontAwesome5 name='eraser' size={24} color='black' />
-              <Text className='font-bold text-xl text-gray-900'>
+              <StyledText className='font-bold text-xl text-gray-900'>
                 {'  Ordenar'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              </StyledText>
+            </StyledTouchableOpacity>
+          </StyledView>
         </Animated.View>
       </PanGestureHandler>
     </GestureHandlerRootView>

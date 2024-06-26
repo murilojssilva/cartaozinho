@@ -1,5 +1,9 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import { styled } from 'nativewind'
+
+const StyledText = styled(Text)
+const StyledTouchableOpacity = styled(TouchableOpacity)
 
 interface IActionButtonProps extends TouchableOpacityProps {
   text: string
@@ -10,7 +14,7 @@ interface IActionButtonProps extends TouchableOpacityProps {
 }
 
 export function ActionButton({
-  icon,
+  icon = '',
   text,
   backgroundColor,
   textColor,
@@ -18,14 +22,14 @@ export function ActionButton({
   ...props
 }: IActionButtonProps) {
   return (
-    <TouchableOpacity
+    <StyledTouchableOpacity
       {...props}
       className={`flex-2 flex-row justify-center items-center p-4 rounded-xl bg-${backgroundColor}`}
     >
       <Ionicons size={20} color={iconColor} name={icon} />
-      <Text
+      <StyledText
         className={`font-bold text-xl text-${textColor}`}
-      >{` ${text}`}</Text>
-    </TouchableOpacity>
+      >{` ${text}`}</StyledText>
+    </StyledTouchableOpacity>
   )
 }

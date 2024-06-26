@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, Text, View } from 'react-native'
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
@@ -14,42 +14,43 @@ import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButto
 import { Header } from '@/components/Header'
 import { SpinnerButton } from '@/components/SpinnerButton'
 
-interface IMoreInformationsProps {
-  category: string[]
-  service: string[]
-}
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledImage = styled(Image)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
 
 export default function MyAd() {
-  const category: IMoreInformationsProps = [
+  const category: string[] = [
     'Informática',
     'Desenvolvimento',
     'Website',
     'Aplicativos',
     'Mobile',
   ]
-  const service: IMoreInformationsProps = [
-    'À domicílio',
-    'No estabelecimento',
-    'Remoto',
-  ]
+  const service: string[] = ['À domicílio', 'No estabelecimento', 'Remoto']
 
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [isLoadingRemove, setIsLoadingRemove] = useState(false)
   return (
-    <View className='flex-1 flex-col bg-white'>
+    <StyledView className='flex-1 flex-col bg-white'>
       <Header title='Meu anúncio' icon='newspaper' />
-      <ScrollView showsVerticalScrollIndicator={false} className='flex-2 p-4'>
+      <StyledScrollView
+        showsVerticalScrollIndicator={false}
+        className='flex-2 p-4'
+      >
         {isLoading ? (
           <SkeletonProfileIcon />
         ) : (
-          <View className='justify-center bg-gray-200 p-4 self-center items-center mb-4 w-40 h-40 rounded-full border-4 border-gray-300'>
+          <StyledView className='justify-center bg-gray-200 p-4 self-center items-center mb-4 w-40 h-40 rounded-full border-4 border-gray-300'>
             <FontAwesome5 name='user' size={50} color='#D1D5DB' />
-          </View>
+          </StyledView>
         )}
 
-        <View className='flex-2 flex-row justify-between items-center mb-4'>
+        <StyledView className='flex-2 flex-row justify-between items-center mb-4'>
           {isLoading ? (
             <SkeletonProfileCard />
           ) : (
@@ -74,52 +75,58 @@ export default function MyAd() {
               text={`Prestador\nde serviço`}
             />
           )}
-        </View>
+        </StyledView>
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={40} />
         ) : (
-          <View className='bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Descrição</Text>
-            <Text className='text-sm text-gray-700 '>
+          <StyledView className='bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Descrição
+            </StyledText>
+            <StyledText className='text-sm text-gray-700 '>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad,
               itaque, cumque eius, obcaecati quia aliquid ipsa ratione expedita
               perspiciatis veniam atque quisquam! Recusandae eaque expedita
               soluta tempora hic vitae dolore.
-            </Text>
-          </View>
+            </StyledText>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Categorias</Text>
+          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Categorias
+            </StyledText>
 
-            <ScrollView
+            <StyledScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
               {category.map((cat, index) => (
-                <View
+                <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
-                  <Text className='text-gray-100 text-xs'>{cat}</Text>
-                </View>
+                  <StyledText className='text-gray-100 text-xs'>
+                    {cat}
+                  </StyledText>
+                </StyledView>
               ))}
-            </ScrollView>
-          </View>
+            </StyledScrollView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Contato</Text>
+          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>Contato</StyledText>
 
-            <View className='flex-2 justify-center flex-row gap-2'>
+            <StyledView className='flex-2 justify-center flex-row gap-2'>
               <SocialButton
                 text='Telefone'
                 color='gray-300'
@@ -140,38 +147,44 @@ export default function MyAd() {
                 icon='envelope'
                 onPress={() => navigation.navigate('details')}
               />
-            </View>
-          </View>
+            </StyledView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <View className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Atendimento</Text>
+          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Atendimento
+            </StyledText>
 
-            <ScrollView
+            <StyledScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
               {service.map((serv, index) => (
-                <View
+                <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
-                  <Text className='text-gray-100 text-xs'>{serv}</Text>
-                </View>
+                  <StyledText className='text-gray-100 text-xs'>
+                    {serv}
+                  </StyledText>
+                </StyledView>
               ))}
-            </ScrollView>
-          </View>
+            </StyledScrollView>
+          </StyledView>
         )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={60} />
         ) : (
-          <View className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
-            <Text className='font-bold text-xl mb-4'>Localização</Text>
+          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Localização
+            </StyledText>
 
             <Topic icon='map-pin' name='CEP' content='25655-100' />
             <Topic icon='map' name='Rua' content='Murilo' />
@@ -183,20 +196,20 @@ export default function MyAd() {
               content='Rio de Janeiro - RJ'
             />
 
-            <View className='flex-2 p-4'>
-              <Image source={mapa} className='flex-2 w-full h-64' />
-            </View>
-          </View>
+            <StyledView className='flex-2 p-4'>
+              <StyledImage source={mapa} className='flex-2 w-full h-64' />
+            </StyledView>
+          </StyledView>
         )}
-      </ScrollView>
+      </StyledScrollView>
       {isLoading ? (
-        <View className='flex-2 flex-col p-4'>
+        <StyledView className='flex-2 flex-col p-4'>
           <SkeletonActionButton />
-          <View className='my-2' />
+          <StyledView className='my-2' />
           <SkeletonActionButton />
-        </View>
+        </StyledView>
       ) : (
-        <View className='p-4 gap-2'>
+        <StyledView className='p-4 gap-2'>
           {isLoadingEdit ? (
             <SpinnerButton />
           ) : (
@@ -206,7 +219,7 @@ export default function MyAd() {
               backgroundColor='cyan-700'
               textColor='white'
               iconColor='white'
-              onPress={() => navigation.navigate('editAd')}
+              onPress={() => navigation.navigate('EditAd')}
             />
           )}
           {isLoadingRemove ? (
@@ -220,8 +233,8 @@ export default function MyAd() {
               textColor='red-500'
             />
           )}
-        </View>
+        </StyledView>
       )}
-    </View>
+    </StyledView>
   )
 }

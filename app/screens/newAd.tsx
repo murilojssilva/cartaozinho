@@ -13,7 +13,14 @@ import {
   Platform,
 } from 'react-native'
 
-export default function New() {
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
+const StyledScrollView = styled(ScrollView)
+const StyledText = styled(Text)
+
+export default function NewAd() {
   const categories = [
     'Administração',
     'Alimentação',
@@ -33,19 +40,21 @@ export default function New() {
   const [isSelected, setIsSelected] = useState(false)
 
   return (
-    <KeyboardAvoidingView
+    <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className='flex-1 bg-white'
     >
       <Header title='Novo anúncio' icon='plus' />
-      <ScrollView
+      <StyledScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
         className='p-4'
       >
-        <View className='flex-col gap-2'>
-          <Text className='font-bold text-xl my-4'>Informações do anúncio</Text>
-          <View className='gap-2'>
+        <StyledView className='flex-col gap-2'>
+          <StyledText className='font-bold text-xl my-4'>
+            Informações do anúncio
+          </StyledText>
+          <StyledView className='gap-2'>
             <InputText text='Nome' />
             <InputText text='Cargo' />
             <InputText
@@ -53,11 +62,12 @@ export default function New() {
               numberOfLines={10}
               multiline={true}
               textAlignVertical='top'
-              className='justify-start'
             />
-          </View>
-          <Text className='font-bold text-xl my-4'>Atendimento</Text>
-          <View className='flex-row gap-2'>
+          </StyledView>
+          <StyledText className='font-bold text-xl my-4'>
+            Atendimento
+          </StyledText>
+          <StyledView className='flex-row gap-2'>
             <Tag
               text='À domicílio'
               onPress={() => setIsSelected(!isSelected)}
@@ -73,10 +83,10 @@ export default function New() {
               onPress={() => setIsSelected(!isSelected)}
               backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
             />
-          </View>
+          </StyledView>
 
-          <Text className='font-bold text-xl my-4'>Categoria</Text>
-          <ScrollView
+          <StyledText className='font-bold text-xl my-4'>Categoria</StyledText>
+          <StyledScrollView
             showsHorizontalScrollIndicator={false}
             horizontal={true}
             className='flex-row'
@@ -89,33 +99,27 @@ export default function New() {
                 backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
               />
             ))}
-          </ScrollView>
-          <Text className='font-bold text-xl my-4'>Contato</Text>
-          <View className='gap-2'>
-            <InputText
-              text='Telefone'
-              keyboardAppearance='number'
-              keyboardType='number'
-            />
-            <InputText
-              text='WhatsApp'
-              keyboardAppearance='number'
-              keyboardType='number'
-            />
+          </StyledScrollView>
+          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
+          <StyledView className='gap-2'>
+            <InputText text='Telefone' keyboardType='numeric' />
+            <InputText text='WhatsApp' keyboardType='numeric' />
             <InputText text='E-mail' />
-          </View>
-          <Text className='font-bold text-xl my-4'>Localização</Text>
-          <View className='gap-2 mb-4'>
+          </StyledView>
+          <StyledText className='font-bold text-xl my-4'>
+            Localização
+          </StyledText>
+          <StyledView className='gap-2 mb-4'>
             <InputText text='CEP' />
             <InputText text='Rua' />
             <InputText text='Número' />
             <InputText text='Bairro' />
             <InputText text='Cidade' />
             <InputText text='Estado' />
-          </View>
-        </View>
-      </ScrollView>
-      <View className='p-4'>
+          </StyledView>
+        </StyledView>
+      </StyledScrollView>
+      <StyledView className='p-4'>
         {isLoading ? (
           <SpinnerButton />
         ) : (
@@ -123,12 +127,12 @@ export default function New() {
             iconColor='white'
             backgroundColor='cyan-700'
             textColor='white'
-            onPress={() => setIsLoading(!isLoading)}
+            onPress={() => navigation.navigate('Home')}
             text='Anunciar'
             icon='id-card'
           />
         )}
-      </View>
-    </KeyboardAvoidingView>
+      </StyledView>
+    </StyledKeyboardAvoidingView>
   )
 }

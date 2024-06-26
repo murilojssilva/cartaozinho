@@ -6,6 +6,12 @@ import {
   View,
 } from 'react-native'
 
+import { styled } from 'nativewind'
+
+const StyledText = styled(Text)
+const StyledView = styled(View)
+const StyledTouchableOpacity = styled(TouchableOpacity)
+
 interface ITabHeaderProps extends TouchableOpacityProps {
   text: string
   icon: string
@@ -21,18 +27,18 @@ export function TabHeader({
   ...props
 }: ITabHeaderProps) {
   return (
-    <View
+    <StyledView
       className={`flex-2 flex-row justify-${
         iconAction ? 'between' : 'center'
       } gap-2 items-center bg-gray-100 p-8 rounded-xl`}
     >
-      <View className='flex-2 flex-row items-center'>
+      <StyledView className='flex-2 flex-row items-center'>
         <FontAwesome5 name={icon} size={22} color='#0e7490' />
-        <Text className='text-2xl text-gray-700 font-semibold'>{` ${text}`}</Text>
-      </View>
-      <TouchableOpacity {...props}>
+        <StyledText className='text-2xl text-gray-700 font-semibold'>{` ${text}`}</StyledText>
+      </StyledView>
+      <StyledTouchableOpacity {...props}>
         <AntDesign name={iconAction} size={22} color={iconActionColor} />
-      </TouchableOpacity>
-    </View>
+      </StyledTouchableOpacity>
+    </StyledView>
   )
 }

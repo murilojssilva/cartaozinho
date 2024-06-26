@@ -2,21 +2,25 @@ import { ScrollView, View } from 'react-native'
 import { CardAd } from '@/components/CardAd'
 import { TabHeader } from '@/components/TabHeader'
 import { useNavigation } from 'expo-router'
+import { styled } from 'nativewind'
 
-export default function Categories() {
+const StyledView = styled(View)
+const StyledScrollView = styled(ScrollView)
+
+export function Categories() {
   const navigation = useNavigation()
   return (
-    <View className='flex-1 bg-white'>
+    <StyledView className='flex-1 bg-white'>
       <TabHeader text='Categorias' icon='list' />
-      <ScrollView
+      <StyledScrollView
         showsVerticalScrollIndicator={false}
         className='flex-2 px-4'
         contentContainerStyle={{ paddingVertical: 20 }}
       >
-        <View className='flex-2 flex-row flex-wrap justify-between gap-2'>
+        <StyledView className='flex-2 flex-row flex-wrap justify-between gap-2'>
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Administração',
                 categoryIcon: 'briefcase',
               })
@@ -26,7 +30,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Alimentação',
                 categoryIcon: 'utensils',
               })
@@ -36,7 +40,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Beleza',
                 categoryIcon: 'spa',
               })
@@ -46,7 +50,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Educação',
                 categoryIcon: 'book',
               })
@@ -56,7 +60,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Entretenimento',
                 categoryIcon: 'film',
               })
@@ -66,7 +70,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Limpeza',
                 categoryIcon: 'broom',
               })
@@ -76,7 +80,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Manutenção',
                 categoryIcon: 'tools',
               })
@@ -86,7 +90,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Pet',
                 categoryIcon: 'paw',
               })
@@ -96,7 +100,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Saúde',
                 categoryIcon: 'heartbeat',
               })
@@ -106,7 +110,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Serviço',
                 categoryIcon: 'hands-helping',
               })
@@ -116,7 +120,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Tecnologia',
                 categoryIcon: 'laptop',
               })
@@ -126,7 +130,7 @@ export default function Categories() {
           />
           <CardAd
             onPress={() =>
-              navigation.navigate('category', {
+              navigation.navigate('Category', {
                 category: 'Transporte',
                 categoryIcon: 'car',
               })
@@ -134,8 +138,8 @@ export default function Categories() {
             text='Transporte'
             icon='car'
           />
-        </View>
-      </ScrollView>
-    </View>
+        </StyledView>
+      </StyledScrollView>
+    </StyledView>
   )
 }

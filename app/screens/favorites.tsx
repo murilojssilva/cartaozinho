@@ -20,7 +20,7 @@ interface IAdProps {
   categories: string[]
 }
 
-export default function Favorites() {
+export function Favorites() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
   const { orderMenu, setOrderMenu } = useOrderMenu()
 
@@ -90,7 +90,7 @@ export default function Favorites() {
                 office={item.office}
                 officeType={item.officeType}
                 categories={item.categories}
-                onPress={() => navigation.navigate('details')}
+                onPress={() => navigation.navigate('FavoritesDetails')}
               />
             )}
             ListEmptyComponent={<EmptyFavoriteList />}

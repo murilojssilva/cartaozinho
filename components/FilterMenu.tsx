@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -12,6 +12,12 @@ import {
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { Title } from './Title'
 import { Tag } from './Tag'
+
+import { styled } from 'nativewind'
+
+const StyledText = styled(Text)
+const StyledView = styled(View)
+const StyledTouchableOpacity = styled(TouchableOpacity)
 
 interface IFilterMenuProps {
   visible: boolean
@@ -89,41 +95,41 @@ export function FilterMenu({ visible, onClose }: IFilterMenuProps) {
             </TouchableOpacity>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <StyledView style={{ flex: 1 }}>
             <Title text='Tipo' />
-            <View className='flex-2 flex-row'>
-              <Tag text='Prestador de serviço' />
-              <Tag text='Estabelecimento' />
-            </View>
+            <StyledView className='flex-2 flex-row'>
+              <Tag backgroundColor='gray-600' text='Prestador de serviço' />
+              <Tag backgroundColor='gray-600' text='Estabelecimento' />
+            </StyledView>
 
             <Title text='Atendimento' />
-            <View className='flex-2 flex-row'>
-              <Tag text='À domicílio' />
-              <Tag text='No estabelecimento' />
-              <Tag text='Remoto' />
-            </View>
-          </View>
+            <StyledView className='flex-2 flex-row'>
+              <Tag backgroundColor='gray-600' text='À domicílio' />
+              <Tag backgroundColor='gray-600' text='No estabelecimento' />
+              <Tag backgroundColor='gray-600' text='Remoto' />
+            </StyledView>
+          </StyledView>
 
-          <View className='flex-2 flex-row justify-around'>
-            <TouchableOpacity
+          <StyledView className='flex-2 flex-row justify-around'>
+            <StyledTouchableOpacity
               className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
               onPress={() => {}}
             >
               <FontAwesome5 name='eraser' size={24} color='black' />
-              <Text className='font-bold text-xl text-gray-900'>
+              <StyledText className='font-bold text-xl text-gray-900'>
                 {'  Limpar'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+              </StyledText>
+            </StyledTouchableOpacity>
+            <StyledTouchableOpacity
               className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-cyan-700'
               onPress={() => {}}
             >
               <FontAwesome5 name='filter' size={24} color='white' />
-              <Text className='font-bold text-xl text-white'>
+              <StyledText className='font-bold text-xl text-white'>
                 {'  Filtrar'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              </StyledText>
+            </StyledTouchableOpacity>
+          </StyledView>
         </Animated.View>
       </PanGestureHandler>
     </GestureHandlerRootView>

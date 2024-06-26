@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, ScrollView, Text, View } from 'react-native'
 import { CardItem } from '../../components/CardItem'
 
 import { useNavigation } from 'expo-router'
@@ -16,6 +16,14 @@ import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { ChangeCityButton } from '@/components/ChangeCityButton'
+import { styled } from 'nativewind'
+
+const StyledView = styled(View)
+const StyledText = styled(Text)
+const StyledFlatList = styled(FlatList)
+const StyledScrollView = styled(ScrollView)
+
+StyledFlatList
 
 interface IAdProps {
   name: string
@@ -24,7 +32,7 @@ interface IAdProps {
   categories: string[]
 }
 
-export default function HomeScreen() {
+export function Home() {
   const navigation = useNavigation()
   const { filterMenu, setFilterMenu } = useFilterMenu()
   const { orderMenu, setOrderMenu } = useOrderMenu()
@@ -81,50 +89,53 @@ export default function HomeScreen() {
   }
 
   return (
-    <View className='flex-1 bg-white'>
+    <StyledView className='flex-1 bg-white'>
       <TabHeader
         text='Cartãozinho'
         icon='home'
         iconAction='pluscircleo'
         iconActionColor='#0e7490'
-        onPress={() => navigation.navigate('new')}
+        onPress={() => navigation.navigate('NewAd')}
       />
 
-      <View showsVerticalScrollIndicator={false} className='flex-2 mb-2 p-4'>
-        <View className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
-          <View className='flex-1 flex-row justify-between items-center px-6 py-4'>
+      <StyledScrollView
+        showsVerticalScrollIndicator={false}
+        className='flex-2 mb-2 p-4'
+      >
+        <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
+          <StyledView className='flex-1 flex-row justify-between items-center px-6 py-4'>
             <FontAwesome5 name='map-marker-alt' size={16} />
-            <View className='flex-1 flex-row justify-center'>
-              <Text className='font-bold text-xl'>
+            <StyledView className='flex-1 flex-row justify-center'>
+              <StyledText className='font-bold text-xl'>
                 {isLoading ? '' : 'Petrópolis'}
-              </Text>
-              <Text className='font-bold text-xl'>
+              </StyledText>
+              <StyledText className='font-bold text-xl'>
                 {isLoading ? ' - ' : ' - RJ'}
-              </Text>
-            </View>
-          </View>
+              </StyledText>
+            </StyledView>
+          </StyledView>
           <ChangeCityButton />
-        </View>
+        </StyledView>
 
         <Title text='Anúncios' />
 
         {isLoading ? (
-          <View className='flex-2'>
-            <View className='flex-2 flex-row justify-between'>
+          <StyledView className='flex-2'>
+            <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
               <SkeletonFilterButton />
-            </View>
+            </StyledView>
             <SkeletonCardItem />
             <SkeletonCardItem />
             <SkeletonCardItem />
-          </View>
+          </StyledView>
         ) : (
-          <View>
-            <View className='flex-2 flex-row justify-between'>
+          <StyledView>
+            <StyledView className='flex-2 flex-row justify-between'>
               <FilterButton onPress={fetchFilterMenu} />
               <OrderButton onPress={fetchOrderMenu} />
-            </View>
-            <FlatList
+            </StyledView>
+            <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
               data={ad}
@@ -134,19 +145,19 @@ export default function HomeScreen() {
                   office={item.office}
                   officeType={item.officeType}
                   categories={item.categories}
-                  onPress={() => navigation.navigate('details')}
+                  onPress={() => navigation.navigate('Details')}
                 />
               )}
               ListEmptyComponent={<EmptyList />}
               ListFooterComponent={<View style={{ height: 350 }} />}
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+          </StyledView>
         )}
-      </View>
+      </StyledScrollView>
 
       {ad.length > 0 && (
-        <View>
+        <StyledView>
           <FilterMenu
             filterMenu={filterMenu}
             setFilterMenu={setFilterMenu}
@@ -159,8 +170,8 @@ export default function HomeScreen() {
             visible={orderMenuVisible}
             onClose={() => setOrderMenuVisible(false)}
           />
-        </View>
+        </StyledView>
       )}
-    </View>
+    </StyledView>
   )
 }

@@ -1,21 +1,28 @@
-import { CardItem } from '../../components/CardItem'
-
 import { useNavigation } from 'expo-router'
+import { useState, useEffect, useRef } from 'react'
+import { FontAwesome5 } from '@expo/vector-icons'
+import {
+  StyledFlatList,
+  StyledKeyboardAvoidingView,
+  StyledText,
+  StyledView,
+} from '../styled'
+import { TabHeader } from '@/components/TabHeader'
+import { CardItem } from '../../components/CardItem'
 import { FilterButton } from '@/components/FilterButton'
 import { FilterMenu } from '@/components/FilterMenu'
 import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
-import { Title } from '@/components/Title'
-import { TabHeader } from '@/components/TabHeader'
-import { useState, useEffect } from 'react'
+import { ChangeCityButton } from '@/components/ChangeCityButton'
+import { ChangeCityMenu } from '@/components/ChangeCityMenu'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
-import { FontAwesome5 } from '@expo/vector-icons'
+import useGetCity from '@/hooks/useGetCity'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
-import { ChangeCityButton } from '@/components/ChangeCityButton'
-import { StyledFlatList, StyledText, StyledView } from '../styled'
+import { Title } from '@/components/Title'
+import { Animated, Easing } from 'react-native'
 
 interface IAdProps {
   id: number
@@ -29,11 +36,37 @@ export function Home() {
   const navigation = useNavigation()
   const { filterMenu, setFilterMenu } = useFilterMenu()
   const { orderMenu, setOrderMenu } = useOrderMenu()
+  const { city, state, isLoadingGetCity } = useGetCity()
+
+  const [selectedCity, setSelectedCity] = useState(city)
+  const [selectedState, setSelectedState] = useState(state)
+
+  const handleCitySelected = (city: string, state: string) => {
+    setSelectedCity(city)
+    setSelectedState(state)
+  }
+
+  const spinValue = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start()
+  }, [])
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  })
 
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
+  const [changeCityMenuVisible, setChangeCityMenuVisible] = useState(false)
   const [ad, setAd] = useState<IAdProps[]>([
     {
       id: 1,
@@ -82,6 +115,11 @@ export function Home() {
   const [orderOption, setOrderOption] = useState<string>('option1')
 
   useEffect(() => {
+    setSelectedCity(city)
+    setSelectedState(state)
+  }, [city, state])
+
+  useEffect(() => {
     if (orderOption === 'option1') {
       setAd((prevAd) =>
         [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
@@ -94,14 +132,21 @@ export function Home() {
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
     setOrderMenuVisible(false)
+    setChangeCityMenuVisible(false)
   }
   function fetchOrderMenu() {
     setOrderMenuVisible(true)
     setFilterMenuVisible(false)
+    setChangeCityMenuVisible(false)
+  }
+  function fetchChangeCityMenu() {
+    setChangeCityMenuVisible(true)
+    setOrderMenuVisible(false)
+    setFilterMenuVisible(false)
   }
 
   return (
-    <StyledView className='flex-1 bg-white'>
+    <StyledKeyboardAvoidingView className='flex-1 bg-white'>
       <TabHeader
         text='Cartãozinho'
         icon='home'
@@ -114,21 +159,35 @@ export function Home() {
         <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
           <StyledView className='flex-1 flex-row justify-between items-center px-6 py-4'>
             <FontAwesome5 name='map-marker-alt' size={16} />
-            <StyledView className='flex-1 flex-row justify-center'>
-              <StyledText className='font-bold text-xl'>
-                {isLoading ? '' : 'Petrópolis'}
-              </StyledText>
-              <StyledText className='font-bold text-xl'>
-                {isLoading ? ' - ' : ' - RJ'}
-              </StyledText>
-            </StyledView>
+            {isLoadingGetCity ? (
+              <Animated.View
+                style={{
+                  flex: 2,
+                  alignItems: 'center',
+                  transform: [{ rotate: spin }],
+                }}
+              >
+                <FontAwesome5 size={22} color='white' name='spinner' />
+              </Animated.View>
+            ) : (
+              <StyledView className='flex-1 flex-row justify-center'>
+                <StyledText className='font-bold text-sm'>
+                  {selectedCity.length > 12
+                    ? selectedCity.slice(0, 9) + '...'
+                    : selectedCity}
+                </StyledText>
+                <StyledText className='font-bold text-sm'>
+                  {` - ${selectedState}`}
+                </StyledText>
+              </StyledView>
+            )}
           </StyledView>
-          <ChangeCityButton />
+          <ChangeCityButton onPress={fetchChangeCityMenu} />
         </StyledView>
 
         <Title text='Anúncios' />
 
-        {isLoading ? (
+        {isLoadingGetCity ? (
           <StyledView className='flex-2'>
             <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
@@ -185,8 +244,14 @@ export function Home() {
             setOption={setOrderOption}
             sheetHeight={550}
           />
+          <ChangeCityMenu
+            visible={changeCityMenuVisible}
+            onClose={() => setChangeCityMenuVisible(false)}
+            sheetHeight={670}
+            onCitySelected={handleCitySelected}
+          />
         </StyledView>
       )}
-    </StyledView>
+    </StyledKeyboardAvoidingView>
   )
 }

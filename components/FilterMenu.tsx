@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -11,13 +11,18 @@ import {
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { Title } from './Title'
 import { Tag } from './Tag'
-import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
+import {
+  StyledScrollView,
+  StyledText,
+  StyledTouchableOpacity,
+  StyledView,
+} from '@/app/styled'
 
 interface IFilterMenuProps {
   visible: boolean
   onClose: any
   filterMenu: boolean
-  setFilterMenu: any
+  setFilterMenu: (visible: boolean) => void
   sheetHeight: number
 }
 
@@ -27,6 +32,7 @@ export function FilterMenu({
   sheetHeight,
 }: IFilterMenuProps) {
   const translateY = useSharedValue(0)
+  const [isSelected, setIsSelected] = useState(false)
 
   useEffect(() => {
     translateY.value = visible ? withSpring(0) : withSpring(sheetHeight)
@@ -98,17 +104,41 @@ export function FilterMenu({
           <StyledView style={{ flex: 1 }}>
             <Title text='Tipo' />
             <StyledView className='flex-2 flex-row'>
-              <Tag backgroundColor='gray-600' text='Prestador de serviço' />
-              <Tag backgroundColor='gray-600' text='Estabelecimento' />
+              <Tag
+                text='Prestador de serviço'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+              <Tag
+                text='Estabelecimento'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
             </StyledView>
 
             <Title text='Atendimento' />
-            <StyledView className='flex-2 flex-row'>
-              <Tag backgroundColor='gray-600' text='À domicílio' />
-              <Tag backgroundColor='gray-600' text='No estabelecimento' />
-              <Tag backgroundColor='gray-600' text='Remoto' />
-            </StyledView>
-            <StyledView className='flex-2 flex-row justify-around py-4'>
+
+            <StyledScrollView
+              horizontal
+              className='flex-2 flex-grow-0 flex-row'
+            >
+              <Tag
+                text='À domicílio'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+              <Tag
+                text='No estabelecimento'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+              <Tag
+                text='Remoto'
+                onPress={() => setIsSelected(!isSelected)}
+                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              />
+            </StyledScrollView>
+            <StyledView className='flex-2 flex-row justify-between py-4'>
               <StyledTouchableOpacity
                 className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
                 onPress={() => {}}

@@ -18,10 +18,10 @@ export default function AppRoutes() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
-      initialRouteName='Home'
+      initialRouteName='HomeRoute'
     >
       <Screen
-        name='Home'
+        name='HomeRoute'
         component={HomeNavigator}
         options={{
           title: 'Home',
@@ -34,7 +34,7 @@ export default function AppRoutes() {
         }}
       />
       <Screen
-        name='Categories'
+        name='CategoriesRoute'
         component={CategoriesNavigator}
         options={{
           title: 'Categorias',
@@ -47,7 +47,7 @@ export default function AppRoutes() {
         }}
       />
       <Screen
-        name='Favorites'
+        name='FavoritesRoute'
         component={FavoritesNavigator}
         options={{
           title: 'Favoritos',
@@ -60,7 +60,7 @@ export default function AppRoutes() {
         }}
       />
       <Screen
-        name='Profile'
+        name='ProfileRoute'
         component={ProfileNavigator}
         options={{
           title: 'Perfil',

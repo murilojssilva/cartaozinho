@@ -121,7 +121,7 @@ export function Favorites() {
             setFilterMenu={setFilterMenu}
             visible={filterMenuVisible}
             onClose={() => setFilterMenuVisible(false)}
-            sheetHeight={500}
+            sheetHeight={520}
           />
 
           <OrderMenu

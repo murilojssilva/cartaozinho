@@ -6,7 +6,7 @@ const { Navigator, Screen } = createStackNavigator()
 
 export default function Routes() {
   return (
-    <Navigator initialRouteName='App' screenOptions={{ headerShown: false }}>
+    <Navigator initialRouteName='Auth' screenOptions={{ headerShown: false }}>
       <Screen name='Auth' component={AuthRoutes} />
       <Screen name='App' component={AppRoutes} />
     </Navigator>

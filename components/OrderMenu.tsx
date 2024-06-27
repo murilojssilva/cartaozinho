@@ -12,14 +12,13 @@ import { RadioButton } from './RadioButton'
 
 import { useEffect } from 'react'
 import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
-import { OrderMenuState } from '@/hooks/useOrderMenu'
 
 interface IOrderMenuProps {
   visible: boolean
   onClose: () => void
   setOrderMenu: (visible: boolean) => void
   option: string
-  orderMenu: OrderMenuState
+  orderMenu: boolean
   setOption: (option: string) => void
   sheetHeight: number
 }

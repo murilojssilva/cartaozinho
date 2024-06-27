@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Platform } from 'react-native'
 import { ActionButton } from '@/components/ActionButton'
 import { InputText } from '@/components/InputText'

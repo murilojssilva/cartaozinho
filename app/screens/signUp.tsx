@@ -11,7 +11,7 @@ import {
   StyledView,
 } from '../styled'
 
-export default function SignUp() {
+export function SignUp() {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
   return (

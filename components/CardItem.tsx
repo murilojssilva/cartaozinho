@@ -1,33 +1,27 @@
 import { Ionicons } from '@expo/vector-icons'
-
-import { TouchableOpacityProps } from 'react-native'
-import { useNavigation } from 'expo-router'
 import { SocialButton } from './SocialButton'
 import { Tag } from './Tag'
 import { useState } from 'react'
 import {
+  StyledFlatList,
   StyledScrollView,
   StyledText,
   StyledTouchableOpacity,
   StyledView,
 } from '@/app/styled'
-
-interface ICardItemProps extends TouchableOpacityProps {
-  name: string
-  office: string
-  officeType: string
-  categories: string[]
-}
+import { ICardItemProps } from '@/app/interfaces/IAdProps'
+import { Linking } from 'react-native'
 
 export function CardItem({
   name,
   office,
   officeType,
   categories,
+  phone,
+  whatsapp,
+  email,
   ...props
 }: ICardItemProps) {
-  const navigation = useNavigation()
-
   const [isFavorited, setIsFavorited] = useState(false)
   return (
     <StyledTouchableOpacity
@@ -59,39 +53,51 @@ export function CardItem({
           </StyledTouchableOpacity>
         </StyledView>
       </StyledView>
-      <StyledScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}
-        className='flex-2 flex-row gap-2 my-4'
-      >
-        {categories.map((categorie: string, index) => (
-          <Tag key={index} text={categorie} backgroundColor='gray-600' />
-        ))}
-      </StyledScrollView>
+      <StyledFlatList
+        data={categories}
+        renderItem={({ item }) => (
+          <StyledScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            className='flex-2 flex-row gap-2 my-4'
+          >
+            {item.map((categorie: string, index) => (
+              <Tag key={index} text={categorie} backgroundColor='gray-600' />
+            ))}
+          </StyledScrollView>
+        )}
+      />
+
       <StyledView className='flex-1 flex-row'>
-        <SocialButton
-          text='Telefone'
-          backgroundColor='gray-300'
-          textColor='black'
-          icon='phone'
-          onPress={() => navigation.navigate('details')}
-        />
+        {phone && (
+          <SocialButton
+            text='Telefone'
+            backgroundColor='gray-300'
+            textColor='black'
+            icon='phone'
+            onPress={() => Linking.openURL(`tel:${phone}`)}
+          />
+        )}
 
-        <SocialButton
-          text='WhatsApp'
-          backgroundColor='gray-300'
-          textColor='black'
-          icon='whatsapp'
-          onPress={() => navigation.navigate('details')}
-        />
+        {whatsapp && (
+          <SocialButton
+            text='WhatsApp'
+            backgroundColor='gray-300'
+            textColor='black'
+            icon='whatsapp'
+            onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}`)}
+          />
+        )}
 
-        <SocialButton
-          text='E-mail'
-          backgroundColor='gray-300'
-          textColor='black'
-          icon='envelope'
-          onPress={() => navigation.navigate('details')}
-        />
+        {email && (
+          <SocialButton
+            text='E-mail'
+            backgroundColor='gray-300'
+            textColor='black'
+            icon='envelope'
+            onPress={() => Linking.openURL(`mailto:${email}`)}
+          />
+        )}
       </StyledView>
     </StyledTouchableOpacity>
   )

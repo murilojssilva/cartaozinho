@@ -5,11 +5,12 @@ import { Alert } from 'react-native'
 export default function useGetAddress() {
   const [address, setAddress] = useState({
     cep: '',
-    rua: '',
-    numero: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
+    street: '',
+    number: '',
+    complement: '',
+    neighborhood: '',
+    city: '',
+    state: '',
   })
 
   const handleCepChange = async (cep: string) => {
@@ -26,10 +27,10 @@ export default function useGetAddress() {
 
         setAddress((prevAddress) => ({
           ...prevAddress,
-          rua: logradouro,
-          bairro,
-          cidade: localidade,
-          estado: uf,
+          street: logradouro,
+          neighborhood: bairro,
+          city: localidade,
+          state: uf,
         }))
       } catch (error) {
         Alert.alert(

@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Login from '../screens/login'
-import SignUp from '../screens/signUp'
 
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { StyledText, StyledView } from '../styled'
 import { useNavigation } from 'expo-router'
+import { Login } from '../screens/Login'
+import { SignUp } from '../screens/SignUp'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 

@@ -5,7 +5,7 @@ import { SpinnerButton } from '@/components/SpinnerButton'
 import { Tag } from '@/components/Tag'
 import { useNavigation } from 'expo-router'
 import { useState } from 'react'
-import { Platform, Alert } from 'react-native'
+import { Platform } from 'react-native'
 import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
@@ -14,8 +14,10 @@ import {
 } from '../styled'
 import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
+import { adCreate } from '../storage/ad/adCreate'
+import { IAdProps } from '../interfaces/IAdProps'
 
-export default function NewAd() {
+export function NewAd() {
   const categories = [
     'Administração',
     'Alimentação',
@@ -33,9 +35,67 @@ export default function NewAd() {
 
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
-  const [isSelected, setIsSelected] = useState(false)
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
+  const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [ad, setAd] = useState<IAdProps>({} as IAdProps)
+
+  const handleServiceToggle = (service: string) => {
+    setSelectedServices((prevSelectedServices) => {
+      if (prevSelectedServices.includes(service)) {
+        return prevSelectedServices.filter((s) => s !== service)
+      } else {
+        return [...prevSelectedServices, service]
+      }
+    })
+  }
+
+  const handleOfficeTypeToggle = (officeType: string) => {
+    setSelectedOfficeTypes((prevSelectedOfficeTypes) => {
+      if (prevSelectedOfficeTypes.includes(officeType)) {
+        return prevSelectedOfficeTypes.filter((s) => s !== officeType)
+      } else {
+        return [...prevSelectedOfficeTypes, officeType]
+      }
+    })
+  }
+
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategories((prevSelectedCategories) => {
+      if (prevSelectedCategories.includes(category)) {
+        return prevSelectedCategories.filter((c) => c !== category)
+      } else {
+        return [...prevSelectedCategories, category]
+      }
+    })
+  }
+
+  const isServiceSelected = (service: string) => {
+    return selectedServices.includes(service)
+  }
+
+  const isOfficeType = (officeType: string) => {
+    return selectedOfficeTypes.includes(officeType)
+  }
+
+  const isCategorySelected = (category: string) => {
+    return selectedCategories.includes(category)
+  }
+
+  async function handleNewAd() {
+    try {
+      await adCreate(ad)
+      navigation.navigate('Home')
+    } catch (error) {
+      throw error
+    }
+  }
 
   const { address, setAddress, handleCepChange } = useGetAddress()
+
+  const handleInputChange = (field: keyof IAdProps, value: string) => {
+    setAd({ ...ad, [field]: value })
+  }
 
   return (
     <StyledKeyboardAvoidingView
@@ -53,33 +113,69 @@ export default function NewAd() {
             Informações do anúncio
           </StyledText>
           <StyledView className='gap-2'>
-            <InputText text='Nome' />
-            <InputText text='Cargo' />
+            <InputText
+              text='Nome'
+              onChangeText={(text) => handleInputChange('name', text)}
+            />
+            <InputText
+              text='Cargo'
+              onChangeText={(text) => handleInputChange('position', text)}
+            />
             <InputText
               text='Descrição'
               numberOfLines={10}
               multiline={true}
               textAlignVertical='top'
+              onChangeText={(text) => handleInputChange('description', text)}
             />
           </StyledView>
           <StyledText className='font-bold text-xl my-4'>
-            Atendimento
+            Tipo de atendimento
           </StyledText>
           <StyledView className='flex-row gap-2'>
             <Tag
+              text='Prestador de serviço'
+              onPress={() => handleOfficeTypeToggle('Prestador de serviço')}
+              backgroundColor={
+                isOfficeType('Prestador de serviço') ? 'cyan-700' : 'gray-600'
+              }
+            />
+            <Tag
+              text='Estabelecimento'
+              onPress={() => handleOfficeTypeToggle('Estabelecimento')}
+              backgroundColor={
+                isOfficeType('Estabelecimento') ? 'cyan-700' : 'gray-600'
+              }
+            />
+          </StyledView>
+
+          <StyledText className='font-bold text-xl my-4'>
+            Local de atendimento
+          </StyledText>
+
+          <StyledView className='flex-row gap-2'>
+            <Tag
               text='À domicílio'
-              onPress={() => setIsSelected(!isSelected)}
-              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              onPress={() => handleServiceToggle('À domicílio')}
+              backgroundColor={
+                isServiceSelected('À domicílio') ? 'cyan-700' : 'gray-600'
+              }
             />
             <Tag
               text='No estabelecimento'
-              onPress={() => setIsSelected(!isSelected)}
-              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              onPress={() => handleServiceToggle('No estabelecimento')}
+              backgroundColor={
+                isServiceSelected('No estabelecimento')
+                  ? 'cyan-700'
+                  : 'gray-600'
+              }
             />
             <Tag
               text='Remoto'
-              onPress={() => setIsSelected(!isSelected)}
-              backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+              onPress={() => handleServiceToggle('Remoto')}
+              backgroundColor={
+                isServiceSelected('Remoto') ? 'cyan-700' : 'gray-600'
+              }
             />
           </StyledView>
 
@@ -93,17 +189,30 @@ export default function NewAd() {
               <Tag
                 key={index}
                 text={categorie}
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+                onPress={() => handleCategoryToggle(categorie)}
+                backgroundColor={
+                  isCategorySelected(categorie) ? 'cyan-700' : 'gray-600'
+                }
               />
             ))}
           </StyledScrollView>
 
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
-            <InputText text='Telefone' keyboardType='numeric' />
-            <InputText text='WhatsApp' keyboardType='numeric' />
-            <InputText text='E-mail' />
+            <InputText
+              text='Telefone'
+              keyboardType='numeric'
+              onChangeText={(text) => handleInputChange('phone', text)}
+            />
+            <InputText
+              text='WhatsApp'
+              keyboardType='numeric'
+              onChangeText={(text) => handleInputChange('whatsapp', text)}
+            />
+            <InputText
+              text='E-mail'
+              onChangeText={(text) => handleInputChange('email', text)}
+            />
           </StyledView>
 
           <StyledText className='font-bold text-xl my-4'>
@@ -117,15 +226,38 @@ export default function NewAd() {
               placeholder='CEP'
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <InputText text='Rua' value={address.rua} editable={false} />
+            <InputText text='Rua' value={address.street} editable={false} />
             <InputText
               text='Número'
-              value={address.numero}
-              onChangeText={(text) => setAddress({ ...address, numero: text })}
+              keyboardType='numeric'
+              value={address.number}
+              onChangeText={(text) => setAddress({ ...address, number: text })}
             />
-            <InputText text='Bairro' value={address.bairro} editable={false} />
-            <InputText text='Cidade' value={address.cidade} editable={false} />
-            <InputText text='Estado' value={address.estado} editable={false} />
+            <InputText
+              text='Complemento'
+              value={address.complement}
+              onChangeText={(text) =>
+                setAddress({ ...address, complement: text })
+              }
+            />
+            <InputText
+              text='Bairro'
+              value={address.neighborhood}
+              editable={false}
+              onChangeText={(text) => handleInputChange('neighborhood', text)}
+            />
+            <InputText
+              text='Cidade'
+              onChangeText={(text) => handleInputChange('city', text)}
+              value={address.city}
+              editable={false}
+            />
+            <InputText
+              text='Estado'
+              onChangeText={(text) => handleInputChange('state', text)}
+              value={address.state}
+              editable={false}
+            />
           </StyledView>
         </StyledView>
       </StyledScrollView>
@@ -137,7 +269,7 @@ export default function NewAd() {
             iconColor='white'
             backgroundColor='cyan-700'
             textColor='white'
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => handleNewAd()}
             text='Anunciar'
             icon='id-card'
           />

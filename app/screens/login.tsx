@@ -13,7 +13,7 @@ import {
   StyledView,
 } from '../styled'
 
-export default function Login() {
+export function Login() {
   const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation()

@@ -24,7 +24,7 @@ const StyledText = styled(Text)
 const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
 const StyledScrollView = styled(ScrollView)
 
-export default function EditAd() {
+export function EditAd() {
   const categories = [
     'Administração',
     'Alimentação',
@@ -163,15 +163,24 @@ export default function EditAd() {
               placeholder='CEP'
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <InputText text='Rua' value={address.rua} editable={false} />
+            <InputText text='Rua' value={address.street} editable={false} />
             <InputText
               text='Número'
-              value={address.numero}
-              onChangeText={(text) => setAddress({ ...address, numero: text })}
+              value={address.number}
+              onChangeText={(text) => setAddress({ ...address, number: text })}
             />
-            <InputText text='Bairro' value={address.bairro} editable={false} />
-            <InputText text='Cidade' value={address.cidade} editable={false} />
-            <InputText text='Estado' value={address.estado} editable={false} />
+            <InputText
+              text='Complemento'
+              value={address.complement}
+              onChangeText={(text) => setAddress({ ...address, number: text })}
+            />
+            <InputText
+              text='Bairro'
+              value={address.neighborhood}
+              editable={false}
+            />
+            <InputText text='Cidade' value={address.city} editable={false} />
+            <InputText text='Estado' value={address.state} editable={false} />
           </StyledView>
         </StyledView>
       </StyledScrollView>

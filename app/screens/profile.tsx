@@ -8,12 +8,40 @@ import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
-import { useState } from 'react'
-import { StyledScrollView, StyledText, StyledView } from '../styled'
+import { useCallback, useState } from 'react'
+import {
+  StyledFlatList,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
+import { adsGetAll } from '../storage/ad/AdsGetAll'
+import { useFocusEffect } from '@react-navigation/native'
+import { adRemove } from '../storage/ad/adRemove'
+import { IAdProps } from '../interfaces/IAdProps'
 
 export function Profile() {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
+
+  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
+
+  async function fetchAds() {
+    try {
+      const data = await adsGetAll()
+      console.log(data)
+      setAd(data)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAds()
+      console.log(ad)
+    }, [])
+  )
   return (
     <StyledView className='flex-1 bg-white'>
       <TabHeader
@@ -100,37 +128,18 @@ export function Profile() {
                   <SkeletonMyItemCard />
                 </StyledView>
               ) : (
-                <StyledScrollView
+                <StyledFlatList
                   horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className='flex-2 gap-2'
-                >
-                  <MyItemCard
-                    name='Murilo'
-                    office='Teste'
-                    onPress={() => navigation.navigate('MyAd')}
-                  />
-                  <MyItemCard
-                    name='Murilo'
-                    office='Teste'
-                    onPress={() => navigation.navigate('MyAd')}
-                  />
-                  <MyItemCard
-                    name='Murilo'
-                    office='Teste'
-                    onPress={() => navigation.navigate('MyAd')}
-                  />
-                  <MyItemCard
-                    name='Murilo'
-                    office='Teste'
-                    onPress={() => navigation.navigate('MyAd')}
-                  />
-                  <MyItemCard
-                    name='Murilo'
-                    office='Teste'
-                    onPress={() => navigation.navigate('MyAd')}
-                  />
-                </StyledScrollView>
+                  className='flex-2 my-2'
+                  data={ad}
+                  renderItem={({ item }) => (
+                    <MyItemCard
+                      name={item.name}
+                      office={item.office}
+                      onPress={() => navigation.navigate('MyAd')}
+                    />
+                  )}
+                />
               )}
             </StyledView>
           </StyledView>

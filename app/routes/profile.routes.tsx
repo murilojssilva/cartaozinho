@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Profile } from '../screens/profile'
-import EditProfile from '../screens/editProfile'
-import EditPassword from '../screens/editPassword'
-import MyAd from '../screens/myAd'
-import EditAd from '../screens/editAd'
+import { Profile } from '../screens/Profile'
+import { EditProfile } from '../screens/EditProfile'
+import { EditPassword } from '../screens/EditPassword'
+import { MyAd } from '../screens/MyAd'
+import { EditAd } from '../screens/EditAd'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 

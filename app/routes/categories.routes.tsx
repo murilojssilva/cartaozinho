@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Categories } from '../screens/categories'
-import Category from '../screens/category'
-import Details from '../screens/details'
-import NewAd from '../screens/newAd'
+import { Details } from '../screens/Details'
+import { NewAd } from '../screens/NewAd'
+import { Categories } from '../screens/Categories'
+import { Category } from '../screens/Category'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 

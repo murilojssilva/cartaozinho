@@ -18,5 +18,3 @@ export const StyledTextInput = styled(TextInput)
 export const StyledFlatList = styled(FlatList)
 export const StyledImage = styled(Image)
 export const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-
-StyledFlatList

@@ -1,5 +1,10 @@
+import { IAdProps } from '@/app/interfaces/IAdProps'
+import { adRemove } from '@/app/storage/ad/adRemove'
+import { adsGetAll } from '@/app/storage/ad/AdsGetAll'
 import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useFocusEffect } from 'expo-router'
+import { useCallback, useState } from 'react'
 
 import { Alert, TouchableOpacityProps } from 'react-native'
 
@@ -9,6 +14,32 @@ interface ICardItemProps extends TouchableOpacityProps {
 }
 
 export function MyItemCard({ name, office, ...props }: ICardItemProps) {
+  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
+
+  async function fetchAds() {
+    try {
+      const data = await adsGetAll()
+      console.log(data)
+      setAd(data)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAds()
+      console.log(ad)
+    }, [])
+  )
+
+  async function handleRemoveAd() {
+    try {
+      await adRemove(ad[0])
+    } catch (error) {
+      throw error
+    }
+  }
   return (
     <StyledTouchableOpacity
       {...props}
@@ -34,7 +65,7 @@ export function MyItemCard({ name, office, ...props }: ICardItemProps) {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              { text: 'Sim', onPress: () => console.log('OK Pressed') },
+              { text: 'Sim', onPress: () => handleRemoveAd() },
             ],
             { cancelable: false }
           )

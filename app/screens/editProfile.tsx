@@ -13,7 +13,7 @@ import {
   StyledView,
 } from '../styled'
 
-export default function EditProfile() {
+export function EditProfile() {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
   return (

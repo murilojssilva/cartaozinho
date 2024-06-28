@@ -1,5 +1,5 @@
 import { useNavigation } from 'expo-router'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { FontAwesome5 } from '@expo/vector-icons'
 import {
   StyledFlatList,
@@ -8,29 +8,25 @@ import {
   StyledView,
 } from '../styled'
 import { TabHeader } from '@/components/TabHeader'
-import { CardItem } from '../../components/CardItem'
+import { CardItem } from '@/components/CardItem'
 import { FilterButton } from '@/components/FilterButton'
 import { FilterMenu } from '@/components/FilterMenu'
 import { OrderButton } from '@/components/OrderButton'
 import { OrderMenu } from '@/components/OrderMenu'
 import { ChangeCityButton } from '@/components/ChangeCityButton'
 import { ChangeCityMenu } from '@/components/ChangeCityMenu'
-import useFilterMenu from '@/hooks/useFilterMenu'
-import useOrderMenu from '@/hooks/useOrderMenu'
-import useGetCity from '@/hooks/useGetCity'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { Title } from '@/components/Title'
 import { Animated, Easing } from 'react-native'
 
-interface IAdProps {
-  id: number
-  name: string
-  office: string
-  officeType: string
-  categories: string[]
-}
+import useFilterMenu from '@/hooks/useFilterMenu'
+import useOrderMenu from '@/hooks/useOrderMenu'
+import useGetCity from '@/hooks/useGetCity'
+import { adsGetAll } from '../storage/ad/AdsGetAll'
+import { useFocusEffect } from '@react-navigation/native'
+import { IAdProps } from '../interfaces/IAdProps'
 
 export function Home() {
   const navigation = useNavigation()
@@ -67,50 +63,24 @@ export function Home() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const [changeCityMenuVisible, setChangeCityMenuVisible] = useState(false)
-  const [ad, setAd] = useState<IAdProps[]>([
-    {
-      id: 1,
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: ['Tecnologia'],
-    },
-    {
-      id: 2,
-      name: 'Paulo Cesar',
-      office: 'Padeiro',
-      officeType: 'Prestador de serviço',
-      categories: ['Alimentação'],
-    },
-    {
-      id: 3,
-      name: 'DIB',
-      office: 'Loja de Guloseimas',
-      officeType: 'Estabelecimento',
-      categories: ['Alimentação'],
-    },
-    {
-      id: 4,
-      name: 'SerraTech',
-      office: 'Loja de Eletrônicos',
-      officeType: 'Estabelecimento',
-      categories: ['Serviços', 'Tecnologia'],
-    },
-    {
-      id: 5,
-      name: 'Gatos & Só',
-      office: 'Clínica Veterinária',
-      officeType: 'Estabelecimento',
-      categories: ['Pet', 'Serviços'],
-    },
-    {
-      id: 6,
-      name: 'Joana Oliveira',
-      office: 'Cabeleireira',
-      officeType: 'Prestador de serviço',
-      categories: ['Beleza'],
-    },
-  ] as IAdProps[])
+  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
+
+  async function fetchAds() {
+    try {
+      const data = await adsGetAll()
+      console.log(data)
+      setAd(data)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAds()
+      console.log(ad)
+    }, [])
+  )
 
   const [orderOption, setOrderOption] = useState<string>('option1')
 
@@ -207,7 +177,7 @@ export function Home() {
               showsVerticalScrollIndicator={false}
               className='h-screen'
               data={ad}
-              renderItem={({ item }) => (
+              renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
                   name={item.name}
                   office={item.office}

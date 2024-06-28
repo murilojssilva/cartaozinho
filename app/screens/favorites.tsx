@@ -12,14 +12,7 @@ import useOrderMenu from '@/hooks/useOrderMenu'
 import { useNavigation } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { StyledFlatList, StyledView } from '../styled'
-
-interface IAdProps {
-  id: number
-  name: string
-  office: string
-  officeType: string
-  categories: string[]
-}
+import { IAdProps } from '../interfaces/IAdProps'
 
 export function Favorites() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
@@ -28,29 +21,7 @@ export function Favorites() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
 
-  const [ad, setAd] = useState<IAdProps[]>([
-    {
-      id: 1,
-      name: 'Paulo Cesar',
-      office: 'Padeiro',
-      officeType: 'Prestador de serviço',
-      categories: ['Alimentação'],
-    },
-    {
-      id: 3,
-      name: 'DIB',
-      office: 'Loja de Guloseimas',
-      officeType: 'Estabelecimento',
-      categories: ['Alimentação'],
-    },
-    {
-      id: 5,
-      name: 'Joana Oliveira',
-      office: 'Cabeleireira',
-      officeType: 'Prestador de serviço',
-      categories: ['Beleza'],
-    },
-  ] as IAdProps[])
+  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
 
   const [isLoading, setIsLoading] = useState(false)
   const [orderOption, setOrderOption] = useState<string>('option1')

@@ -17,7 +17,7 @@ import {
   StyledView,
 } from '../styled'
 
-export default function Details() {
+export function Details() {
   const category: string[] = [
     'Informática',
     'Desenvolvimento',

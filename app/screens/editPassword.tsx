@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useNavigation } from 'expo-router'
 import { StyledScrollView, StyledText, StyledView } from '../styled'
 
-export default function EditPassword() {
+export function EditPassword() {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
   return (

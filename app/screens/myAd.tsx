@@ -19,7 +19,7 @@ import {
   StyledView,
 } from '../styled'
 
-export default function MyAd() {
+export function MyAd() {
   const category: string[] = [
     'Informática',
     'Desenvolvimento',

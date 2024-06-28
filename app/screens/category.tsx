@@ -7,20 +7,11 @@ import { Header } from '@/components/Header'
 import { OrderButton } from '@/components/OrderButton'
 import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
-import useFilterMenu from '@/hooks/useFilterMenu'
-import useOrderMenu from '@/hooks/useOrderMenu'
+
 import { StyledFlatList, StyledView } from '../styled'
+import { IAdProps } from '../interfaces/IAdProps'
 
-interface IAdProps {
-  name: string
-  office: string
-  officeType: string
-  categories: string[]
-}
-
-export default function Category() {
-  const { filterMenu, setFilterMenu } = useFilterMenu()
-  const { orderMenu, setOrderMenu } = useOrderMenu()
+export function Category() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -30,44 +21,7 @@ export default function Category() {
 
   const navigation = useNavigation()
 
-  const ad: IAdProps[] = [
-    {
-      name: 'Murilo Silva',
-      office: 'Desenvolvedor',
-      officeType: 'Prestador de serviço',
-      categories: ['Tecnologia'],
-    },
-    {
-      name: 'Paulo Cesar',
-      office: 'Padeiro',
-      officeType: 'Prestador de serviço',
-      categories: ['Alimentação'],
-    },
-    {
-      name: 'DIB',
-      office: 'Loja de Guloseimas',
-      officeType: 'Estabelecimento',
-      categories: ['Alimentação'],
-    },
-    {
-      name: 'SerraTech',
-      office: 'Loja de Eletrônicos',
-      officeType: 'Estabelecimento',
-      categories: ['Serviços', 'Tecnologia'],
-    },
-    {
-      name: 'Gatos & Só',
-      office: 'Clínica Veterinária',
-      officeType: 'Estabelecimento',
-      categories: ['Pet', 'Serviços'],
-    },
-    {
-      name: 'Joana Oliveira',
-      office: 'Cabeleireira',
-      officeType: 'Prestador de serviço',
-      categories: ['Beleza'],
-    },
-  ] as IAdProps[]
+  const ad: IAdProps[] = [] as IAdProps[]
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)

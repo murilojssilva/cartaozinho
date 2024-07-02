@@ -9,16 +9,14 @@ import { Topic } from '@/components/Topic'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
 import { useCallback, useState } from 'react'
-import {
-  StyledFlatList,
-  StyledScrollView,
-  StyledText,
-  StyledView,
-} from '../styled'
+import { Linking } from 'react-native'
+
+import { StyledFlatList, StyledView } from '../styled'
 import { adsGetAll } from '../storage/ad/AdsGetAll'
 import { useFocusEffect } from '@react-navigation/native'
 import { adRemove } from '../storage/ad/adRemove'
 import { IAdProps } from '../interfaces/IAdProps'
+import { EmptyList } from '@/components/EmptyList'
 
 export function Profile() {
   const navigation = useNavigation()
@@ -52,7 +50,7 @@ export function Profile() {
         onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
       />
 
-      <StyledScrollView className='flex-2 flex-col'>
+      <StyledView className='flex-2 flex-col'>
         <StyledView className='flex-2 p-4 flex-col h-full'>
           <StyledView className='flex-2 mb-4 flex-col'>
             <Title text='Informações pessoais' />
@@ -64,12 +62,24 @@ export function Profile() {
             {isLoading ? (
               <SkeletonText />
             ) : (
-              <Topic icon='phone' name='Telefone' content='(21) 99999-9999' />
+              <Topic
+                icon='phone'
+                name='Telefone'
+                content='(21) 99999-9999'
+                onPress={() => Linking.openURL('tel:+5521992687311')}
+              />
             )}
             {isLoading ? (
               <SkeletonText />
             ) : (
-              <Topic icon='envelope' name='E-mail' content='email@email.com' />
+              <Topic
+                icon='envelope'
+                name='E-mail'
+                content='email@email.com'
+                onPress={() =>
+                  Linking.openURL('mailto:murilojssilva@outlook.com')
+                }
+              />
             )}
           </StyledView>
           {isLoading ? (
@@ -99,52 +109,31 @@ export function Profile() {
           )}
 
           <StyledView className='flex-2 flex-col'>
-            <Title text='Geral' />
             {isLoading ? (
-              <SkeletonText />
-            ) : (
-              <StyledView className='flex-2 flex-row justify-between'>
-                <StyledText className='text-lg'>Tema</StyledText>
-                <Entypo name='switch' size={32} />
+              <StyledView className='flex-2 flex-row justify-around w-full'>
+                <SkeletonMyItemCard />
+                <SkeletonMyItemCard />
+                <SkeletonMyItemCard />
               </StyledView>
-            )}
-            {isLoading ? (
-              <SkeletonText />
             ) : (
-              <StyledView className='flex-2 flex-row justify-between'>
-                <StyledText className='text-lg'>Biometria</StyledText>
-                <Entypo name='switch' size={32} />
-              </StyledView>
+              <StyledFlatList
+                className='flex-2 my-2'
+                data={ad}
+                renderItem={({ item }) => (
+                  <MyItemCard
+                    name={item.name}
+                    office={item.office}
+                    onPress={() => navigation.navigate('MyAd')}
+                  />
+                )}
+                ListHeaderComponent={<Title text='Meus anúncios' />}
+                ListEmptyComponent={<EmptyList />}
+                style={{ flexDirection: 'column' }}
+              />
             )}
-          </StyledView>
-
-          <StyledView className='flex-2 flex-col'>
-            <Title text='Meus anúncios' />
-            <StyledView>
-              {isLoading ? (
-                <StyledView className='flex-2 flex-row justify-around w-full'>
-                  <SkeletonMyItemCard />
-                  <SkeletonMyItemCard />
-                  <SkeletonMyItemCard />
-                </StyledView>
-              ) : (
-                <StyledFlatList
-                  horizontal
-                  className='flex-2 my-2'
-                  data={ad}
-                  renderItem={({ item }) => (
-                    <MyItemCard
-                      name={item.name}
-                      office={item.office}
-                      onPress={() => navigation.navigate('MyAd')}
-                    />
-                  )}
-                />
-              )}
-            </StyledView>
           </StyledView>
         </StyledView>
-      </StyledScrollView>
+      </StyledView>
     </StyledView>
   )
 }

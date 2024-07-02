@@ -19,6 +19,7 @@ import {
 import { InputText } from './InputText'
 import useGetCity from '@/hooks/useGetCity'
 import { Alert, Keyboard, Platform } from 'react-native'
+import { ActionButton } from './ActionButton'
 
 interface IChangeCityMenuProps {
   visible: boolean
@@ -165,23 +166,27 @@ export function ChangeCityMenu({
                     <FontAwesome5 name='map-pin' color='white' size={26} />
                   </StyledTouchableOpacity>
                 </StyledView>
-                {city && state && (
-                  <StyledText style={{ marginTop: 8 }}>
-                    {city} - {state}
-                  </StyledText>
+
+                {city && state ? (
+                  <StyledView className='flex-2 flex-row my-2 items-center'>
+                    <FontAwesome5 name='map-pin' size={22} />
+                    <StyledText className='font-bold text-xl'>{` ${city} - ${state}`}</StyledText>
+                  </StyledView>
+                ) : (
+                  <StyledView className='flex-2 flex-row my-2 items-center'>
+                    <FontAwesome5 name='map-pin' size={22} />
+                    <StyledText className='text-xl'>{` Pesquisando cidade...`}</StyledText>
+                  </StyledView>
                 )}
               </StyledView>
-              <StyledView className='flex-2 flex-row justify-between py-4'>
-                <StyledTouchableOpacity
-                  className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-cyan-700'
-                  onPress={handleSaveCity}
-                >
-                  <FontAwesome5 name='save' size={24} color='white' />
-                  <StyledText className='font-bold text-xl text-white'>
-                    {'  Salvar'}
-                  </StyledText>
-                </StyledTouchableOpacity>
-              </StyledView>
+              <ActionButton
+                text='Salvar'
+                icon='save'
+                backgroundColor='cyan-700'
+                textColor='white'
+                iconColor='white'
+                onPress={handleSaveCity}
+              />
             </StyledView>
           </Animated.View>
         </PanGestureHandler>

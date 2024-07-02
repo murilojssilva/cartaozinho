@@ -13,6 +13,7 @@ import { useNavigation } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
+import { SearchInput } from '@/components/SearchInput'
 
 export function Favorites() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
@@ -63,15 +64,25 @@ export function Favorites() {
         </StyledView>
       ) : (
         <StyledView className='flex-2 mb-2 p-4'>
-          <StyledView className='flex-2 flex-row justify-between'>
-            <FilterButton onPress={fetchFilterMenu} />
-            <OrderButton onPress={fetchOrderMenu} />
-          </StyledView>
+          {ad.length > 0 && (
+            <StyledView>
+              <StyledView className='mb-2'>
+                <SearchInput text='Pesquisar' />
+              </StyledView>
+              <StyledView className='flex-2 flex-row justify-between'>
+                <FilterButton onPress={fetchFilterMenu} />
+                <OrderButton onPress={fetchOrderMenu} />
+              </StyledView>
+            </StyledView>
+          )}
           <StyledFlatList
             showsVerticalScrollIndicator={false}
             data={ad}
-            renderItem={({ item }) => (
+            renderItem={({ item }: { item: IAdProps }) => (
               <CardItem
+                phone={item.phone}
+                whatsapp={item.whatsapp}
+                email={item.email}
                 name={item.name}
                 office={item.office}
                 officeType={item.officeType}

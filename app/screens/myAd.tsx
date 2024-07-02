@@ -18,6 +18,7 @@ import {
   StyledText,
   StyledView,
 } from '../styled'
+import { Linking } from 'react-native'
 
 export function MyAd() {
   const category: string[] = [
@@ -130,7 +131,7 @@ export function MyAd() {
                 backgroundColor='gray-300'
                 textColor='black'
                 icon='phone'
-                onPress={() => navigation.navigate('details')}
+                onPress={() => Linking.openURL('tel:+5521992687311')}
               />
 
               <SocialButton
@@ -138,7 +139,7 @@ export function MyAd() {
                 backgroundColor='gray-300'
                 textColor='black'
                 icon='whatsapp'
-                onPress={() => navigation.navigate('details')}
+                onPress={() => Linking.openURL('https://wa.me/+5521992687311')}
               />
 
               <SocialButton
@@ -146,7 +147,9 @@ export function MyAd() {
                 backgroundColor='gray-300'
                 textColor='black'
                 icon='envelope'
-                onPress={() => navigation.navigate('details')}
+                onPress={() =>
+                  Linking.openURL('mailto:murilojssilva@outlook.com')
+                }
               />
             </StyledView>
           </StyledView>

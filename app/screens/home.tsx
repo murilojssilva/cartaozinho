@@ -27,6 +27,8 @@ import useGetCity from '@/hooks/useGetCity'
 import { adsGetAll } from '../storage/ad/AdsGetAll'
 import { useFocusEffect } from '@react-navigation/native'
 import { IAdProps } from '../interfaces/IAdProps'
+import { InputText } from '@/components/InputText'
+import { SearchInput } from '@/components/SearchInput'
 
 export function Home() {
   const navigation = useNavigation()
@@ -155,8 +157,6 @@ export function Home() {
           <ChangeCityButton onPress={fetchChangeCityMenu} />
         </StyledView>
 
-        <Title text='Anúncios' />
-
         {isLoadingGetCity ? (
           <StyledView className='flex-2'>
             <StyledView className='flex-2 flex-row justify-between'>
@@ -169,17 +169,29 @@ export function Home() {
           </StyledView>
         ) : (
           <StyledView>
-            <StyledView className='flex-2 flex-row justify-between'>
-              <FilterButton onPress={fetchFilterMenu} />
-              <OrderButton onPress={fetchOrderMenu} />
-            </StyledView>
+            {ad.length > 0 && (
+              <StyledView>
+                <StyledView className='mb-2'>
+                  <SearchInput text='Pesquisar' />
+                </StyledView>
+                <StyledView className='flex-2 flex-row justify-between'>
+                  <FilterButton onPress={fetchFilterMenu} />
+                  <OrderButton onPress={fetchOrderMenu} />
+                </StyledView>
+              </StyledView>
+            )}
+
             <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
               data={ad}
+              ListHeaderComponent={<Title text='Anúncios' />}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
                   name={item.name}
+                  email={item.email}
+                  whatsapp={item.whatsapp}
+                  phone={item.phone}
                   office={item.office}
                   officeType={item.officeType}
                   categories={item.categories}
@@ -196,7 +208,7 @@ export function Home() {
         )}
       </StyledView>
 
-      {ad.length > 0 && (
+      {ad.length == 0 && (
         <StyledView>
           <FilterMenu
             filterMenu={filterMenu}

@@ -10,6 +10,7 @@ import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButto
 
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
+import { SearchInput } from '@/components/SearchInput'
 
 export function Category() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
@@ -51,9 +52,14 @@ export function Category() {
           <StyledView>
             {ad.filter((a) => a.categories.includes(category as string))
               .length > 0 && (
-              <StyledView className='flex-2 flex-row justify-between'>
-                <FilterButton onPress={fetchFilterMenu} />
-                <OrderButton onPress={fetchOrderMenu} />
+              <StyledView>
+                <StyledView className='mb-2'>
+                  <SearchInput text='Pesquisar' />
+                </StyledView>
+                <StyledView className='flex-2 flex-row justify-between'>
+                  <FilterButton onPress={fetchFilterMenu} />
+                  <OrderButton onPress={fetchOrderMenu} />
+                </StyledView>
               </StyledView>
             )}
             <StyledFlatList
@@ -62,6 +68,9 @@ export function Category() {
               data={ad.filter((a) => a.categories.includes(category as string))}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  phone={item.phone}
+                  whatsapp={item.whatsapp}
+                  email={item.email}
                   name={item.name}
                   office={item.office}
                   officeType={item.officeType}

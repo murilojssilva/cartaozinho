@@ -25,7 +25,7 @@ export function ActionButton({
     >
       <Ionicons size={20} color={iconColor} name={icon} />
       <StyledText
-        className={`font-bold text-xl text-${textColor}`}
+        className={`font-bold text-md text-${textColor}`}
       >{` ${text}`}</StyledText>
     </StyledTouchableOpacity>
   )

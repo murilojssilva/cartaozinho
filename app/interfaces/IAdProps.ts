@@ -4,7 +4,7 @@ export interface IAdProps {
   id: number
   name: string
   office: string
-  officeType: string
+  officeType: string[]
   categories: string[]
   description: string
   serviceType: string[]
@@ -26,6 +26,6 @@ export interface ICardItemProps extends TouchableOpacityProps {
   email: string
   whatsapp: string
   office: string
-  officeType: string
+  officeType: string[]
   categories: string[]
 }

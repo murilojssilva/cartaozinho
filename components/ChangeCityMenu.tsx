@@ -16,10 +16,12 @@ import {
   StyledTouchableOpacity,
   StyledView,
 } from '@/app/styled'
-import { InputText } from './InputText'
 import useGetCity from '@/hooks/useGetCity'
-import { Alert, Keyboard, Platform } from 'react-native'
+import { Alert, Easing, Keyboard, Platform } from 'react-native'
 import { ActionButton } from './ActionButton'
+import { SearchInput } from './SearchInput'
+import { useSpinAnimation } from '@/hooks/useSpinAnimation'
+import { SpinningIcon } from './SpinningIcon'
 
 interface IChangeCityMenuProps {
   visible: boolean
@@ -39,6 +41,8 @@ export function ChangeCityMenu({
   const [inputCity, setInputCity] = useState('')
 
   const { getCurrentLocation, fetchCity, city, state } = useGetCity()
+
+  const spin = useSpinAnimation()
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -147,24 +151,28 @@ export function ChangeCityMenu({
             <StyledView style={{ flex: 1 }}>
               <Title text='Digite o nome da cidade' />
               <StyledView className='flex-2 flex-col'>
-                <StyledView className='flex-2 flex-row'>
-                  <InputText
-                    text='Cidade'
-                    placeholder='Digite a cidade'
-                    onChangeText={handleCityChange}
-                  />
-                  <StyledTouchableOpacity
-                    onPress={handleSearchCity}
-                    className='flex-2 bg-cyan-700 items-center justify-center ml-2 p-4 rounded-xl'
-                  >
-                    <FontAwesome5 name='search' color='white' size={26} />
-                  </StyledTouchableOpacity>
-                  <StyledTouchableOpacity
-                    onPress={getCurrentLocation}
-                    className='flex-2 bg-cyan-700 items-center justify-center ml-2 p-4 rounded-xl'
-                  >
-                    <FontAwesome5 name='map-pin' color='white' size={26} />
-                  </StyledTouchableOpacity>
+                <StyledView className='flex-2 flex-row items-center'>
+                  <StyledView className='flex-3 w-[60%]'>
+                    <SearchInput
+                      text=''
+                      placeholder='Digite a cidade'
+                      onChangeText={handleCityChange}
+                    />
+                  </StyledView>
+                  <StyledView className='flex-1 flex-row justify-end'>
+                    <StyledTouchableOpacity
+                      onPress={handleSearchCity}
+                      className='flex-2 bg-cyan-700 items-center justify-center ml-2 p-4 rounded-xl'
+                    >
+                      <FontAwesome5 name='search' color='white' size={26} />
+                    </StyledTouchableOpacity>
+                    <StyledTouchableOpacity
+                      onPress={getCurrentLocation}
+                      className='flex-2 bg-cyan-700 items-center justify-center ml-2 p-4 rounded-xl'
+                    >
+                      <FontAwesome5 name='map-pin' color='white' size={26} />
+                    </StyledTouchableOpacity>
+                  </StyledView>
                 </StyledView>
 
                 {city && state ? (
@@ -174,8 +182,7 @@ export function ChangeCityMenu({
                   </StyledView>
                 ) : (
                   <StyledView className='flex-2 flex-row my-2 items-center'>
-                    <FontAwesome5 name='map-pin' size={22} />
-                    <StyledText className='text-xl'>{` Pesquisando cidade...`}</StyledText>
+                    <SpinningIcon />
                   </StyledView>
                 )}
               </StyledView>

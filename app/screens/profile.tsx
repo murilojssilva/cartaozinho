@@ -6,7 +6,6 @@ import { SkeletonText } from '@/components/Skeletons/SkeletonText'
 import { TabHeader } from '@/components/TabHeader'
 import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
-import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
 import { useCallback, useState } from 'react'
 import { Linking } from 'react-native'
@@ -27,7 +26,6 @@ export function Profile() {
   async function fetchAds() {
     try {
       const data = await adsGetAll()
-      console.log(data)
       setAd(data)
     } catch (error) {
       throw error
@@ -37,8 +35,7 @@ export function Profile() {
   useFocusEffect(
     useCallback(() => {
       fetchAds()
-      console.log(ad)
-    }, [])
+    }, [ad])
   )
   return (
     <StyledView className='flex-1 bg-white'>
@@ -107,6 +104,7 @@ export function Profile() {
               />
             </StyledView>
           )}
+          <Title text='Meus anúncios' />
 
           <StyledView className='flex-2 flex-col'>
             {isLoading ? (
@@ -118,6 +116,7 @@ export function Profile() {
             ) : (
               <StyledFlatList
                 className='flex-2 my-2'
+                horizontal
                 data={ad}
                 renderItem={({ item }) => (
                   <MyItemCard
@@ -126,8 +125,9 @@ export function Profile() {
                     onPress={() => navigation.navigate('MyAd')}
                   />
                 )}
-                ListHeaderComponent={<Title text='Meus anúncios' />}
-                ListEmptyComponent={<EmptyList />}
+                ListEmptyComponent={
+                  <EmptyList onPress={() => navigation.navigate('NewAd')} />
+                }
                 style={{ flexDirection: 'column' }}
               />
             )}

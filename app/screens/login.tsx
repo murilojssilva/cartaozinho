@@ -12,6 +12,7 @@ import {
   StyledText,
   StyledView,
 } from '../styled'
+import { TabHeader } from '@/components/TabHeader'
 
 export function Login() {
   const [isLoading, setIsLoading] = useState(false)
@@ -23,6 +24,7 @@ export function Login() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className='flex-1 bg-gray-100 justify-center'
     >
+      <TabHeader text='Cartãozinho' icon='home' />
       <StyledScrollView className='p-4  flex-grow'>
         <StyledImage source={mapa} className='flex-2 w-full h-32' />
         <StyledView className=' flex-col p-4 gap-2'>

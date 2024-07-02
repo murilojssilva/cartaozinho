@@ -4,7 +4,7 @@ import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { Tag } from '@/components/Tag'
 import { useNavigation } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import {
   StyledKeyboardAvoidingView,
@@ -39,6 +39,24 @@ export function NewAd() {
   const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [ad, setAd] = useState<IAdProps>({} as IAdProps)
+
+  const { address, setAddress, handleCepChange } = useGetAddress()
+
+  useEffect(() => {
+    setAd({
+      ...ad,
+      city: address.city,
+      state: address.state,
+      street: address.street,
+      neighborhood: address.neighborhood,
+      complement: address.complement,
+      number: address.number,
+      cep: address.cep,
+      officeType: selectedOfficeTypes,
+      categories: selectedCategories,
+      serviceType: selectedServices,
+    })
+  }, [address, selectedOfficeTypes, selectedCategories, selectedServices])
 
   const handleServiceToggle = (service: string) => {
     setSelectedServices((prevSelectedServices) => {
@@ -83,15 +101,16 @@ export function NewAd() {
   }
 
   async function handleNewAd() {
+    setIsLoading(true)
     try {
       await adCreate(ad)
       navigation.navigate('Home')
     } catch (error) {
       throw error
+    } finally {
+      setIsLoading(false)
     }
   }
-
-  const { address, setAddress, handleCepChange } = useGetAddress()
 
   const handleInputChange = (field: keyof IAdProps, value: string) => {
     setAd({ ...ad, [field]: value })
@@ -119,7 +138,7 @@ export function NewAd() {
             />
             <InputText
               text='Cargo'
-              onChangeText={(text) => handleInputChange('position', text)}
+              onChangeText={(text) => handleInputChange('office', text)}
             />
             <InputText
               text='Descrição'
@@ -199,18 +218,23 @@ export function NewAd() {
 
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
-            <InputText
-              text='Telefone'
-              keyboardType='numeric'
+            <TextInputMask
+              placeholder='(00)0000-0000'
+              type={'cel-phone'}
+              keyboardType='phone-pad'
               onChangeText={(text) => handleInputChange('phone', text)}
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <InputText
-              text='WhatsApp'
+            <TextInputMask
+              placeholder='(00)00000-0000'
+              type={'cel-phone'}
               keyboardType='numeric'
               onChangeText={(text) => handleInputChange('whatsapp', text)}
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
             <InputText
               text='E-mail'
+              keyboardType='email-address'
               onChangeText={(text) => handleInputChange('email', text)}
             />
           </StyledView>

@@ -1,5 +1,5 @@
 import { useNavigation } from 'expo-router'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FontAwesome5 } from '@expo/vector-icons'
 import {
   StyledFlatList,
@@ -19,7 +19,6 @@ import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
 import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { Title } from '@/components/Title'
-import { Animated, Easing } from 'react-native'
 
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
@@ -27,8 +26,8 @@ import useGetCity from '@/hooks/useGetCity'
 import { adsGetAll } from '../storage/ad/AdsGetAll'
 import { useFocusEffect } from '@react-navigation/native'
 import { IAdProps } from '../interfaces/IAdProps'
-import { InputText } from '@/components/InputText'
 import { SearchInput } from '@/components/SearchInput'
+import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
 
 export function Home() {
   const navigation = useNavigation()
@@ -44,24 +43,6 @@ export function Home() {
     setSelectedState(state)
   }
 
-  const spinValue = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(spinValue, {
-        toValue: 1,
-        duration: 1000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
-    ).start()
-  }, [])
-
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  })
-
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const [changeCityMenuVisible, setChangeCityMenuVisible] = useState(false)
@@ -70,8 +51,8 @@ export function Home() {
   async function fetchAds() {
     try {
       const data = await adsGetAll()
-      console.log(data)
       setAd(data)
+      console.log(ad)
     } catch (error) {
       throw error
     }
@@ -81,7 +62,7 @@ export function Home() {
     useCallback(() => {
       fetchAds()
       console.log(ad)
-    }, [])
+    }, [selectedCity])
   )
 
   const [orderOption, setOrderOption] = useState<string>('option1')
@@ -117,6 +98,8 @@ export function Home() {
     setFilterMenuVisible(false)
   }
 
+  const filteredAds = ad.filter((a) => a.city === selectedCity)
+
   return (
     <StyledKeyboardAvoidingView className='flex-1 bg-white'>
       <TabHeader
@@ -128,20 +111,13 @@ export function Home() {
       />
 
       <StyledView className='flex-2 p-4'>
-        <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center'>
-          <StyledView className='flex-1 flex-row justify-between items-center px-6 py-4'>
-            <FontAwesome5 name='map-marker-alt' size={16} />
-            {isLoadingGetCity ? (
-              <Animated.View
-                style={{
-                  flex: 2,
-                  alignItems: 'center',
-                  transform: [{ rotate: spin }],
-                }}
-              >
-                <FontAwesome5 size={22} color='white' name='spinner' />
-              </Animated.View>
-            ) : (
+        {isLoadingGetCity ? (
+          <SkeletonChangeCity />
+        ) : (
+          <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center mb-2'>
+            <StyledView className='flex-1 flex-row justify-between items-center px-6 py-4'>
+              <FontAwesome5 name='map-marker-alt' size={16} />
+
               <StyledView className='flex-1 flex-row justify-center'>
                 <StyledText className='font-bold text-sm'>
                   {selectedCity.length > 12
@@ -152,10 +128,10 @@ export function Home() {
                   {` - ${selectedState}`}
                 </StyledText>
               </StyledView>
-            )}
+            </StyledView>
+            <ChangeCityButton onPress={fetchChangeCityMenu} />
           </StyledView>
-          <ChangeCityButton onPress={fetchChangeCityMenu} />
-        </StyledView>
+        )}
 
         {isLoadingGetCity ? (
           <StyledView className='flex-2'>
@@ -184,7 +160,7 @@ export function Home() {
             <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
-              data={ad}
+              data={filteredAds}
               ListHeaderComponent={<Title text='Anúncios' />}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
@@ -208,7 +184,7 @@ export function Home() {
         )}
       </StyledView>
 
-      {ad.length == 0 && (
+      {ad.length > 0 && (
         <StyledView>
           <FilterMenu
             filterMenu={filterMenu}
@@ -229,7 +205,7 @@ export function Home() {
           <ChangeCityMenu
             visible={changeCityMenuVisible}
             onClose={() => setChangeCityMenuVisible(false)}
-            sheetHeight={670}
+            sheetHeight={ad ? 690 : 550}
             onCitySelected={handleCitySelected}
           />
         </StyledView>

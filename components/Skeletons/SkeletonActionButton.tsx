@@ -1,9 +1,12 @@
-import { StyledView } from '@/app/styled'
+import { StyledAnimatedView, StyledView } from '@/app/styled'
+import { useColorSkeletonTransition } from '@/hooks/useColorSkeletonTransition'
 
 export function SkeletonActionButton() {
+  const backgroundColor = useColorSkeletonTransition()
   return (
-    <StyledView className='flex-1 flex-row py-8 mx-2 rounded-xl bg-gray-300'>
-      <StyledView className='flex-1 flex-row animate-pulse rounded-xl bg-gray-200' />
-    </StyledView>
+    <StyledAnimatedView
+      className='flex-1 flex-row py-8 mx-2 rounded-xl bg-gray-300'
+      style={{ backgroundColor }}
+    />
   )
 }

@@ -29,7 +29,6 @@ export function MyItemCard({ name, office, ...props }: ICardItemProps) {
   useFocusEffect(
     useCallback(() => {
       fetchAds()
-      console.log(ad)
     }, [])
   )
 

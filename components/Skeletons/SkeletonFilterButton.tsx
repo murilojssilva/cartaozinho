@@ -1,7 +1,12 @@
-import { StyledView } from '@/app/styled'
+import { StyledAnimatedView } from '@/app/styled'
+import { useColorSkeletonTransition } from '@/hooks/useColorSkeletonTransition'
 
 export function SkeletonFilterButton() {
+  const backgroundColor = useColorSkeletonTransition()
   return (
-    <StyledView className='flex-2 flex-row animate-pulse py-5 px-12 bg-gray-300 rounded-xl' />
+    <StyledAnimatedView
+      className='flex-2 flex-row  py-5 px-12 rounded-xl'
+      style={{ backgroundColor }}
+    />
   )
 }

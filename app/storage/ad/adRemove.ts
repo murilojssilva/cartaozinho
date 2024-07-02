@@ -29,7 +29,7 @@ export async function adRemove(adToRemove: IAdProps) {
     if (error instanceof AppError) {
       Alert.alert('Remover anúncio', error.message)
     } else {
-      console.log('Não foi possível remover o anúncio')
+      Alert.alert('Não foi possível remover o anúncio')
     }
   }
 }

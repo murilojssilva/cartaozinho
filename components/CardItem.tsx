@@ -4,7 +4,6 @@ import { Tag } from './Tag'
 import { useState } from 'react'
 import {
   StyledFlatList,
-  StyledScrollView,
   StyledText,
   StyledTouchableOpacity,
   StyledView,
@@ -31,7 +30,7 @@ export function CardItem({
       <StyledView className='flex-1 flex-row my-4'>
         <StyledView className='flex-1 flex-row justify-between items-start'>
           <StyledView className='flex-1 flex-row gap-2'>
-            <StyledView className='flex-2 items-center justify-center bg-gray-300 p-4 rounded-xl'>
+            <StyledView className='flex-2 w-24 items-center justify-center bg-gray-300 p-4 rounded-xl'>
               <Ionicons name='person' size={32} color='gray-300' />
             </StyledView>
             <StyledView className='flex-1 flex-col'>
@@ -39,8 +38,10 @@ export function CardItem({
               <StyledText className='font-semibold text-sm'>
                 {office}
               </StyledText>
-              <StyledText className='font-normal text-xs'>
-                {officeType}
+              <StyledText className='font-normal text-xs flex-2 flex-row'>
+                {officeType.length == 2
+                  ? `${officeType[0]}, ${officeType[1]}`
+                  : officeType[0]}
               </StyledText>
             </StyledView>
           </StyledView>
@@ -54,18 +55,13 @@ export function CardItem({
         </StyledView>
       </StyledView>
       <StyledFlatList
+        className='my-4'
         data={categories}
-        renderItem={({ item }) => (
-          <StyledScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            className='flex-2 flex-row gap-2 my-4'
-          >
-            {item.map((categorie: string, index) => (
-              <Tag key={index} text={categorie} backgroundColor='gray-600' />
-            ))}
-          </StyledScrollView>
+        horizontal
+        renderItem={({ item }: { item: string }) => (
+          <Tag text={item} backgroundColor='gray-300' />
         )}
+        keyExtractor={(item, index) => index.toString()}
       />
 
       <StyledView className='flex-1 flex-row'>
@@ -85,7 +81,9 @@ export function CardItem({
             backgroundColor='gray-300'
             textColor='black'
             icon='whatsapp'
-            onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}`)}
+            onPress={() =>
+              Linking.openURL(`whatsapp://send?phone=55${whatsapp}`)
+            }
           />
         )}
 

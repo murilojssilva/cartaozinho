@@ -22,7 +22,7 @@ export async function adCreate(newAd: IAdProps) {
     if (error instanceof AppError) {
       Alert.alert('Novo anúncio', error.message)
     } else {
-      console.log('Não foi possível criar um novo grupo')
+      Alert.alert('Não foi possível criar um novo grupo')
     }
   }
 }

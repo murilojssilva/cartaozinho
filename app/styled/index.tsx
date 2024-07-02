@@ -1,5 +1,6 @@
 import { styled } from 'nativewind'
 import {
+  Animated,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -11,6 +12,7 @@ import {
 } from 'react-native'
 
 export const StyledView = styled(View)
+export const StyledAnimatedView = styled(Animated.View)
 export const StyledTouchableOpacity = styled(TouchableOpacity)
 export const StyledScrollView = styled(ScrollView)
 export const StyledText = styled(Text)

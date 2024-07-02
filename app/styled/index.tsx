@@ -4,6 +4,8 @@ import {
   FlatList,
   Image,
   KeyboardAvoidingView,
+  Modal,
+  SafeAreaView,
   ScrollView,
   Text,
   TextInput,
@@ -12,6 +14,8 @@ import {
 } from 'react-native'
 
 export const StyledView = styled(View)
+export const StyledModal = styled(Modal)
+export const StyledSafeAreaView = styled(SafeAreaView)
 export const StyledAnimatedView = styled(Animated.View)
 export const StyledTouchableOpacity = styled(TouchableOpacity)
 export const StyledScrollView = styled(ScrollView)

@@ -6,17 +6,17 @@ interface IInputTextProps extends TextInputProps {
   text: string
 }
 
-export function SearchInput({ text = '', ...props }: IInputTextProps) {
+export function SearchInput({ text, ...props }: IInputTextProps) {
   return (
-    <StyledView className='flex-2 flex-row bg-gray-200 py-4 px-6 rounded-xl items-center'>
-      <FontAwesome5 size={18} color='white' name='search' />
+    <StyledView className='flex-row items-center bg-gray-200 px-4 py-3 rounded-full'>
+      <FontAwesome5 name='search' size={18} color='white' />
       <StyledTextInput
         {...props}
+        placeholderTextColor='#9CA3AF'
         textBreakStrategy='highQuality'
-        className='font-bold text-gray-900'
-      >
-        {` ${text}`}
-      </StyledTextInput>
+        className='font-bold text-lg text-gray-900 flex-1 ml-2'
+        value={text}
+      />
     </StyledView>
   )
 }

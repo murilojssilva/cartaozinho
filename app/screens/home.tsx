@@ -1,10 +1,13 @@
 import { useNavigation } from 'expo-router'
+
 import { useState, useEffect, useCallback } from 'react'
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
+
 import {
   StyledFlatList,
   StyledKeyboardAvoidingView,
   StyledText,
+  StyledTouchableOpacity,
   StyledView,
 } from '../styled'
 import { TabHeader } from '@/components/TabHeader'
@@ -20,50 +23,112 @@ import { EmptyList } from '@/components/EmptyList'
 import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
 import { Title } from '@/components/Title'
 
-import useFilterMenu from '@/hooks/useFilterMenu'
-import useOrderMenu from '@/hooks/useOrderMenu'
 import useGetCity from '@/hooks/useGetCity'
 import { adsGetAll } from '../storage/ad/AdsGetAll'
 import { useFocusEffect } from '@react-navigation/native'
 import { IAdProps } from '../interfaces/IAdProps'
-import { SearchInput } from '@/components/SearchInput'
 import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
+import { Alert, RefreshControl } from 'react-native'
+import { useFilters } from '@/hooks/useFilters'
+import useOrderMenu from '@/hooks/useOrderMenu'
+import { categories, officeTypes, serviceTypes } from '../constants'
 
 export function Home() {
   const navigation = useNavigation()
-  const { filterMenu, setFilterMenu } = useFilterMenu()
-  const { orderMenu, setOrderMenu } = useOrderMenu()
+
   const { city, state, isLoadingGetCity } = useGetCity()
 
   const [selectedCity, setSelectedCity] = useState(city)
   const [selectedState, setSelectedState] = useState(state)
-
   const handleCitySelected = (city: string, state: string) => {
     setSelectedCity(city)
     setSelectedState(state)
   }
 
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const initialFilters = {
+    name: '',
+    categories: [],
+    officeTypes: [],
+    serviceTypes: [],
+  }
+
+  const { filters, setFilters } = useFilters(initialFilters)
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchData() {
+        try {
+          setIsLoading(true)
+          const data = await adsGetAll()
+          setAd(data)
+          setIsLoading(false)
+        } catch (error) {
+          Alert.alert('Erro ao buscar anúncios: ', error as string)
+          setIsLoading(false)
+        }
+      }
+
+      if (city) {
+        fetchData()
+      }
+    }, [city])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAds = async () => {
+        try {
+          const storedAds = await adsGetAll()
+
+          const filteredAds = storedAds.filter((ad) => {
+            const matchesCategory =
+              filters.categories.length === 0 ||
+              filters.categories.some((category) =>
+                ad.categories.includes(category)
+              )
+            const matchesOfficeType =
+              filters.officeTypes.length === 0 ||
+              filters.officeTypes.some((officeType) =>
+                ad.officeTypes.includes(officeType)
+              )
+            const matchesServiceType =
+              filters.serviceTypes.length === 0 ||
+              filters.serviceTypes.some((serviceType) =>
+                ad.serviceTypes.includes(serviceType)
+              )
+
+            return matchesCategory && matchesOfficeType && matchesServiceType
+          })
+
+          setAd(filteredAds)
+        } catch (error) {
+          Alert.alert('Erro ao buscar anúncios:', error as string)
+        }
+      }
+
+      fetchAds()
+    }, [filters])
+  )
+
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
+  const { orderMenu, setOrderMenu } = useOrderMenu()
   const [changeCityMenuVisible, setChangeCityMenuVisible] = useState(false)
   const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
 
   async function fetchAds() {
     try {
+      setIsLoading(true)
       const data = await adsGetAll()
       setAd(data)
-      console.log(ad)
     } catch (error) {
       throw error
+    } finally {
+      setIsLoading(false)
     }
   }
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchAds()
-      console.log(ad)
-    }, [selectedCity])
-  )
 
   const [orderOption, setOrderOption] = useState<string>('option1')
 
@@ -78,7 +143,7 @@ export function Home() {
         [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
       )
     } else if (orderOption === 'option2') {
-      setAd((prevAd) => [...prevAd].sort((a, b) => a.id - b.id))
+      setAd((prevAd) => [...prevAd].sort((a, b) => Number(a.id) - Number(b.id)))
     }
   }, [orderOption])
 
@@ -98,7 +163,11 @@ export function Home() {
     setFilterMenuVisible(false)
   }
 
-  const filteredAds = ad.filter((a) => a.city === selectedCity)
+  useFocusEffect(
+    useCallback(() => {
+      fetchAds()
+    }, [selectedCity])
+  )
 
   return (
     <StyledKeyboardAvoidingView className='flex-1 bg-white'>
@@ -111,7 +180,7 @@ export function Home() {
       />
 
       <StyledView className='flex-2 p-4'>
-        {isLoadingGetCity ? (
+        {isLoadingGetCity || isLoading ? (
           <SkeletonChangeCity />
         ) : (
           <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center mb-2'>
@@ -133,7 +202,7 @@ export function Home() {
           </StyledView>
         )}
 
-        {isLoadingGetCity ? (
+        {isLoadingGetCity || isLoading ? (
           <StyledView className='flex-2'>
             <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
@@ -147,9 +216,6 @@ export function Home() {
           <StyledView>
             {ad.length > 0 && (
               <StyledView>
-                <StyledView className='mb-2'>
-                  <SearchInput text='Pesquisar' />
-                </StyledView>
                 <StyledView className='flex-2 flex-row justify-between'>
                   <FilterButton onPress={fetchFilterMenu} />
                   <OrderButton onPress={fetchOrderMenu} />
@@ -159,9 +225,19 @@ export function Home() {
 
             <StyledFlatList
               showsVerticalScrollIndicator={false}
-              className='h-screen'
-              data={filteredAds}
-              ListHeaderComponent={<Title text='Anúncios' />}
+              refreshControl={
+                <RefreshControl refreshing={false} onRefresh={fetchAds} />
+              }
+              data={ad}
+              ListHeaderComponent={
+                <StyledView className='flex-2 flex-row justify-between items-center'>
+                  <Title text='Anúncios' />
+
+                  <StyledTouchableOpacity onPress={() => fetchAds()}>
+                    <FontAwesome size={20} name='refresh' color='white' />
+                  </StyledTouchableOpacity>
+                </StyledView>
+              }
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
                   name={item.name}
@@ -169,9 +245,30 @@ export function Home() {
                   whatsapp={item.whatsapp}
                   phone={item.phone}
                   office={item.office}
-                  officeType={item.officeType}
+                  officeTypes={item.officeTypes}
+                  serviceTypes={item.serviceTypes}
                   categories={item.categories}
-                  onPress={() => navigation.navigate('Details')}
+                  onPress={() =>
+                    navigation.navigate('Details', {
+                      name: item.name,
+                      email: item.email,
+                      id: item.id,
+                      office: item.office,
+                      officeTypes: item.officeTypes,
+                      categories: item.categories,
+                      description: item.description,
+                      serviceTypes: item.serviceTypes,
+                      phone: item.phone,
+                      whatsapp: item.whatsapp,
+                      cep: item.cep,
+                      street: item.street,
+                      number: item.number,
+                      neighborhood: item.neighborhood,
+                      city: item.city,
+                      state: item.state,
+                      complement: item.complement,
+                    })
+                  }
                 />
               )}
               ListEmptyComponent={
@@ -184,31 +281,35 @@ export function Home() {
         )}
       </StyledView>
 
-      {ad.length > 0 && (
-        <StyledView>
-          <FilterMenu
-            filterMenu={filterMenu}
-            setFilterMenu={setFilterMenu}
-            visible={filterMenuVisible}
-            onClose={() => setFilterMenuVisible(false)}
-            sheetHeight={740}
-          />
-          <OrderMenu
-            orderMenu={orderMenu}
-            setOrderMenu={setOrderMenu}
-            visible={orderMenuVisible}
-            onClose={() => setOrderMenuVisible(false)}
-            option={orderOption}
-            setOption={setOrderOption}
-            sheetHeight={550}
-          />
-          <ChangeCityMenu
-            visible={changeCityMenuVisible}
-            onClose={() => setChangeCityMenuVisible(false)}
-            sheetHeight={ad ? 690 : 550}
-            onCitySelected={handleCitySelected}
-          />
-        </StyledView>
+      {filterMenuVisible && (
+        <FilterMenu
+          filters={filters}
+          visible={filterMenuVisible}
+          sheetHeight={660}
+          onClose={() => setFilterMenuVisible(false)}
+          setFilters={setFilters}
+        />
+      )}
+
+      {orderMenuVisible && (
+        <OrderMenu
+          orderMenu={orderMenu}
+          setOrderMenu={setOrderMenu}
+          visible={orderMenuVisible}
+          onClose={() => setOrderMenuVisible(false)}
+          option={orderOption}
+          setOption={setOrderOption}
+          sheetHeight={550}
+        />
+      )}
+
+      {changeCityMenuVisible && (
+        <ChangeCityMenu
+          sheetHeight={600}
+          visible={changeCityMenuVisible}
+          onClose={() => setChangeCityMenuVisible(false)}
+          onCitySelected={handleCitySelected}
+        />
       )}
     </StyledKeyboardAvoidingView>
   )

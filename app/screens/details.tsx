@@ -1,6 +1,6 @@
 import { Topic } from '@/components/Topic'
 import mapa from '@/assets/images/mapa.jpg'
-import { useNavigation } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
 import { Header } from '@/components/Header'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -30,6 +30,26 @@ export function Details() {
 
   const navigation = useNavigation()
 
+  const {
+    name,
+    email,
+    id,
+    office,
+    officeTypes,
+    categories,
+    description,
+    serviceTypes,
+    phone,
+    whatsapp,
+    cep,
+    street,
+    number,
+    neighborhood,
+    city,
+    state,
+    complement,
+  } = useLocalSearchParams()
+
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
 
@@ -48,7 +68,7 @@ export function Details() {
           {isLoading ? (
             <SkeletonProfileCard />
           ) : (
-            <ProfileCard icon='user' title='Nome' text={`Murilo\nSilva`} />
+            <ProfileCard icon='user' title='Nome' text={name as string} />
           )}
           {isLoading ? (
             <SkeletonProfileCard />
@@ -56,20 +76,35 @@ export function Details() {
             <ProfileCard
               icon='suitcase'
               title='Cargo'
-              text={`Desenvolvedor\nFront-end`}
-            />
-          )}
-
-          {isLoading ? (
-            <SkeletonProfileCard />
-          ) : (
-            <ProfileCard
-              icon='id-card'
-              title='Tipo'
-              text={`Prestador\nde serviço`}
+              text={office as string}
             />
           )}
         </StyledView>
+
+        {isLoading ? (
+          <SkeletonCategoryCard heightSize={28} />
+        ) : (
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>Tipo</StyledText>
+
+            <StyledScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              className='flex-2 flex-row gap-2'
+            >
+              {officeTypes.map((cat: string, index: number) => (
+                <StyledView
+                  key={index}
+                  className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
+                >
+                  <StyledText className='text-gray-100 text-xs'>
+                    {cat}
+                  </StyledText>
+                </StyledView>
+              ))}
+            </StyledScrollView>
+          </StyledView>
+        )}
 
         {isLoading ? (
           <SkeletonCategoryCard heightSize={40} />
@@ -79,10 +114,7 @@ export function Details() {
               Descrição
             </StyledText>
             <StyledText className='text-sm text-gray-700 '>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad,
-              itaque, cumque eius, obcaecati quia aliquid ipsa ratione expedita
-              perspiciatis veniam atque quisquam! Recusandae eaque expedita
-              soluta tempora hic vitae dolore.
+              {description}
             </StyledText>
           </StyledView>
         )}
@@ -100,7 +132,7 @@ export function Details() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {category.map((cat: string, index: number) => (
+              {categories.map((cat: string, index: number) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
@@ -126,7 +158,7 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='phone'
-                onPress={() => Linking.openURL('tel:+5521992687311')}
+                onPress={() => Linking.openURL(`tel:+55${phone}`)}
               />
 
               <SocialButton
@@ -134,7 +166,7 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='whatsapp'
-                onPress={() => Linking.openURL('https://wa.me/+5521992687311')}
+                onPress={() => Linking.openURL(`https://wa.me/+55${whatsapp}`)}
               />
 
               <SocialButton
@@ -142,7 +174,7 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='envelope'
-                onPress={() => Linking.openURL('mailto:email@email.com')}
+                onPress={() => Linking.openURL(`mailto:${email}`)}
               />
             </StyledView>
           </StyledView>
@@ -161,7 +193,7 @@ export function Details() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {service.map((serv: string, index: number) => (
+              {serviceTypes.map((serv: string, index: number) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
@@ -183,15 +215,16 @@ export function Details() {
               Localização
             </StyledText>
 
-            <Topic icon='map-pin' name='CEP' content='25655-100' />
-            <Topic icon='map' name='Rua' content='Murilo' />
-            <Topic icon='square' name='Número' content='200' />
-            <Topic icon='list' name='Complemento' content='Portão Branco' />
+            <Topic icon='map-pin' name='CEP' content={cep as string} />
+            <Topic icon='map' name='Rua' content={street as string} />
+            <Topic icon='square' name='Número' content={number as string} />
             <Topic
-              icon='city'
-              name='Cidade - Estado'
-              content='Rio de Janeiro - RJ'
+              icon='list'
+              name='Complemento'
+              content={complement as string}
             />
+            <Topic icon='city' name='Bairro' content={neighborhood as string} />
+            <Topic icon='city' name='Cidade' content={`${city} - ${state}`} />
 
             <StyledView className='flex-2 p-4'>
               <StyledImage source={mapa} className='flex-1 w-full h-64' />

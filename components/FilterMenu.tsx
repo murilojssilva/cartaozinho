@@ -1,53 +1,100 @@
 import { useEffect, useState } from 'react'
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated'
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons'
 import {
-  GestureHandlerRootView,
-  PanGestureHandler,
-} from 'react-native-gesture-handler'
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'
-import { Title } from './Title'
-import { Tag } from './Tag'
-import {
-  StyledScrollView,
+  StyledFlatList,
+  StyledSafeAreaView,
   StyledText,
   StyledTouchableOpacity,
   StyledView,
 } from '@/app/styled'
+import { FilterCategoryButton } from '@/components/FilterCategoryButton'
+import { categories, serviceTypes, officeTypes } from '@/app/constants'
+import { ActionButton } from './ActionButton'
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+} from 'react-native-gesture-handler'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 interface IFilterMenuProps {
+  filters: {
+    name: string
+    categories: string[]
+    officeTypes: string[]
+    serviceTypes: string[]
+  }
   visible: boolean
-  onClose: any
-  filterMenu: boolean
-  setFilterMenu: (visible: boolean) => void
   sheetHeight: number
+  onClose: () => void
+  setFilters: React.Dispatch<
+    React.SetStateAction<{
+      name: string
+      categories: string[]
+      officeTypes: string[]
+      serviceTypes: string[]
+    }>
+  >
 }
 
 export function FilterMenu({
+  filters,
   visible,
-  onClose,
   sheetHeight,
+  onClose,
+  setFilters,
 }: IFilterMenuProps) {
-  const translateY = useSharedValue(0)
-  const [isSelected, setIsSelected] = useState(false)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    filters.categories || []
+  )
+  const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>(
+    filters.officeTypes || []
+  )
+  const [selectedServiceTypes, setSelectedServiceTypes] = useState<string[]>(
+    filters.serviceTypes || []
+  )
+
+  const translateY = useSharedValue(sheetHeight)
 
   useEffect(() => {
     translateY.value = visible ? withSpring(0) : withSpring(sheetHeight)
-  }, [visible])
+  }, [visible, sheetHeight])
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
   }))
+
+  const handleClearFilters = () => {
+    setSelectedCategories([])
+    setSelectedOfficeTypes([])
+    setSelectedServiceTypes([])
+    setFilters({
+      name: '',
+      categories: [],
+      officeTypes: [],
+      serviceTypes: [],
+    })
+  }
+
+  const handleApplyFilters = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      categories: selectedCategories,
+      officeTypes: selectedOfficeTypes,
+      serviceTypes: selectedServiceTypes,
+    }))
+    onClose()
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1, justifyContent: 'flex-end' }}>
       <PanGestureHandler
         onGestureEvent={(event: any) => {
           if (event.nativeEvent.translationY > 0) {
-            translateY.value = withSpring(event.nativeEvent.translationY)
+            translateY.value = event.nativeEvent.translationY
           }
         }}
         onEnded={(event: any) => {
@@ -70,94 +117,112 @@ export function FilterMenu({
             animatedStyle,
           ]}
         >
-          <StyledView
-            style={{
-              height: 4,
-              width: 32,
-              alignSelf: 'center',
-              backgroundColor: '#9CA3AF',
-              borderRadius: 2,
-              marginBottom: 16,
-            }}
-          />
+          <StyledView className='flex-2 flex-row bg-gray-300' />
+          <StyledView className='p-4'>
+            <StyledView className='flex-row justify-between items-center mb-4'>
+              <StyledView className='flex-2 flex-row '>
+                <FontAwesome5 name='filter' size={26} color='white' />
+                <StyledText className='text-xl font-bold'> Filtros</StyledText>
+              </StyledView>
+              <StyledTouchableOpacity onPress={onClose}>
+                <AntDesign name='close' size={24} color='black' />
+              </StyledTouchableOpacity>
+            </StyledView>
 
-          <StyledView
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 16,
-            }}
-          >
-            <StyledView style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name='filter' size={32} />
-              <StyledText
-                style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}
-              >
-                Filtros
+            <StyledView>
+              <StyledText className='text-lg font-semibold'>
+                Categorias
               </StyledText>
+              <StyledFlatList
+                scrollEnabled={true}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={categories}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }: { item: string }) => (
+                  <FilterCategoryButton
+                    key={item}
+                    label={item}
+                    isSelected={selectedCategories.includes(item)}
+                    onPress={() =>
+                      setSelectedCategories((prevSelected) =>
+                        prevSelected.includes(item)
+                          ? prevSelected.filter((cat) => cat !== item)
+                          : [...prevSelected, item]
+                      )
+                    }
+                  />
+                )}
+              />
+
+              <StyledText className='text-lg font-semibold mt-4'>
+                Tipo
+              </StyledText>
+              <StyledFlatList
+                scrollEnabled={true}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={officeTypes}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }: { item: string }) => (
+                  <FilterCategoryButton
+                    key={item}
+                    label={item}
+                    isSelected={selectedOfficeTypes.includes(item)}
+                    onPress={() =>
+                      setSelectedOfficeTypes((prevSelected) =>
+                        prevSelected.includes(item)
+                          ? prevSelected.filter((type) => type !== item)
+                          : [...prevSelected, item]
+                      )
+                    }
+                  />
+                )}
+              />
+
+              <StyledText className='text-lg font-semibold mt-4'>
+                Local de atendimento
+              </StyledText>
+              <StyledFlatList
+                scrollEnabled={true}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={serviceTypes}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }: { item: string }) => (
+                  <FilterCategoryButton
+                    key={item}
+                    label={item}
+                    isSelected={selectedServiceTypes.includes(item)}
+                    onPress={() =>
+                      setSelectedServiceTypes((prevSelected) =>
+                        prevSelected.includes(item)
+                          ? prevSelected.filter((service) => service !== item)
+                          : [...prevSelected, item]
+                      )
+                    }
+                  />
+                )}
+              />
             </StyledView>
-            <StyledTouchableOpacity onPress={onClose}>
-              <Ionicons size={32} color='#9CA3AF' name='close' />
-            </StyledTouchableOpacity>
           </StyledView>
-
-          <StyledView style={{ flex: 1 }}>
-            <Title text='Tipo' />
-            <StyledView className='flex-2 flex-row'>
-              <Tag
-                text='Prestador de serviço'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-              <Tag
-                text='Estabelecimento'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-            </StyledView>
-
-            <Title text='Atendimento' />
-
-            <StyledScrollView
-              horizontal
-              className='flex-2 flex-grow-0 flex-row'
-            >
-              <Tag
-                text='À domicílio'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-              <Tag
-                text='No estabelecimento'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-              <Tag
-                text='Remoto'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-            </StyledScrollView>
-            <StyledView className='flex-2 flex-row justify-between py-4'>
-              <StyledTouchableOpacity
-                className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-gray-300'
-                onPress={() => {}}
-              >
-                <FontAwesome5 name='eraser' size={24} color='black' />
-                <StyledText className='font-bold text-xl text-gray-900'>
-                  {'  Limpar'}
-                </StyledText>
-              </StyledTouchableOpacity>
-              <StyledTouchableOpacity
-                className='flex-2 flex-row items-center py-3 px-8 rounded-xl bg-cyan-700'
-                onPress={() => {}}
-              >
-                <FontAwesome5 name='filter' size={24} color='white' />
-                <StyledText className='font-bold text-xl text-white'>
-                  {'  Filtrar'}
-                </StyledText>
-              </StyledTouchableOpacity>
-            </StyledView>
+          <StyledView className='flex-2 flex-row justify-around'>
+            <ActionButton
+              text='Limpar'
+              icon='trash'
+              backgroundColor='transparent'
+              textColor='white'
+              iconColor='white'
+              onPress={handleClearFilters}
+            />
+            <ActionButton
+              text='Filtrar'
+              icon='filter'
+              backgroundColor='cyan-700'
+              textColor='white'
+              iconColor='white'
+              onPress={handleApplyFilters}
+            />
           </StyledView>
         </Animated.View>
       </PanGestureHandler>

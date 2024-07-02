@@ -6,6 +6,7 @@ import { Tag } from '@/components/Tag'
 import { useNavigation } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
+import uuid from 'react-native-uuid'
 import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
@@ -16,23 +17,9 @@ import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
 import { adCreate } from '../storage/ad/adCreate'
 import { IAdProps } from '../interfaces/IAdProps'
+import { categories } from '../constants'
 
 export function NewAd() {
-  const categories = [
-    'Administração',
-    'Alimentação',
-    'Beleza',
-    'Educação',
-    'Entretenimento',
-    'Limpeza',
-    'Manutenção',
-    'Pet',
-    'Saúde',
-    'Serviço',
-    'Tecnologia',
-    'Transporte',
-  ]
-
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -43,8 +30,9 @@ export function NewAd() {
   const { address, setAddress, handleCepChange } = useGetAddress()
 
   useEffect(() => {
-    setAd({
+    setAd((ad: IAdProps) => ({
       ...ad,
+      id: uuid.v4(),
       city: address.city,
       state: address.state,
       street: address.street,
@@ -52,10 +40,10 @@ export function NewAd() {
       complement: address.complement,
       number: address.number,
       cep: address.cep,
-      officeType: selectedOfficeTypes,
+      officeTypes: selectedOfficeTypes,
       categories: selectedCategories,
-      serviceType: selectedServices,
-    })
+      serviceTypes: selectedServices,
+    }))
   }, [address, selectedOfficeTypes, selectedCategories, selectedServices])
 
   const handleServiceToggle = (service: string) => {
@@ -68,12 +56,12 @@ export function NewAd() {
     })
   }
 
-  const handleOfficeTypeToggle = (officeType: string) => {
+  const handleOfficeTypeToggle = (officeTypes: string) => {
     setSelectedOfficeTypes((prevSelectedOfficeTypes) => {
-      if (prevSelectedOfficeTypes.includes(officeType)) {
-        return prevSelectedOfficeTypes.filter((s) => s !== officeType)
+      if (prevSelectedOfficeTypes.includes(officeTypes)) {
+        return prevSelectedOfficeTypes.filter((s) => s !== officeTypes)
       } else {
-        return [...prevSelectedOfficeTypes, officeType]
+        return [...prevSelectedOfficeTypes, officeTypes]
       }
     })
   }
@@ -219,14 +207,14 @@ export function NewAd() {
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
             <TextInputMask
-              placeholder='(00)0000-0000'
+              placeholder='(00) 0000-0000'
               type={'cel-phone'}
               keyboardType='phone-pad'
               onChangeText={(text) => handleInputChange('phone', text)}
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
             <TextInputMask
-              placeholder='(00)00000-0000'
+              placeholder='(00) 00000-0000'
               type={'cel-phone'}
               keyboardType='numeric'
               onChangeText={(text) => handleInputChange('whatsapp', text)}

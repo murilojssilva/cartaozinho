@@ -11,7 +11,7 @@ interface ITopicProps extends TouchableOpacityProps {
 
 export function Topic({ name, content, icon, ...props }: ITopicProps) {
   return (
-    <StyledView className='flex-2 flex-row justify-between px-2 mb-2 border-l-4 border-l-cyan-700'>
+    <StyledView className='flex-2 flex-row items-center justify-between px-2 mb-2 border-l-4 border-l-cyan-700'>
       <StyledView className='flex-2 flex-row items-center '>
         <StyledView className='w-8 h-8 flex-2 items-center justify-center'>
           <FontAwesome5 name={icon} size={22} color='gray-300' />
@@ -21,9 +21,7 @@ export function Topic({ name, content, icon, ...props }: ITopicProps) {
         </StyledText>
       </StyledView>
       <StyledTouchableOpacity {...props}>
-        <StyledText className='text-gray-700 text-lg font-semibold'>
-          {content}
-        </StyledText>
+        <StyledText className='text-gray-700 text-sm'>{content}</StyledText>
       </StyledTouchableOpacity>
     </StyledView>
   )

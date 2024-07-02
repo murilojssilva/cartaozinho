@@ -18,6 +18,7 @@ import {
 import { styled } from 'nativewind'
 import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
+import { categories } from '../constants'
 
 const StyledView = styled(View)
 const StyledText = styled(Text)
@@ -25,20 +26,6 @@ const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
 const StyledScrollView = styled(ScrollView)
 
 export function EditAd() {
-  const categories = [
-    'Administração',
-    'Alimentação',
-    'Beleza',
-    'Educação',
-    'Entretenimento',
-    'Limpeza',
-    'Manutenção',
-    'Pet',
-    'Saúde',
-    'Serviço',
-    'Tecnologia',
-    'Transporte',
-  ]
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [isSelected, setIsSelected] = useState(false)

@@ -42,8 +42,6 @@ export function ChangeCityMenu({
 
   const { getCurrentLocation, fetchCity, city, state } = useGetCity()
 
-  const spin = useSpinAnimation()
-
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -154,7 +152,7 @@ export function ChangeCityMenu({
                 <StyledView className='flex-2 flex-row items-center'>
                   <StyledView className='flex-3 w-[60%]'>
                     <SearchInput
-                      text=''
+                      text={inputCity}
                       placeholder='Digite a cidade'
                       onChangeText={handleCityChange}
                     />

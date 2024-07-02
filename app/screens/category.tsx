@@ -73,7 +73,8 @@ export function Category() {
                   email={item.email}
                   name={item.name}
                   office={item.office}
-                  officeType={item.officeType}
+                  officeTypes={item.officeTypes}
+                  serviceTypes={item.serviceTypes}
                   categories={item.categories}
                   onPress={() => navigation.navigate('CategoryDetails')}
                 />

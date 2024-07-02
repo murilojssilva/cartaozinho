@@ -10,10 +10,15 @@ import { TabHeader } from '@/components/TabHeader'
 import useFilterMenu from '@/hooks/useFilterMenu'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { useNavigation } from 'expo-router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
 import { SearchInput } from '@/components/SearchInput'
+
+import { useFilters } from '@/hooks/useFilters'
+import { favoritesGetAll } from '../storage/favorites/favoritesGetAll'
+import { useFocusEffect } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 export function Favorites() {
   const { filterMenu, setFilterMenu } = useFilterMenu()
@@ -22,25 +27,64 @@ export function Favorites() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
 
-  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
+  const initialFilters = {
+    name: '',
+    categories: [],
+    officeTypes: [],
+    serviceTypes: [],
+  }
 
+  const { filters, setFilters } = useFilters(initialFilters)
+
+  const [favorites, setFavorites] = useState<IAdProps[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [orderOption, setOrderOption] = useState<string>('option1')
 
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchData() {
+        try {
+          setIsLoading(true)
+          loadFavorites()
+          setIsLoading(false)
+        } catch (error) {
+          Alert.alert('Erro ao buscar anúncios: ', error as string)
+          setIsLoading(false)
+        }
+      }
+      fetchData()
+    }, [favorites])
+  )
+
   useEffect(() => {
     if (orderOption === 'option1') {
-      setAd((prevAd) =>
-        [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
+      setFavorites((prevFavorites) =>
+        [...prevFavorites].sort((a, b) => a.name.localeCompare(b.name))
       )
     } else if (orderOption === 'option2') {
-      setAd((prevAd) => [...prevAd].sort((a, b) => a.id - b.id))
+      setFavorites((prevFavorites) =>
+        [...prevFavorites].sort((a, b) => Number(a.id) - Number(b.id))
+      )
     }
   }, [orderOption])
+
+  async function loadFavorites() {
+    try {
+      setIsLoading(true)
+      const storedFavorites = await favoritesGetAll()
+      setFavorites(storedFavorites)
+    } catch (error) {
+      console.error('Failed to load favorites:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
     setOrderMenuVisible(false)
   }
+
   function fetchOrderMenu() {
     setOrderMenuVisible(true)
     setFilterMenuVisible(false)
@@ -64,7 +108,7 @@ export function Favorites() {
         </StyledView>
       ) : (
         <StyledView className='flex-2 mb-2 p-4'>
-          {ad.length > 0 && (
+          {favorites.length > 0 && (
             <StyledView>
               <StyledView className='mb-2'>
                 <SearchInput text='Pesquisar' />
@@ -77,15 +121,17 @@ export function Favorites() {
           )}
           <StyledFlatList
             showsVerticalScrollIndicator={false}
-            data={ad}
+            data={favorites}
             renderItem={({ item }: { item: IAdProps }) => (
               <CardItem
+                id={item.id as string}
                 phone={item.phone}
                 whatsapp={item.whatsapp}
                 email={item.email}
                 name={item.name}
                 office={item.office}
-                officeType={item.officeType}
+                officeTypes={item.officeTypes}
+                serviceTypes={item.serviceTypes}
                 categories={item.categories}
                 onPress={() => navigation.navigate('FavoritesDetails')}
               />
@@ -96,25 +142,29 @@ export function Favorites() {
           />
         </StyledView>
       )}
-      {ad.length > 0 && (
+      {favorites.length > 0 && (
         <StyledView>
-          <FilterMenu
-            filterMenu={filterMenu}
-            setFilterMenu={setFilterMenu}
-            visible={filterMenuVisible}
-            onClose={() => setFilterMenuVisible(false)}
-            sheetHeight={520}
-          />
+          {filterMenuVisible && (
+            <FilterMenu
+              filters={filters}
+              visible={filterMenuVisible}
+              sheetHeight={660}
+              onClose={() => setFilterMenuVisible(false)}
+              setFilters={setFilters}
+            />
+          )}
 
-          <OrderMenu
-            orderMenu={orderMenu}
-            setOrderMenu={setOrderMenu}
-            visible={orderMenuVisible}
-            onClose={() => setOrderMenuVisible(false)}
-            option={orderOption}
-            setOption={setOrderOption}
-            sheetHeight={320}
-          />
+          {orderMenuVisible && (
+            <OrderMenu
+              orderMenu={orderMenu}
+              setOrderMenu={setOrderMenu}
+              visible={orderMenuVisible}
+              onClose={() => setOrderMenuVisible(false)}
+              option={orderOption}
+              setOption={setOrderOption}
+              sheetHeight={550}
+            />
+          )}
         </StyledView>
       )}
     </StyledView>

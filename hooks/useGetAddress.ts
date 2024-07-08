@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { Alert } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 export default function useGetAddress() {
   const [address, setAddress] = useState({
@@ -33,10 +33,11 @@ export default function useGetAddress() {
           state: uf,
         }))
       } catch (error) {
-        Alert.alert(
-          'Erro',
-          'Não foi possível recuperar o endereço. Verifique o CEP e tente novamente.'
-        )
+        Toast.show({
+          type: 'error',
+          text1: `Não foi possível recuperar o endereço. Verifique o CEP e tente novamente.`,
+          text2: error as string,
+        })
       }
     }
   }

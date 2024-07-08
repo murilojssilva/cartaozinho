@@ -50,12 +50,17 @@ export function OrderMenu({
     <GestureHandlerRootView style={{ flex: 1, justifyContent: 'flex-end' }}>
       <PanGestureHandler
         onGestureEvent={(event: any) => {
-          if (event.nativeEvent.translationY > 0) {
-            translateY.value = event.nativeEvent.translationY
-          }
+          const maxTranslation = sheetHeight
+          const newTranslateY =
+            translateY.value + event.nativeEvent.translationY
+          translateY.value = Math.max(
+            0,
+            Math.min(maxTranslation, newTranslateY)
+          )
         }}
         onEnded={(event: any) => {
-          if (event.nativeEvent.translationY > sheetHeight / 3) {
+          const maxTranslation = sheetHeight
+          if (event.nativeEvent.translationY > maxTranslation / 3) {
             onClose()
           } else {
             translateY.value = withSpring(0)
@@ -74,16 +79,7 @@ export function OrderMenu({
             animatedStyle,
           ]}
         >
-          <StyledView
-            style={{
-              height: 4,
-              width: 32,
-              alignSelf: 'center',
-              backgroundColor: '#9CA3AF',
-              borderRadius: 2,
-              marginBottom: 16,
-            }}
-          />
+          <StyledView className='flex-2 h-2 py-1 rounded-xl w-8 self-center justify-center bg-gray-400' />
 
           <StyledView
             style={{
@@ -93,12 +89,8 @@ export function OrderMenu({
             }}
           >
             <StyledView style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name='swap-vertical-sharp' size={32} />
-              <StyledText
-                style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 8 }}
-              >
-                Ordem
-              </StyledText>
+              <Ionicons name='swap-vertical-sharp' size={24} />
+              <StyledText className='font-bold text-xl'>{' Ordem'}</StyledText>
             </StyledView>
             <StyledTouchableOpacity onPress={onClose}>
               <Ionicons size={32} color='#9CA3AF' name='close' />

@@ -160,7 +160,7 @@ export function NewAd() {
             Local de atendimento
           </StyledText>
 
-          <StyledView className='flex-row gap-2'>
+          <StyledScrollView horizontal className='flex-row gap-2'>
             <Tag
               text='À domicílio'
               onPress={() => handleServiceToggle('À domicílio')}
@@ -184,7 +184,7 @@ export function NewAd() {
                 isServiceSelected('Remoto') ? 'cyan-700' : 'gray-600'
               }
             />
-          </StyledView>
+          </StyledScrollView>
 
           <StyledText className='font-bold text-xl my-4'>Categoria</StyledText>
           <StyledScrollView
@@ -219,6 +219,16 @@ export function NewAd() {
               keyboardType='numeric'
               onChangeText={(text) => handleInputChange('whatsapp', text)}
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            />
+            <InputText
+              text='Instagram'
+              autoCapitalize='none'
+              onChangeText={(text) =>
+                handleInputChange(
+                  'instagram',
+                  text.replace(/\s/g, '').toLowerCase()
+                )
+              }
             />
             <InputText
               text='E-mail'

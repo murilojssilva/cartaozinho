@@ -24,14 +24,12 @@ import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButto
 import { Title } from '@/components/Title'
 
 import useGetCity from '@/hooks/useGetCity'
-import { adsGetAll } from '../storage/ad/AdsGetAll'
 import { useFocusEffect } from '@react-navigation/native'
 import { IAdProps } from '../interfaces/IAdProps'
 import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
-import { Alert, RefreshControl } from 'react-native'
-import { useFilters } from '@/hooks/useFilters'
+import { RefreshControl } from 'react-native'
 import useOrderMenu from '@/hooks/useOrderMenu'
-import { categories, officeTypes, serviceTypes } from '../constants'
+import { useAds } from '@/hooks/useAds'
 
 export function Home() {
   const navigation = useNavigation()
@@ -46,89 +44,12 @@ export function Home() {
   }
 
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
-  const initialFilters = {
-    name: '',
-    categories: [],
-    officeTypes: [],
-    serviceTypes: [],
-  }
-
-  const { filters, setFilters } = useFilters(initialFilters)
-
-  useFocusEffect(
-    useCallback(() => {
-      async function fetchData() {
-        try {
-          setIsLoading(true)
-          const data = await adsGetAll()
-          setAd(data)
-          setIsLoading(false)
-        } catch (error) {
-          Alert.alert('Erro ao buscar anúncios: ', error as string)
-          setIsLoading(false)
-        }
-      }
-
-      if (city) {
-        fetchData()
-      }
-    }, [city])
-  )
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAds = async () => {
-        try {
-          const storedAds = await adsGetAll()
-
-          const filteredAds = storedAds.filter((ad) => {
-            const matchesCategory =
-              filters.categories.length === 0 ||
-              filters.categories.some((category) =>
-                ad.categories.includes(category)
-              )
-            const matchesOfficeType =
-              filters.officeTypes.length === 0 ||
-              filters.officeTypes.some((officeType) =>
-                ad.officeTypes.includes(officeType)
-              )
-            const matchesServiceType =
-              filters.serviceTypes.length === 0 ||
-              filters.serviceTypes.some((serviceType) =>
-                ad.serviceTypes.includes(serviceType)
-              )
-
-            return matchesCategory && matchesOfficeType && matchesServiceType
-          })
-
-          setAd(filteredAds)
-        } catch (error) {
-          Alert.alert('Erro ao buscar anúncios:', error as string)
-        }
-      }
-
-      fetchAds()
-    }, [filters])
-  )
+  const { ads, isLoadingAds, fetchAds, filters, setFilters, setAds } = useAds()
 
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const { orderMenu, setOrderMenu } = useOrderMenu()
   const [changeCityMenuVisible, setChangeCityMenuVisible] = useState(false)
-  const [ad, setAd] = useState<IAdProps[]>([] as IAdProps[])
-
-  async function fetchAds() {
-    try {
-      setIsLoading(true)
-      const data = await adsGetAll()
-      setAd(data)
-    } catch (error) {
-      throw error
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const [orderOption, setOrderOption] = useState<string>('option1')
 
@@ -139,11 +60,13 @@ export function Home() {
 
   useEffect(() => {
     if (orderOption === 'option1') {
-      setAd((prevAd) =>
+      setAds((prevAd) =>
         [...prevAd].sort((a, b) => a.name.localeCompare(b.name))
       )
     } else if (orderOption === 'option2') {
-      setAd((prevAd) => [...prevAd].sort((a, b) => Number(a.id) - Number(b.id)))
+      setAds((prevAd) =>
+        [...prevAd].sort((a, b) => Number(a.id) - Number(b.id))
+      )
     }
   }, [orderOption])
 
@@ -165,7 +88,7 @@ export function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAds()
+      fetchAds(selectedCity)
     }, [selectedCity])
   )
 
@@ -180,7 +103,7 @@ export function Home() {
       />
 
       <StyledView className='flex-2 p-4'>
-        {isLoadingGetCity || isLoading ? (
+        {isLoadingGetCity || isLoadingAds ? (
           <SkeletonChangeCity />
         ) : (
           <StyledView className='flex-2 flex-row bg-gray-200 rounded-xl items-center mb-2'>
@@ -202,7 +125,7 @@ export function Home() {
           </StyledView>
         )}
 
-        {isLoadingGetCity || isLoading ? (
+        {isLoadingGetCity || isLoadingAds ? (
           <StyledView className='flex-2'>
             <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
@@ -214,7 +137,7 @@ export function Home() {
           </StyledView>
         ) : (
           <StyledView>
-            {ad.length > 0 && (
+            {ads.length > 0 && (
               <StyledView>
                 <StyledView className='flex-2 flex-row justify-between'>
                   <FilterButton onPress={fetchFilterMenu} />
@@ -226,23 +149,30 @@ export function Home() {
             <StyledFlatList
               showsVerticalScrollIndicator={false}
               refreshControl={
-                <RefreshControl refreshing={false} onRefresh={fetchAds} />
+                <RefreshControl
+                  refreshing={false}
+                  onRefresh={() => fetchAds(selectedCity)}
+                />
               }
-              data={ad}
+              data={ads.filter((adsCity) => adsCity.city === city)}
               ListHeaderComponent={
                 <StyledView className='flex-2 flex-row justify-between items-center'>
                   <Title text='Anúncios' />
 
-                  <StyledTouchableOpacity onPress={() => fetchAds()}>
+                  <StyledTouchableOpacity
+                    onPress={() => fetchAds(selectedCity)}
+                  >
                     <FontAwesome size={20} name='refresh' color='white' />
                   </StyledTouchableOpacity>
                 </StyledView>
               }
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  id={item.id as string}
                   name={item.name}
                   email={item.email}
                   whatsapp={item.whatsapp}
+                  instagram={item.instagram}
                   phone={item.phone}
                   office={item.office}
                   officeTypes={item.officeTypes}
@@ -260,6 +190,7 @@ export function Home() {
                       serviceTypes: item.serviceTypes,
                       phone: item.phone,
                       whatsapp: item.whatsapp,
+                      instagram: item.instagram,
                       cep: item.cep,
                       street: item.street,
                       number: item.number,
@@ -299,13 +230,13 @@ export function Home() {
           onClose={() => setOrderMenuVisible(false)}
           option={orderOption}
           setOption={setOrderOption}
-          sheetHeight={550}
+          sheetHeight={370}
         />
       )}
 
       {changeCityMenuVisible && (
         <ChangeCityMenu
-          sheetHeight={600}
+          sheetHeight={550}
           visible={changeCityMenuVisible}
           onClose={() => setChangeCityMenuVisible(false)}
           onCitySelected={handleCitySelected}

@@ -136,6 +136,11 @@ export function EditAd() {
             {isLoading ? (
               <SkeletonInputText inputSize={6} />
             ) : (
+              <InputText text='Instagram' />
+            )}
+            {isLoading ? (
+              <SkeletonInputText inputSize={6} />
+            ) : (
               <InputText text='E-mail' />
             )}
           </StyledView>

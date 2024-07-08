@@ -19,11 +19,10 @@ export function SocialButton({
   return (
     <StyledTouchableOpacity
       {...props}
-      className={`flex-1 flex-row items-center justify-center rounded-xl bg-${backgroundColor} mx-2 py-3`}
+      className={`flex-1 flex-col items-center h-16 justify-around rounded-xl bg-${backgroundColor} mx-2 py-3`}
     >
       <FontAwesome5 name={icon} size={14} color={textColor} />
-      <StyledText className={`font-bold text-xs text-${textColor}`}>
-        {' '}
+      <StyledText className={`text-[10px] text-${textColor}`}>
         {text}
       </StyledText>
     </StyledTouchableOpacity>

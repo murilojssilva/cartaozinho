@@ -11,18 +11,32 @@ import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButto
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
 import { SearchInput } from '@/components/SearchInput'
+import { useAds } from '@/hooks/useAds'
+import { useFilters } from '@/hooks/useFilters'
+import { FilterMenu } from '@/components/FilterMenu'
+import { OrderMenu } from '@/components/OrderMenu'
+import useOrderMenu from '@/hooks/useOrderMenu'
 
 export function Category() {
+  const { orderMenu, setOrderMenu } = useOrderMenu()
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
+  const [orderOption, setOrderOption] = useState<string>('option1')
+
+  const { filters, setFilters } = useFilters({
+    name: '',
+    categories: [],
+    officeTypes: [],
+    serviceTypes: [],
+  })
+
   const [isLoading, setIsLoading] = useState(false)
 
-  const router = useRouter()
   const { category, categoryIcon } = useLocalSearchParams()
 
   const navigation = useNavigation()
 
-  const ad: IAdProps[] = [] as IAdProps[]
+  const { ads } = useAds()
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
@@ -50,7 +64,7 @@ export function Category() {
           </StyledView>
         ) : (
           <StyledView>
-            {ad.filter((a) => a.categories.includes(category as string))
+            {ads.filter((ad) => ad.categories.includes(category as string))
               .length > 0 && (
               <StyledView>
                 <StyledView className='mb-2'>
@@ -65,11 +79,15 @@ export function Category() {
             <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
-              data={ad.filter((a) => a.categories.includes(category as string))}
+              data={ads.filter((ad) =>
+                ad.categories.includes(category as string)
+              )}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  id={item.id as string}
                   phone={item.phone}
                   whatsapp={item.whatsapp}
+                  instagram={item.instagram}
                   email={item.email}
                   name={item.name}
                   office={item.office}
@@ -88,6 +106,32 @@ export function Category() {
           </StyledView>
         )}
       </StyledView>
+      {ads.filter((ad) => ad.categories.includes(category as string)).length >
+        0 && (
+        <StyledView>
+          {filterMenuVisible && (
+            <FilterMenu
+              filters={filters}
+              visible={filterMenuVisible}
+              sheetHeight={730}
+              onClose={() => setFilterMenuVisible(false)}
+              setFilters={setFilters}
+            />
+          )}
+
+          {orderMenuVisible && (
+            <OrderMenu
+              orderMenu={orderMenu}
+              setOrderMenu={setOrderMenu}
+              visible={orderMenuVisible}
+              onClose={() => setOrderMenuVisible(false)}
+              option={orderOption}
+              setOption={setOrderOption}
+              sheetHeight={450}
+            />
+          )}
+        </StyledView>
+      )}
     </StyledView>
   )
 }

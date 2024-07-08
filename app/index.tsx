@@ -9,6 +9,7 @@ import Routes from './routes'
 import { StatusBar } from 'react-native'
 import DarkTheme from './themes/DarkTheme'
 import DefaultTheme from './themes/DefaultTheme'
+import Toast from 'react-native-toast-message'
 
 export default function App() {
   const colorScheme = useColorScheme()
@@ -35,6 +36,7 @@ export default function App() {
           translucent
         />
         <Routes />
+        <Toast position='bottom' bottomOffset={20} />
       </ThemeProvider>
     </NavigationContainer>
   )

@@ -3,7 +3,7 @@ import { FAVORITES_COLLECTION } from '../storageConfig'
 import { favoritesGetAll } from './favoritesGetAll'
 import { IAdProps } from '@/app/interfaces/IAdProps'
 import { AppError } from '@/app/utils/AppError'
-import { Alert } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 export async function favoritesAdd(newFavorite: IAdProps) {
   try {
@@ -23,9 +23,16 @@ export async function favoritesAdd(newFavorite: IAdProps) {
     await AsyncStorage.setItem(FAVORITES_COLLECTION, storage)
   } catch (error) {
     if (error instanceof AppError) {
-      Alert.alert('Favoritos', error.message)
+      Toast.show({
+        type: 'error',
+        text1: `Favoritos`,
+        text2: error.message,
+      })
     } else {
-      Alert.alert('Não foi possível adicionar aos favoritos')
+      Toast.show({
+        type: 'error',
+        text1: `Não foi possível adicionar aos favoritos`,
+      })
     }
   }
 }

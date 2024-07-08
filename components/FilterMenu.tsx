@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons'
+import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import {
   StyledFlatList,
   StyledSafeAreaView,
@@ -93,12 +93,17 @@ export function FilterMenu({
     <GestureHandlerRootView style={{ flex: 1, justifyContent: 'flex-end' }}>
       <PanGestureHandler
         onGestureEvent={(event: any) => {
-          if (event.nativeEvent.translationY > 0) {
-            translateY.value = event.nativeEvent.translationY
-          }
+          const maxTranslation = sheetHeight
+          const newTranslateY =
+            translateY.value + event.nativeEvent.translationY
+          translateY.value = Math.max(
+            0,
+            Math.min(maxTranslation, newTranslateY)
+          )
         }}
         onEnded={(event: any) => {
-          if (event.nativeEvent.translationY > sheetHeight / 3) {
+          const maxTranslation = sheetHeight
+          if (event.nativeEvent.translationY > maxTranslation / 3) {
             onClose()
           } else {
             translateY.value = withSpring(0)
@@ -117,15 +122,18 @@ export function FilterMenu({
             animatedStyle,
           ]}
         >
+          <StyledView className='flex-2 h-2 py-1 rounded-xl w-8 self-center justify-center bg-gray-400' />
           <StyledView className='flex-2 flex-row bg-gray-300' />
           <StyledView className='p-4'>
             <StyledView className='flex-row justify-between items-center mb-4'>
-              <StyledView className='flex-2 flex-row '>
-                <FontAwesome5 name='filter' size={26} color='white' />
-                <StyledText className='text-xl font-bold'> Filtros</StyledText>
+              <StyledView className='flex-2 flex-row items-center'>
+                <FontAwesome5 name='filter' size={24} color='white' />
+                <StyledText className='font-bold text-xl'>
+                  {' Filtros'}
+                </StyledText>
               </StyledView>
               <StyledTouchableOpacity onPress={onClose}>
-                <AntDesign name='close' size={24} color='black' />
+                <Ionicons size={32} color='#9CA3AF' name='close' />
               </StyledTouchableOpacity>
             </StyledView>
 

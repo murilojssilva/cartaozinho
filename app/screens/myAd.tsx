@@ -1,6 +1,5 @@
 import { Topic } from '@/components/Topic'
-import mapa from '@/assets/images/mapa.jpg'
-import { useNavigation } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ProfileCard } from '@/components/ProfileCard'
@@ -12,28 +11,40 @@ import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
 import { Header } from '@/components/Header'
 import { SpinnerButton } from '@/components/SpinnerButton'
-import {
-  StyledImage,
-  StyledScrollView,
-  StyledText,
-  StyledView,
-} from '../styled'
+import { StyledScrollView, StyledText, StyledView } from '../styled'
 import { Linking } from 'react-native'
+import { MapScreen } from '@/components/MapScreen'
+import { useAds } from '@/hooks/useAds'
 
 export function MyAd() {
-  const category: string[] = [
-    'Informática',
-    'Desenvolvimento',
-    'Website',
-    'Aplicativos',
-    'Mobile',
-  ]
-  const service: string[] = ['À domicílio', 'No estabelecimento', 'Remoto']
-
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [isLoadingRemove, setIsLoadingRemove] = useState(false)
+
+  const { handleRemoveAd } = useAds()
+
+  const {
+    name,
+    email,
+    id,
+    office,
+    officeTypes,
+    categories,
+    description,
+    serviceTypes,
+    phone,
+    whatsapp,
+    instagram,
+    cep,
+    street,
+    number,
+    neighborhood,
+    city,
+    state,
+    complement,
+  } = useLocalSearchParams()
+
   return (
     <StyledView className='flex-1 flex-col bg-white'>
       <Header title='Meu anúncio' icon='newspaper' />
@@ -53,7 +64,7 @@ export function MyAd() {
           {isLoading ? (
             <SkeletonProfileCard />
           ) : (
-            <ProfileCard icon='user' title='Nome' text={`Murilo\nSilva`} />
+            <ProfileCard icon='user' title='Nome' text={name as string} />
           )}
           {isLoading ? (
             <SkeletonProfileCard />
@@ -61,17 +72,7 @@ export function MyAd() {
             <ProfileCard
               icon='suitcase'
               title='Cargo'
-              text={`Desenvolvedor\nFront-end`}
-            />
-          )}
-
-          {isLoading ? (
-            <SkeletonProfileCard />
-          ) : (
-            <ProfileCard
-              icon='id-card'
-              title='Tipo'
-              text={`Prestador\nde serviço`}
+              text={office as string}
             />
           )}
         </StyledView>
@@ -84,11 +85,33 @@ export function MyAd() {
               Descrição
             </StyledText>
             <StyledText className='text-sm text-gray-700 '>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad,
-              itaque, cumque eius, obcaecati quia aliquid ipsa ratione expedita
-              perspiciatis veniam atque quisquam! Recusandae eaque expedita
-              soluta tempora hic vitae dolore.
+              {description}
             </StyledText>
+          </StyledView>
+        )}
+
+        {isLoading ? (
+          <SkeletonCategoryCard heightSize={28} />
+        ) : (
+          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>Tipo</StyledText>
+
+            <StyledScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              className='flex-2 flex-row gap-2'
+            >
+              {officeTypes.map((officeType, index) => (
+                <StyledView
+                  key={index}
+                  className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
+                >
+                  <StyledText className='text-gray-100 text-xs'>
+                    {officeType}
+                  </StyledText>
+                </StyledView>
+              ))}
+            </StyledScrollView>
           </StyledView>
         )}
 
@@ -105,7 +128,7 @@ export function MyAd() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {category.map((cat, index) => (
+              {categories.map((cat, index) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
@@ -126,31 +149,49 @@ export function MyAd() {
             <StyledText className='font-bold text-xl mb-4'>Contato</StyledText>
 
             <StyledView className='flex-2 justify-center flex-row gap-2'>
-              <SocialButton
-                text='Telefone'
-                backgroundColor='gray-300'
-                textColor='black'
-                icon='phone'
-                onPress={() => Linking.openURL('tel:+5521992687311')}
-              />
+              {phone && (
+                <SocialButton
+                  text='Telefone'
+                  backgroundColor='gray-300'
+                  textColor='white'
+                  icon='phone'
+                  onPress={() => Linking.openURL(`tel:+55${phone}`)}
+                />
+              )}
 
-              <SocialButton
-                text='WhatsApp'
-                backgroundColor='gray-300'
-                textColor='black'
-                icon='whatsapp'
-                onPress={() => Linking.openURL('https://wa.me/+5521992687311')}
-              />
+              {whatsapp && (
+                <SocialButton
+                  text='WhatsApp'
+                  backgroundColor='gray-300'
+                  textColor='white'
+                  icon='whatsapp'
+                  onPress={() =>
+                    Linking.openURL(`https://wa.me/+55${whatsapp}`)
+                  }
+                />
+              )}
 
-              <SocialButton
-                text='E-mail'
-                backgroundColor='gray-300'
-                textColor='black'
-                icon='envelope'
-                onPress={() =>
-                  Linking.openURL('mailto:murilojssilva@outlook.com')
-                }
-              />
+              {instagram && (
+                <SocialButton
+                  text='Instagram'
+                  backgroundColor='gray-300'
+                  textColor='black'
+                  icon='instagram'
+                  onPress={() =>
+                    Linking.openURL(`https://instagram.com/${instagram}`)
+                  }
+                />
+              )}
+
+              {email && (
+                <SocialButton
+                  text='E-mail'
+                  backgroundColor='gray-300'
+                  textColor='white'
+                  icon='envelope'
+                  onPress={() => Linking.openURL(`mailto:${email}`)}
+                />
+              )}
             </StyledView>
           </StyledView>
         )}
@@ -158,7 +199,7 @@ export function MyAd() {
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
-          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
             <StyledText className='font-bold text-xl mb-4'>
               Atendimento
             </StyledText>
@@ -168,7 +209,7 @@ export function MyAd() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {service.map((serv, index) => (
+              {serviceTypes.map((serv: string, index: number) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
@@ -185,23 +226,24 @@ export function MyAd() {
         {isLoading ? (
           <SkeletonCategoryCard heightSize={60} />
         ) : (
-          <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
             <StyledText className='font-bold text-xl mb-4'>
               Localização
             </StyledText>
 
-            <Topic icon='map-pin' name='CEP' content='25655-100' />
-            <Topic icon='map' name='Rua' content='Murilo' />
-            <Topic icon='square' name='Número' content='200' />
-            <Topic icon='list' name='Complemento' content='Portão Branco' />
+            <Topic icon='map-pin' name='CEP' content={cep as string} />
+            <Topic icon='map' name='Rua' content={street as string} />
+            <Topic icon='square' name='Número' content={number as string} />
             <Topic
-              icon='city'
-              name='Cidade - Estado'
-              content='Rio de Janeiro - RJ'
+              icon='list'
+              name='Complemento'
+              content={complement as string}
             />
+            <Topic icon='city' name='Bairro' content={neighborhood as string} />
+            <Topic icon='city' name='Cidade' content={`${city} - ${state}`} />
 
             <StyledView className='flex-2 p-4'>
-              <StyledImage source={mapa} className='flex-2 w-full h-64' />
+              <MapScreen cep={cep as string} number={number as string} />
             </StyledView>
           </StyledView>
         )}
@@ -223,6 +265,24 @@ export function MyAd() {
               iconColor='red'
               backgroundColor='transparent'
               textColor='red-500'
+              onPress={() =>
+                Alert.alert(
+                  'Remover',
+                  'Deseja remover o anúncio?',
+                  [
+                    {
+                      text: 'Não',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Sim',
+                      onPress: () => handleRemoveAd(id as string),
+                    },
+                  ],
+                  { cancelable: false }
+                )
+              }
             />
           )}
           {isLoadingEdit ? (

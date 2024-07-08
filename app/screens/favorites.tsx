@@ -1,102 +1,92 @@
-import { CardItem } from '@/components/CardItem'
-import { EmptyFavoriteList } from '@/components/EmptyFavoriteList'
-import { FilterButton } from '@/components/FilterButton'
-import { FilterMenu } from '@/components/FilterMenu'
-import { OrderButton } from '@/components/OrderButton'
-import { OrderMenu } from '@/components/OrderMenu'
-import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
-import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
-import { TabHeader } from '@/components/TabHeader'
-import useFilterMenu from '@/hooks/useFilterMenu'
-import useOrderMenu from '@/hooks/useOrderMenu'
-import { useNavigation } from 'expo-router'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useLayoutEffect, useCallback } from 'react'
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
-import { SearchInput } from '@/components/SearchInput'
-
 import { useFilters } from '@/hooks/useFilters'
-import { favoritesGetAll } from '../storage/favorites/favoritesGetAll'
-import { useFocusEffect } from '@react-navigation/native'
-import { Alert } from 'react-native'
+import { useFavorites } from '@/hooks/useFavorites'
+import { TabHeader } from '@/components/TabHeader'
+import useOrderMenu from '@/hooks/useOrderMenu'
+import { SkeletonFilterButton } from '@/components/Skeletons/SkeletonFilterButton'
+import { SkeletonCardItem } from '@/components/Skeletons/SkeletonCardItem'
+import { FilterButton } from '@/components/FilterButton'
+import { OrderButton } from '@/components/OrderButton'
+import { CardItem } from '@/components/CardItem'
+import { EmptyFavoriteList } from '@/components/EmptyFavoriteList'
+import { FilterMenu } from '@/components/FilterMenu'
+import { OrderMenu } from '@/components/OrderMenu'
+import { ActionButton } from '@/components/ActionButton'
+import {
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from 'expo-router'
 
 export function Favorites() {
-  const { filterMenu, setFilterMenu } = useFilterMenu()
+  const { loadFavorites, favorites, isFavoriteLoading, removeAllFavorites } =
+    useFavorites()
+
+  const navigation = useNavigation()
+
   const { orderMenu, setOrderMenu } = useOrderMenu()
-
-  const [filterMenuVisible, setFilterMenuVisible] = useState(false)
-  const [orderMenuVisible, setOrderMenuVisible] = useState(false)
-
-  const initialFilters = {
+  const { filters, setFilters } = useFilters({
     name: '',
     categories: [],
     officeTypes: [],
     serviceTypes: [],
-  }
+  })
 
-  const { filters, setFilters } = useFilters(initialFilters)
-
-  const [favorites, setFavorites] = useState<IAdProps[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [orderOption, setOrderOption] = useState<string>('option1')
+  const { favoritesSize } = useLocalSearchParams()
 
   useFocusEffect(
     useCallback(() => {
-      async function fetchData() {
-        try {
-          setIsLoading(true)
-          loadFavorites()
-          setIsLoading(false)
-        } catch (error) {
-          Alert.alert('Erro ao buscar anúncios: ', error as string)
-          setIsLoading(false)
-        }
-      }
-      fetchData()
-    }, [favorites])
+      loadFavorites()
+    }, [favoritesSize])
   )
 
-  useEffect(() => {
+  const [orderOption, setOrderOption] = useState<string>('option1')
+  const [filterMenuVisible, setFilterMenuVisible] = useState(false)
+  const [orderMenuVisible, setOrderMenuVisible] = useState(false)
+
+  useLayoutEffect(() => {
     if (orderOption === 'option1') {
-      setFavorites((prevFavorites) =>
-        [...prevFavorites].sort((a, b) => a.name.localeCompare(b.name))
-      )
+      favorites.sort((a, b) => a.name.localeCompare(b.name))
     } else if (orderOption === 'option2') {
-      setFavorites((prevFavorites) =>
-        [...prevFavorites].sort((a, b) => Number(a.id) - Number(b.id))
-      )
+      favorites.sort((a, b) => Number(a.id) - Number(b.id))
     }
-  }, [orderOption])
+  }, [orderOption, favorites])
 
-  async function loadFavorites() {
-    try {
-      setIsLoading(true)
-      const storedFavorites = await favoritesGetAll()
-      setFavorites(storedFavorites)
-    } catch (error) {
-      console.error('Failed to load favorites:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  function fetchFilterMenu() {
+  const fetchFilterMenu = () => {
     setFilterMenuVisible(true)
     setOrderMenuVisible(false)
   }
 
-  function fetchOrderMenu() {
+  const fetchOrderMenu = () => {
     setOrderMenuVisible(true)
     setFilterMenuVisible(false)
   }
-
-  const navigation = useNavigation()
 
   return (
     <StyledView className='flex-1 bg-white'>
       <TabHeader text='Favoritos' icon='bookmark' />
 
-      {isLoading ? (
+      <ActionButton
+        text='Remover todos os favoritos'
+        icon='trash'
+        backgroundColor='red-500'
+        textColor='white'
+        iconColor='white'
+        onPress={() => removeAllFavorites()}
+      />
+
+      <ActionButton
+        text='Carregar todos os favoritos'
+        icon='refresh'
+        backgroundColor='red-500'
+        textColor='white'
+        iconColor='white'
+        onPress={() => loadFavorites()}
+      />
+
+      {isFavoriteLoading ? (
         <StyledView className='flex-2 flex-col p-4'>
           <StyledView className='flex-2 flex-row justify-between'>
             <SkeletonFilterButton />
@@ -110,9 +100,6 @@ export function Favorites() {
         <StyledView className='flex-2 mb-2 p-4'>
           {favorites.length > 0 && (
             <StyledView>
-              <StyledView className='mb-2'>
-                <SearchInput text='Pesquisar' />
-              </StyledView>
               <StyledView className='flex-2 flex-row justify-between'>
                 <FilterButton onPress={fetchFilterMenu} />
                 <OrderButton onPress={fetchOrderMenu} />
@@ -121,34 +108,58 @@ export function Favorites() {
           )}
           <StyledFlatList
             showsVerticalScrollIndicator={false}
+            className='h-screen'
             data={favorites}
             renderItem={({ item }: { item: IAdProps }) => (
               <CardItem
                 id={item.id as string}
                 phone={item.phone}
                 whatsapp={item.whatsapp}
+                instagram={item.instagram}
                 email={item.email}
                 name={item.name}
                 office={item.office}
                 officeTypes={item.officeTypes}
                 serviceTypes={item.serviceTypes}
                 categories={item.categories}
-                onPress={() => navigation.navigate('FavoritesDetails')}
+                onPress={() =>
+                  navigation.navigate('FavoritesDetails', {
+                    name: item.name,
+                    email: item.email,
+                    id: item.id,
+                    office: item.office,
+                    officeTypes: item.officeTypes,
+                    categories: item.categories,
+                    description: item.description,
+                    serviceTypes: item.serviceTypes,
+                    phone: item.phone,
+                    whatsapp: item.whatsapp,
+                    instagram: item.instagram,
+                    cep: item.cep,
+                    street: item.street,
+                    number: item.number,
+                    neighborhood: item.neighborhood,
+                    city: item.city,
+                    state: item.state,
+                    complement: item.complement,
+                  })
+                }
               />
             )}
             ListEmptyComponent={<EmptyFavoriteList />}
-            ListFooterComponent={<StyledView style={{ height: 130 }} />}
-            keyExtractor={(item, index) => index.toString()}
+            ListFooterComponent={<StyledView />}
+            keyExtractor={(item) => item.id.toString()}
           />
         </StyledView>
       )}
+
       {favorites.length > 0 && (
         <StyledView>
           {filterMenuVisible && (
             <FilterMenu
               filters={filters}
               visible={filterMenuVisible}
-              sheetHeight={660}
+              sheetHeight={450}
               onClose={() => setFilterMenuVisible(false)}
               setFilters={setFilters}
             />
@@ -162,7 +173,7 @@ export function Favorites() {
               onClose={() => setOrderMenuVisible(false)}
               option={orderOption}
               setOption={setOrderOption}
-              sheetHeight={550}
+              sheetHeight={150}
             />
           )}
         </StyledView>

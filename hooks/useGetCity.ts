@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import * as Location from 'expo-location'
-import { Alert } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 const removeAccents = (str: string) => {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -38,7 +38,12 @@ const useGetCity = () => {
         setState('')
       }
     } catch (error) {
-      Alert.alert('Erro ao buscar a cidade:', error)
+      Toast.show({
+        type: 'error',
+        text1: `Erro ao buscar a cidade.`,
+        text2: error as string,
+      })
+
       setCity('Erro ao buscar a cidade')
       setState('')
     } finally {
@@ -85,7 +90,12 @@ const useGetCity = () => {
         setState('')
       }
     } catch (error) {
-      Alert.alert('Erro ao buscar a cidade pelas coordenadas:', error)
+      Toast.show({
+        type: 'error',
+        text1: `Erro ao buscar a cidade pelas coordenadas.`,
+        text2: error as string,
+      })
+
       setCity('Erro ao buscar a cidade')
       setState('')
     } finally {

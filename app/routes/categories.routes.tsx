@@ -13,6 +13,7 @@ export default function CategoriesNavigator() {
       <Screen name='Category' component={Category} />
       <Screen name='CategoryDetails' component={Details} />
       <Screen name='NewAd' component={NewAd} />
+      <Screen name='Details' component={Details} />
     </Navigator>
   )
 }

@@ -11,6 +11,7 @@ export interface IAdProps {
   phone: string
   email: string
   whatsapp: string
+  instagram: string
   cep: string
   street: string
   number: string
@@ -26,6 +27,7 @@ export interface ICardItemProps extends TouchableOpacityProps {
   phone: string
   email: string
   whatsapp: string
+  instagram: string
   office: string
   officeTypes: string[]
   serviceTypes: string[]

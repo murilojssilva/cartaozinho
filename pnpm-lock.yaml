@@ -11,6 +11,9 @@ dependencies:
   '@expo/vector-icons':
     specifier: ^14.0.0
     version: 14.0.2
+  '@notifee/react-native':
+    specifier: ^7.8.2
+    version: 7.8.2(react-native@0.74.2)
   '@react-native-async-storage/async-storage':
     specifier: 1.23.1
     version: 1.23.1(react-native@0.74.2)
@@ -41,6 +44,9 @@ dependencies:
   expo:
     specifier: ^51.0.14
     version: 51.0.14(@babel/core@7.24.7)(@babel/preset-env@7.24.7)
+  expo-build-properties:
+    specifier: ~0.12.3
+    version: 0.12.3(expo@51.0.14)
   expo-constants:
     specifier: ~16.0.2
     version: 16.0.2(expo@51.0.14)
@@ -80,9 +86,18 @@ dependencies:
   react-native:
     specifier: 0.74.2
     version: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
+  react-native-geolocation-service:
+    specifier: ^5.3.1
+    version: 5.3.1
   react-native-gesture-handler:
     specifier: ~2.16.2
     version: 2.16.2(react-native@0.74.2)(react@18.3.1)
+  react-native-maps:
+    specifier: ^1.15.6
+    version: 1.15.6(react-native-web@0.19.12)(react-native@0.74.2)(react@18.3.1)
+  react-native-maps-directions:
+    specifier: ^1.9.0
+    version: 1.9.0(react-native-maps@1.15.6)(react-native@0.74.2)(react@18.3.1)
   react-native-masked-text:
     specifier: ^1.13.0
     version: 1.13.0
@@ -98,6 +113,9 @@ dependencies:
   react-native-screens:
     specifier: 3.31.1
     version: 3.31.1(react-native@0.74.2)(react@18.3.1)
+  react-native-toast-message:
+    specifier: ^2.2.0
+    version: 2.2.0(react-native@0.74.2)(react@18.3.1)
   react-native-uuid:
     specifier: ^2.0.2
     version: 2.0.2
@@ -2444,6 +2462,14 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  /@notifee/react-native@7.8.2(react-native@0.74.2):
+    resolution: {integrity: sha512-VG4IkWJIlOKqXwa3aExC3WFCVCGCC9BA55Ivg0SMRfEs+ruvYy/zlLANcrVGiPtgkUEryXDhA8SXx9+JcO8oLA==}
+    peerDependencies:
+      react-native: '*'
+    dependencies:
+      react-native: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
+    dev: false
+
   /@npmcli/fs@3.1.1:
     resolution: {integrity: sha512-q9CRWjpHCMIh5sVyefoD1cA7PkvILqCZsnSOEUUivORLjxCO/Irmue2DprETiNgEqktDBZaM1Bi+jrarx1XdCg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -3129,6 +3155,10 @@ packages:
 
   /@types/cookie@0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+    dev: false
+
+  /@types/geojson@7946.0.14:
+    resolution: {integrity: sha512-WCfD5Ht3ZesJUsONdhvm84dmzWOiOzOAqOncN0++w0lBw1o8OuDNJF2McvvCef/yBqb/HYRahp1BYtODFQ8bRg==}
     dev: false
 
   /@types/graceful-fs@4.1.9:
@@ -4775,6 +4805,16 @@ packages:
       md5-file: 3.2.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /expo-build-properties@0.12.3(expo@51.0.14):
+    resolution: {integrity: sha512-ihMKJyCHnKaiadI56UFYp2IdTxUhYa7e0ekHDfT+T3H2fk3jDYfh3n3wlUxFVeGyT7BE78tBTQ7QhMT6lluX2A==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      ajv: 8.16.0
+      expo: 51.0.14(@babel/core@7.24.7)(@babel/preset-env@7.24.7)
+      semver: 7.6.2
     dev: false
 
   /expo-constants@16.0.2(expo@51.0.14):
@@ -6753,6 +6793,10 @@ packages:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
     dev: false
 
+  /lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    dev: false
+
   /lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
     dev: false
@@ -7979,6 +8023,10 @@ packages:
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
+  /react-native-geolocation-service@5.3.1:
+    resolution: {integrity: sha512-LTXPtPNmrdhx+yeWG47sAaCgQc3nG1z+HLLHlhK/5YfOgfLcAb9HAkhREPjQKPZOUx8pKZMIpdGFUGfJYtimXQ==}
+    dev: false
+
   /react-native-gesture-handler@2.16.2(react-native@0.74.2)(react@18.3.1):
     resolution: {integrity: sha512-vGFlrDKlmyI+BT+FemqVxmvO7nqxU33cgXVsn6IKAFishvlG3oV2Ds67D5nPkHMea8T+s1IcuMm0bF8ntZtAyg==}
     peerDependencies:
@@ -8003,6 +8051,37 @@ packages:
       react: 18.3.1
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
+    dev: false
+
+  /react-native-maps-directions@1.9.0(react-native-maps@1.15.6)(react-native@0.74.2)(react@18.3.1):
+    resolution: {integrity: sha512-68SrMOUg4WQ5PmpS9sNOTZaYtdyVYJnnjQOOhABrgiKnb5BXCZRU2gDoS11gYf23hjUBjq8JXzgfn37WcINLwA==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+      react-native-maps: '>=1.0.0'
+    dependencies:
+      lodash.isequal: 4.5.0
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-native: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
+      react-native-maps: 1.15.6(react-native-web@0.19.12)(react-native@0.74.2)(react@18.3.1)
+    dev: false
+
+  /react-native-maps@1.15.6(react-native-web@0.19.12)(react-native@0.74.2)(react@18.3.1):
+    resolution: {integrity: sha512-RRyjMvpMoV3249kJ9PA1JjZE/8FmYYHrHuloI/Vzkg/DjxFtJAbFnCnhg5AyS/LI5/n2riulbVl4qpiKpuO22Q==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>= 17.0.1'
+      react-native: '>= 0.64.3'
+      react-native-web: '>= 0.11'
+    peerDependenciesMeta:
+      react-native-web:
+        optional: true
+    dependencies:
+      '@types/geojson': 7946.0.14
+      react: 18.3.1
+      react-native: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
+      react-native-web: 0.19.12(react-dom@18.2.0)(react@18.3.1)
     dev: false
 
   /react-native-masked-text@1.13.0:
@@ -8071,6 +8150,16 @@ packages:
       react-freeze: 1.0.4(react@18.3.1)
       react-native: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
       warn-once: 0.1.1
+    dev: false
+
+  /react-native-toast-message@2.2.0(react-native@0.74.2)(react@18.3.1):
+    resolution: {integrity: sha512-AFti8VzUk6JvyGAlLm9/BknTNDXrrhqnUk7ak/pM7uCTxDPveAu2ekszU0on6vnUPFnG04H/QfYE2IlETqeaWw==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      react: 18.3.1
+      react-native: 0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7)(@types/react@18.2.79)(react@18.3.1)
     dev: false
 
   /react-native-uuid@2.0.2:

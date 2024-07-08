@@ -1,35 +1,21 @@
 import { Topic } from '@/components/Topic'
-import mapa from '@/assets/images/mapa.jpg'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
 import { Header } from '@/components/Header'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { ProfileCard } from '@/components/ProfileCard'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SkeletonProfileIcon } from '@/components/Skeletons/SkeletonProfileIcon'
 import { SkeletonProfileCard } from '@/components/Skeletons/SkeletonProfileCard'
 import { SkeletonCategoryCard } from '@/components/Skeletons/SkeletonCategoryCard'
 import { ActionButton } from '@/components/ActionButton'
-import {
-  StyledImage,
-  StyledScrollView,
-  StyledText,
-  StyledView,
-} from '../styled'
+import { StyledScrollView, StyledText, StyledView } from '../styled'
 import { Linking } from 'react-native'
+import { MapScreen } from '@/components/MapScreen'
+import { useFavorites } from '@/hooks/useFavorites'
+import { useAds } from '@/hooks/useAds'
 
 export function Details() {
-  const category: string[] = [
-    'Informática',
-    'Desenvolvimento',
-    'Website',
-    'Aplicativos',
-    'Mobile',
-  ]
-  const service: string[] = ['À domicílio', 'No estabelecimento', 'Remoto']
-
-  const navigation = useNavigation()
-
   const {
     name,
     email,
@@ -41,6 +27,7 @@ export function Details() {
     serviceTypes,
     phone,
     whatsapp,
+    instagram,
     cep,
     street,
     number,
@@ -50,8 +37,19 @@ export function Details() {
     complement,
   } = useLocalSearchParams()
 
+  const { toggleFavorite, isFavorited } = useFavorites()
+
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
+
+  useEffect(() => {
+    setIsFavorite(isFavorited(id as string))
+  }, [id, isFavorited])
+
+  function handleFavorite(id: string) {
+    setIsFavorite(!isFavorite)
+    toggleFavorite(id)
+  }
 
   return (
     <StyledScrollView className='flex-1 flex-col bg-white'>
@@ -92,13 +90,13 @@ export function Details() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {officeTypes.map((cat: string, index: number) => (
+              {officeTypes.map((officeType, index) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
                   <StyledText className='text-gray-100 text-xs'>
-                    {cat}
+                    {officeType}
                   </StyledText>
                 </StyledView>
               ))}
@@ -170,6 +168,16 @@ export function Details() {
               />
 
               <SocialButton
+                text='Instagram'
+                backgroundColor='gray-300'
+                textColor='white'
+                icon='instagram'
+                onPress={() =>
+                  Linking.openURL(`https://instagram.com/${instagram}`)
+                }
+              />
+
+              <SocialButton
                 text='E-mail'
                 backgroundColor='gray-300'
                 textColor='white'
@@ -227,14 +235,14 @@ export function Details() {
             <Topic icon='city' name='Cidade' content={`${city} - ${state}`} />
 
             <StyledView className='flex-2 p-4'>
-              <StyledImage source={mapa} className='flex-1 w-full h-64' />
+              <MapScreen cep={cep as string} number={number as string} />
             </StyledView>
           </StyledView>
         )}
       </StyledView>
       <StyledView className='p-4'>
         <ActionButton
-          onPress={() => setIsFavorite(!isFavorite)}
+          onPress={() => handleFavorite(id as string)}
           icon={isFavorite ? 'bookmark-outline' : 'bookmark'}
           text={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
           textColor={isFavorite ? 'cyan-700' : 'white'}

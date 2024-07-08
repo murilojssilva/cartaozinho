@@ -1,7 +1,7 @@
+import React, { useEffect, useLayoutEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { SocialButton } from './SocialButton'
 import { Tag } from './Tag'
-import { useState, useEffect } from 'react'
 import {
   StyledFlatList,
   StyledText,
@@ -10,9 +10,8 @@ import {
 } from '@/app/styled'
 import { ICardItemProps } from '@/app/interfaces/IAdProps'
 import { Linking } from 'react-native'
-import { favoritesGetAll } from '@/app/storage/favorites/favoritesGetAll'
-import { favoritesRemove } from '@/app/storage/favorites/favoritesRemove'
-import { favoritesAdd } from '@/app/storage/favorites/favoritesAdd'
+
+import { useFavorites } from '@/hooks/useFavorites'
 
 export function CardItem({
   id,
@@ -23,47 +22,18 @@ export function CardItem({
   categories,
   phone,
   whatsapp,
+  instagram,
   email,
   ...props
 }: ICardItemProps) {
-  const [favorites, setFavorites] = useState<string[]>([])
+  const { toggleFavorite, isFavorited, loadFavorites, favorites } =
+    useFavorites()
 
-  useEffect(() => {
-    const loadFavorites = async () => {
-      const storedFavorites = await favoritesGetAll()
-      setFavorites(storedFavorites.map((fav) => fav.id))
-    }
+  const favoriteList = isFavorited(id)
+
+  useLayoutEffect(() => {
     loadFavorites()
-  }, [])
-
-  const toggleFavorite = async () => {
-    try {
-      if (favorites.includes(id)) {
-        await favoritesRemove(id)
-        setFavorites((prevFavorites) =>
-          prevFavorites.filter((favId) => favId !== id)
-        )
-      } else {
-        const newFavorite = {
-          id,
-          name,
-          office,
-          officeTypes,
-          serviceTypes,
-          categories,
-          phone,
-          whatsapp,
-          email,
-        }
-        await favoritesAdd(newFavorite as any)
-        setFavorites((prevFavorites) => [...prevFavorites, id])
-      }
-    } catch (error) {
-      console.error('Failed to update favorites:', error)
-    }
-  }
-
-  const isFavorited = favorites.includes(id)
+  }, [favoriteList])
 
   return (
     <StyledTouchableOpacity
@@ -93,11 +63,11 @@ export function CardItem({
               />
             </StyledView>
           </StyledView>
-          <StyledTouchableOpacity onPress={toggleFavorite}>
+          <StyledTouchableOpacity onPress={() => toggleFavorite(id)}>
             <Ionicons
-              name={isFavorited ? 'bookmark' : 'bookmark-outline'}
+              name={favoriteList ? 'bookmark' : 'bookmark-outline'}
               size={28}
-              color={isFavorited ? '#0e7490' : '#9ca3af'}
+              color={favoriteList ? '#0e7490' : '#9ca3af'}
             />
           </StyledTouchableOpacity>
         </StyledView>
@@ -129,6 +99,17 @@ export function CardItem({
             icon='whatsapp'
             onPress={() =>
               Linking.openURL(`whatsapp://send?phone=55${whatsapp}`)
+            }
+          />
+        )}
+        {instagram && (
+          <SocialButton
+            text='Instagram'
+            backgroundColor='gray-300'
+            textColor='black'
+            icon='instagram'
+            onPress={() =>
+              Linking.openURL(`https://instagram.com/${instagram}`)
             }
           />
         )}

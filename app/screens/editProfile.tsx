@@ -12,10 +12,30 @@ import {
   StyledText,
   StyledView,
 } from '../styled'
+import Toast from 'react-native-toast-message'
 
 export function EditProfile() {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
+
+  function handleEditProfile() {
+    try {
+      setIsLoading(true)
+      Toast.show({
+        type: 'success',
+        text1: 'Perfil editado com sucesso.',
+      })
+      navigation.navigate('Profile')
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao editar perfil.',
+        text2: error as string,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -51,6 +71,7 @@ export function EditProfile() {
               keyboardType='numeric'
               placeholder='(21)9999-9999'
             />
+            <InputText text='Instagram' placeholder='@meu_instagram' />
             <InputText text='E-mail' placeholder='email@email.com' />
           </StyledView>
         </StyledView>
@@ -64,7 +85,7 @@ export function EditProfile() {
             textColor='white'
             iconColor='white'
             text='Editar perfil'
-            onPress={() => navigation.navigate('Profile')}
+            onPress={handleEditProfile}
             icon='save'
           />
         )}

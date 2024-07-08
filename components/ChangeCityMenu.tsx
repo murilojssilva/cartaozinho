@@ -17,11 +17,11 @@ import {
   StyledView,
 } from '@/app/styled'
 import useGetCity from '@/hooks/useGetCity'
-import { Alert, Easing, Keyboard, Platform } from 'react-native'
+import { Keyboard, Platform } from 'react-native'
 import { ActionButton } from './ActionButton'
 import { SearchInput } from './SearchInput'
-import { useSpinAnimation } from '@/hooks/useSpinAnimation'
 import { SpinningIcon } from './SpinningIcon'
+import Toast from 'react-native-toast-message'
 
 interface IChangeCityMenuProps {
   visible: boolean
@@ -75,15 +75,36 @@ export function ChangeCityMenu({
   }
 
   const handleSearchCity = () => {
-    fetchCity(inputCity)
+    if (inputCity.length > 0) {
+      if (!city || !state) {
+        Toast.show({
+          type: 'error',
+          text1: `Cidade não encontrada`,
+        })
+        getCurrentLocation()
+        handleSaveCity()
+        setInputCity('')
+        onClose()
+      }
+      fetchCity(inputCity)
+    }
   }
 
   const handleSaveCity = () => {
     if (city && state) {
+      Toast.show({
+        type: 'success',
+        text1: `Cidade selecionada`,
+        text2: `${city} - ${state}`,
+      })
+
       onCitySelected(city, state)
       onClose()
     } else {
-      Alert.alert('Nenhuma cidade selecionada')
+      Toast.show({
+        type: 'error',
+        text1: `Nenhuma cidade selecionada`,
+      })
     }
   }
 
@@ -160,7 +181,9 @@ export function ChangeCityMenu({
                   <StyledView className='flex-1 flex-row justify-end'>
                     <StyledTouchableOpacity
                       onPress={handleSearchCity}
-                      className='flex-2 bg-cyan-700 items-center justify-center ml-2 p-4 rounded-xl'
+                      className={`flex-2 bg-${
+                        inputCity.length ? 'cyan-700' : 'gray-400'
+                      } items-center justify-center ml-2 p-4 rounded-xl`}
                     >
                       <FontAwesome5 name='search' color='white' size={26} />
                     </StyledTouchableOpacity>

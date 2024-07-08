@@ -1,4 +1,4 @@
-export const categories = [
+export const defaultCategories = [
   'Administração',
   'Alimentação',
   'Beleza',
@@ -13,6 +13,10 @@ export const categories = [
   'Transporte',
 ]
 
-export const officeTypes = ['Estabelecimento', 'Prestador de serviços']
+export const defaultOfficeTypes = ['Estabelecimento', 'Prestador de serviços']
 
-export const serviceTypes = ['À domicílio', 'No estabelecimento', 'Remoto']
+export const defaultServiceTypes = [
+  'À domicílio',
+  'No estabelecimento',
+  'Remoto',
+]

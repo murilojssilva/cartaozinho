@@ -68,23 +68,16 @@ export function Favorites() {
     <StyledView className='flex-1 bg-white'>
       <TabHeader text='Favoritos' icon='bookmark' />
 
-      <ActionButton
-        text='Remover todos os favoritos'
-        icon='trash'
-        backgroundColor='red-500'
-        textColor='white'
-        iconColor='white'
-        onPress={() => removeAllFavorites()}
-      />
-
-      <ActionButton
-        text='Carregar todos os favoritos'
-        icon='refresh'
-        backgroundColor='red-500'
-        textColor='white'
-        iconColor='white'
-        onPress={() => loadFavorites()}
-      />
+      {favorites.length > 0 && (
+        <ActionButton
+          text='Remover todos os favoritos'
+          icon='trash'
+          backgroundColor='transparent'
+          textColor='red-500'
+          iconColor='red'
+          onPress={() => removeAllFavorites()}
+        />
+      )}
 
       {isFavoriteLoading ? (
         <StyledView className='flex-2 flex-col p-4'>

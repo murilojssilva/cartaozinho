@@ -17,7 +17,11 @@ import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
 import { adCreate } from '../storage/ad/adCreate'
 import { IAdProps } from '../interfaces/IAdProps'
-import { categories } from '../constants'
+import {
+  defaultCategories,
+  defaultOfficeTypes,
+  defaultServiceTypes,
+} from '../constants'
 
 export function NewAd() {
   const navigation = useNavigation()
@@ -80,7 +84,7 @@ export function NewAd() {
     return selectedServices.includes(service)
   }
 
-  const isOfficeType = (officeType: string) => {
+  const isOfficeTypeSelected = (officeType: string) => {
     return selectedOfficeTypes.includes(officeType)
   }
 
@@ -139,51 +143,42 @@ export function NewAd() {
           <StyledText className='font-bold text-xl my-4'>
             Tipo de atendimento
           </StyledText>
-          <StyledView className='flex-row gap-2'>
-            <Tag
-              text='Prestador de serviço'
-              onPress={() => handleOfficeTypeToggle('Prestador de serviço')}
-              backgroundColor={
-                isOfficeType('Prestador de serviço') ? 'cyan-700' : 'gray-600'
-              }
-            />
-            <Tag
-              text='Estabelecimento'
-              onPress={() => handleOfficeTypeToggle('Estabelecimento')}
-              backgroundColor={
-                isOfficeType('Estabelecimento') ? 'cyan-700' : 'gray-600'
-              }
-            />
-          </StyledView>
+          <StyledScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            className='flex-row'
+          >
+            {defaultOfficeTypes.map((officeType, index) => (
+              <Tag
+                key={index}
+                text={officeType}
+                onPress={() => handleOfficeTypeToggle(officeType)}
+                backgroundColor={
+                  isOfficeTypeSelected(officeType) ? 'cyan-700' : 'gray-600'
+                }
+              />
+            ))}
+          </StyledScrollView>
 
           <StyledText className='font-bold text-xl my-4'>
             Local de atendimento
           </StyledText>
 
-          <StyledScrollView horizontal className='flex-row gap-2'>
-            <Tag
-              text='À domicílio'
-              onPress={() => handleServiceToggle('À domicílio')}
-              backgroundColor={
-                isServiceSelected('À domicílio') ? 'cyan-700' : 'gray-600'
-              }
-            />
-            <Tag
-              text='No estabelecimento'
-              onPress={() => handleServiceToggle('No estabelecimento')}
-              backgroundColor={
-                isServiceSelected('No estabelecimento')
-                  ? 'cyan-700'
-                  : 'gray-600'
-              }
-            />
-            <Tag
-              text='Remoto'
-              onPress={() => handleServiceToggle('Remoto')}
-              backgroundColor={
-                isServiceSelected('Remoto') ? 'cyan-700' : 'gray-600'
-              }
-            />
+          <StyledScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            className='flex-row'
+          >
+            {defaultServiceTypes.map((serviceType, index) => (
+              <Tag
+                key={index}
+                text={serviceType}
+                onPress={() => handleServiceToggle(serviceType)}
+                backgroundColor={
+                  isServiceSelected(serviceType) ? 'cyan-700' : 'gray-600'
+                }
+              />
+            ))}
           </StyledScrollView>
 
           <StyledText className='font-bold text-xl my-4'>Categoria</StyledText>
@@ -192,13 +187,13 @@ export function NewAd() {
             horizontal={true}
             className='flex-row'
           >
-            {categories.map((categorie, index) => (
+            {defaultCategories.map((category, index) => (
               <Tag
                 key={index}
-                text={categorie}
-                onPress={() => handleCategoryToggle(categorie)}
+                text={category}
+                onPress={() => handleCategoryToggle(category)}
                 backgroundColor={
-                  isCategorySelected(categorie) ? 'cyan-700' : 'gray-600'
+                  isCategorySelected(category) ? 'cyan-700' : 'gray-600'
                 }
               />
             ))}

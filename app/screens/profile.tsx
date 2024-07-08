@@ -98,7 +98,7 @@ export function Profile() {
 
           <StyledView className='flex-2 flex-col'>
             {isLoadingAllAds ? (
-              <StyledView className='flex-2 flex-row justify-around w-full'>
+              <StyledView className='flex-2 flex-row'>
                 <SkeletonMyItemCard />
                 <SkeletonMyItemCard />
                 <SkeletonMyItemCard />

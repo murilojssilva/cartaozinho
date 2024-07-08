@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { IAdProps } from '@/app/interfaces/IAdProps'
 import Toast from 'react-native-toast-message'
@@ -16,7 +16,7 @@ export function useFavorites() {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false)
   const navigation = useNavigation()
 
-  const updateNavigationParams = (updatedFavorites) => {
+  const updateNavigationParams = (updatedFavorites: IAdProps) => {
     navigation.setParams({ favoritesSize: updatedFavorites.length })
   }
 

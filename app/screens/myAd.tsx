@@ -12,7 +12,7 @@ import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButto
 import { Header } from '@/components/Header'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { StyledScrollView, StyledText, StyledView } from '../styled'
-import { Linking } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { MapScreen } from '@/components/MapScreen'
 import { useAds } from '@/hooks/useAds'
 
@@ -93,8 +93,37 @@ export function MyAd() {
         {isLoading ? (
           <SkeletonCategoryCard heightSize={28} />
         ) : (
+          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
+            <StyledText className='font-bold text-xl mb-4'>
+              Local de atendimento
+            </StyledText>
+
+            <StyledScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              className='flex-2 flex-row gap-2'
+            >
+              {serviceTypes.map((serv: string, index: number) => (
+                <StyledView
+                  key={index}
+                  className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
+                >
+                  <StyledText className='text-gray-100 text-xs'>
+                    {serv}
+                  </StyledText>
+                </StyledView>
+              ))}
+            </StyledScrollView>
+          </StyledView>
+        )}
+
+        {isLoading ? (
+          <SkeletonCategoryCard heightSize={28} />
+        ) : (
           <StyledView className='flex-2 bg-gray-200 p-4 rounded-xl mb-4'>
-            <StyledText className='font-bold text-xl mb-4'>Tipo</StyledText>
+            <StyledText className='font-bold text-xl mb-4'>
+              Tipo de atendimento
+            </StyledText>
 
             <StyledScrollView
               showsHorizontalScrollIndicator={false}
@@ -197,33 +226,6 @@ export function MyAd() {
         )}
 
         {isLoading ? (
-          <SkeletonCategoryCard heightSize={28} />
-        ) : (
-          <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <StyledText className='font-bold text-xl mb-4'>
-              Atendimento
-            </StyledText>
-
-            <StyledScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              className='flex-2 flex-row gap-2'
-            >
-              {serviceTypes.map((serv: string, index: number) => (
-                <StyledView
-                  key={index}
-                  className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
-                >
-                  <StyledText className='text-gray-100 text-xs'>
-                    {serv}
-                  </StyledText>
-                </StyledView>
-              ))}
-            </StyledScrollView>
-          </StyledView>
-        )}
-
-        {isLoading ? (
           <SkeletonCategoryCard heightSize={60} />
         ) : (
           <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
@@ -294,7 +296,28 @@ export function MyAd() {
               backgroundColor='cyan-700'
               textColor='white'
               iconColor='white'
-              onPress={() => navigation.navigate('EditAd')}
+              onPress={() =>
+                navigation.navigate('EditAd', {
+                  id: id,
+                  name: name,
+                  office: office,
+                  categories: categories,
+                  description: description,
+                  phone: phone,
+                  whatsapp: whatsapp,
+                  instagram: instagram,
+                  email: email,
+                  officeTypes: officeTypes,
+                  serviceTypes: serviceTypes,
+                  cep: cep,
+                  number: number,
+                  street: street,
+                  complement: complement,
+                  city: city,
+                  state: state,
+                  neighborhood: neighborhood,
+                })
+              }
             />
           )}
         </StyledView>

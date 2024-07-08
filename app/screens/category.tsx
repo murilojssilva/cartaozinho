@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useState } from 'react'
 import { CardItem } from '@/components/CardItem'
 import { EmptyList } from '@/components/EmptyList'
@@ -30,13 +30,12 @@ export function Category() {
     serviceTypes: [],
   })
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const { category, categoryIcon } = useLocalSearchParams()
 
   const navigation = useNavigation()
 
-  const { ads } = useAds()
+  const { allAds, isLoadingAds } = useAds()
+  console.log(allAds)
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)
@@ -52,7 +51,7 @@ export function Category() {
     <StyledView className='flex-1 flex-col bg-white'>
       <Header title={category as string} icon={categoryIcon as string} />
       <StyledView className='flex-2 p-4'>
-        {isLoading ? (
+        {isLoadingAds ? (
           <StyledView className='flex-2'>
             <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonFilterButton />
@@ -64,7 +63,7 @@ export function Category() {
           </StyledView>
         ) : (
           <StyledView>
-            {ads.filter((ad) => ad.categories.includes(category as string))
+            {allAds.filter((ad) => ad.categories.includes(category as string))
               .length > 0 && (
               <StyledView>
                 <StyledView className='mb-2'>
@@ -79,7 +78,7 @@ export function Category() {
             <StyledFlatList
               showsVerticalScrollIndicator={false}
               className='h-screen'
-              data={ads.filter((ad) =>
+              data={allAds.filter((ad) =>
                 ad.categories.includes(category as string)
               )}
               renderItem={({ item }: { item: IAdProps }) => (
@@ -94,7 +93,28 @@ export function Category() {
                   officeTypes={item.officeTypes}
                   serviceTypes={item.serviceTypes}
                   categories={item.categories}
-                  onPress={() => navigation.navigate('CategoryDetails')}
+                  onPress={() =>
+                    navigation.navigate('CategoryDetails', {
+                      name: item.name,
+                      email: item.email,
+                      id: item.id,
+                      office: item.office,
+                      officeTypes: item.officeTypes,
+                      categories: item.categories,
+                      description: item.description,
+                      serviceTypes: item.serviceTypes,
+                      phone: item.phone,
+                      whatsapp: item.whatsapp,
+                      instagram: item.instagram,
+                      cep: item.cep,
+                      street: item.street,
+                      number: item.number,
+                      neighborhood: item.neighborhood,
+                      city: item.city,
+                      state: item.state,
+                      complement: item.complement,
+                    })
+                  }
                 />
               )}
               ListEmptyComponent={
@@ -106,8 +126,8 @@ export function Category() {
           </StyledView>
         )}
       </StyledView>
-      {ads.filter((ad) => ad.categories.includes(category as string)).length >
-        0 && (
+      {allAds.filter((ad) => ad.categories.includes(category as string))
+        .length > 0 && (
         <StyledView>
           {filterMenuVisible && (
             <FilterMenu

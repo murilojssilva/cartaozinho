@@ -1,9 +1,13 @@
-import { StyledView } from '@/app/styled'
+import { StyledAnimatedView } from '@/app/styled'
+import { useColorSkeletonTransition } from '@/hooks/useColorSkeletonTransition'
 
 export function SkeletonCardAd() {
+  const backgroundColor = useColorSkeletonTransition()
+
   return (
-    <StyledView className='flex-2 h-36 w-[47%] my-2 bg-gray-300 rounded-xl '>
-      <StyledView className='flex-2 animate-pulse bg-gray-200 rounded-xl' />
-    </StyledView>
+    <StyledAnimatedView
+      className='flex-2 rounded-xl'
+      style={{ backgroundColor }}
+    />
   )
 }

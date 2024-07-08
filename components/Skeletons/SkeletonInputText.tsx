@@ -1,13 +1,16 @@
-import { StyledView } from '@/app/styled'
+import { StyledAnimatedView } from '@/app/styled'
+import { useColorSkeletonTransition } from '@/hooks/useColorSkeletonTransition'
 
 interface ISkeletonInputTextProps {
   inputSize: number
 }
 
 export function SkeletonInputText({ inputSize }: ISkeletonInputTextProps) {
+  const backgroundColor = useColorSkeletonTransition()
   return (
-    <StyledView className={`flex-1 bg-gray-300 p-${inputSize} rounded-xl my-2`}>
-      <StyledView className='flex-1 bg-gray-200 animate-pulse  rounded-xl' />
-    </StyledView>
+    <StyledAnimatedView
+      className={`flex-1 p-${inputSize} rounded-xl my-2`}
+      style={{ backgroundColor }}
+    />
   )
 }

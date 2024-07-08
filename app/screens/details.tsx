@@ -1,3 +1,4 @@
+import { TouchableOpacityProps } from 'react-native'
 import { Topic } from '@/components/Topic'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
@@ -66,7 +67,11 @@ export function Details() {
           {isLoading ? (
             <SkeletonProfileCard />
           ) : (
-            <ProfileCard icon='user' title='Nome' text={name as string} />
+            <ProfileCard
+              icon='user'
+              title='Nome'
+              text={name || 'Não disponível'}
+            />
           )}
           {isLoading ? (
             <SkeletonProfileCard />
@@ -74,7 +79,7 @@ export function Details() {
             <ProfileCard
               icon='suitcase'
               title='Cargo'
-              text={office as string}
+              text={office || 'Não disponível'}
             />
           )}
         </StyledView>
@@ -83,7 +88,9 @@ export function Details() {
           <SkeletonCategoryCard heightSize={28} />
         ) : (
           <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
-            <StyledText className='font-bold text-xl mb-4'>Tipo</StyledText>
+            <StyledText className='font-bold text-xl mb-4'>
+              Tipo de Atendimento
+            </StyledText>
 
             <StyledScrollView
               showsHorizontalScrollIndicator={false}
@@ -112,7 +119,7 @@ export function Details() {
               Descrição
             </StyledText>
             <StyledText className='text-sm text-gray-700 '>
-              {description}
+              {description || 'Não disponível'}
             </StyledText>
           </StyledView>
         )}
@@ -156,7 +163,7 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='phone'
-                onPress={() => Linking.openURL(`tel:+55${phone}`)}
+                onPress={() => phone && Linking.openURL(`tel:+55${phone}`)}
               />
 
               <SocialButton
@@ -164,7 +171,9 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='whatsapp'
-                onPress={() => Linking.openURL(`https://wa.me/+55${whatsapp}`)}
+                onPress={() =>
+                  whatsapp && Linking.openURL(`https://wa.me/+55${whatsapp}`)
+                }
               />
 
               <SocialButton
@@ -173,6 +182,7 @@ export function Details() {
                 textColor='white'
                 icon='instagram'
                 onPress={() =>
+                  instagram &&
                   Linking.openURL(`https://instagram.com/${instagram}`)
                 }
               />
@@ -182,7 +192,7 @@ export function Details() {
                 backgroundColor='gray-300'
                 textColor='white'
                 icon='envelope'
-                onPress={() => Linking.openURL(`mailto:${email}`)}
+                onPress={() => email && Linking.openURL(`mailto:${email}`)}
               />
             </StyledView>
           </StyledView>
@@ -193,7 +203,7 @@ export function Details() {
         ) : (
           <StyledView className='flex-1 bg-gray-200 p-4 rounded-xl mb-4'>
             <StyledText className='font-bold text-xl mb-4'>
-              Atendimento
+              Local de atendimento
             </StyledText>
 
             <StyledScrollView
@@ -223,16 +233,32 @@ export function Details() {
               Localização
             </StyledText>
 
-            <Topic icon='map-pin' name='CEP' content={cep as string} />
-            <Topic icon='map' name='Rua' content={street as string} />
-            <Topic icon='square' name='Número' content={number as string} />
+            <Topic
+              icon='map-pin'
+              name='CEP'
+              content={cep || 'Não disponível'}
+            />
+            <Topic icon='map' name='Rua' content={street || 'Não disponível'} />
+            <Topic
+              icon='square'
+              name='Número'
+              content={number || 'Não disponível'}
+            />
             <Topic
               icon='list'
               name='Complemento'
-              content={complement as string}
+              content={complement || 'Não disponível'}
             />
-            <Topic icon='city' name='Bairro' content={neighborhood as string} />
-            <Topic icon='city' name='Cidade' content={`${city} - ${state}`} />
+            <Topic
+              icon='city'
+              name='Bairro'
+              content={neighborhood || 'Não disponível'}
+            />
+            <Topic
+              icon='city'
+              name='Cidade'
+              content={`${city} - ${state}` || 'Não disponível'}
+            />
 
             <StyledView className='flex-2 p-4'>
               <MapScreen cep={cep as string} number={number as string} />

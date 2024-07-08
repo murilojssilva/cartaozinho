@@ -1,4 +1,5 @@
-import { StyledView } from '@/app/styled'
+import { StyledAnimatedView } from '@/app/styled'
+import { useColorSkeletonTransition } from '@/hooks/useColorSkeletonTransition'
 
 interface ISkeletonCategoryCardProps {
   heightSize: number
@@ -7,9 +8,11 @@ interface ISkeletonCategoryCardProps {
 export function SkeletonCategoryCard({
   heightSize,
 }: ISkeletonCategoryCardProps) {
+  const backgroundColor = useColorSkeletonTransition()
   return (
-    <StyledView className={`bg-gray-300 p-4 h-${heightSize} rounded-xl mb-4`}>
-      <StyledView className='bg-gray-200 animate-pulse rounded-xl mb-4' />
-    </StyledView>
+    <StyledAnimatedView
+      className={` p-4 h-${heightSize} rounded-xl mb-4`}
+      style={{ backgroundColor }}
+    />
   )
 }

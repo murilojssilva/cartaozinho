@@ -5,7 +5,7 @@ export function SkeletonFilterButton() {
   const backgroundColor = useColorSkeletonTransition()
   return (
     <StyledAnimatedView
-      className='flex-2 flex-row  py-5 px-12 rounded-xl'
+      className='flex-2 flex-row py-5 px-12 rounded-xl'
       style={{ backgroundColor }}
     />
   )

@@ -5,32 +5,163 @@ import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButto
 import { SkeletonInputText } from '@/components/Skeletons/SkeletonInputText'
 import { SkeletonTag } from '@/components/Skeletons/SkeletonTag'
 import { Tag } from '@/components/Tag'
-import { useNavigation } from 'expo-router'
-import { useState } from 'react'
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  View,
-  Platform,
-} from 'react-native'
-
-import { styled } from 'nativewind'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
-import { categories } from '../constants'
-
-const StyledView = styled(View)
-const StyledText = styled(Text)
-const StyledKeyboardAvoidingView = styled(KeyboardAvoidingView)
-const StyledScrollView = styled(ScrollView)
+import {
+  defaultCategories,
+  defaultOfficeTypes,
+  defaultServiceTypes,
+} from '../constants'
+import { useAds } from '@/hooks/useAds'
+import {
+  StyledKeyboardAvoidingView,
+  StyledScrollView,
+  StyledText,
+  StyledView,
+} from '../styled'
+import Toast from 'react-native-toast-message'
+import { adEdit } from '../storage/ad/adEdit'
+import { IAdProps } from '../interfaces/IAdProps'
 
 export function EditAd() {
+  const { isLoadingAllAds } = useAds()
+
+  const {
+    id,
+    cep,
+    street,
+    number,
+    complement,
+    neighborhood,
+    city,
+    state,
+    name,
+    office,
+    description,
+    phone,
+    whatsapp,
+    instagram,
+    email,
+    officeTypes: selectedOfficeTypesFromParams = defaultOfficeTypes,
+    serviceTypes: selectedServiceTypesFromParams = defaultServiceTypes,
+    categories: selectedCategoriesFromParams = defaultCategories,
+  } = useLocalSearchParams()
+
   const navigation = useNavigation()
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSelected, setIsSelected] = useState(false)
+  const [selectedOfficeTypes, setSelectedOfficeTypes] = useState(
+    selectedOfficeTypesFromParams
+  )
+  const [selectedServiceTypes, setSelectedServiceTypes] = useState(
+    selectedServiceTypesFromParams
+  )
+  const [selectedCategories, setSelectedCategories] = useState(
+    selectedCategoriesFromParams
+  )
+
+  useEffect(() => {
+    setAddress({
+      cep,
+      street,
+      number,
+      complement,
+      neighborhood,
+      city,
+      state,
+    })
+  }, [])
 
   const { address, setAddress, handleCepChange } = useGetAddress()
+
+  const [editedAd, setEditedAd] = useState<IAdProps>({
+    id,
+    name: name,
+    office: office,
+    description: description,
+    phone: phone,
+    whatsapp: whatsapp,
+    instagram: instagram,
+    email: email,
+    officeTypes: selectedOfficeTypes,
+    serviceTypes: selectedServiceTypes,
+    categories: selectedCategories,
+    cep: address.cep,
+    neighborhood: address.neighborhood,
+    street: address.street,
+    city: address.city,
+    state: address.state,
+    number: address.number,
+  } as IAdProps)
+
+  const handleOfficeTypesSelected = (tag) => {
+    setSelectedOfficeTypes((prevSelected) => {
+      if (prevSelected.includes(tag)) {
+        return prevSelected.filter((item) => item !== tag)
+      } else {
+        return [...prevSelected, tag]
+      }
+    })
+  }
+
+  const handleServiceTypesSelected = (serviceType) => {
+    setSelectedServiceTypes((prevSelected) => {
+      if (prevSelected.includes(serviceType)) {
+        return prevSelected.filter((item) => item !== serviceType)
+      } else {
+        return [...prevSelected, serviceType]
+      }
+    })
+  }
+
+  const handleCategorySelected = (category) => {
+    setSelectedCategories((prevSelected) => {
+      if (prevSelected.includes(category)) {
+        return prevSelected.filter((item) => item !== category)
+      } else {
+        return [...prevSelected, category]
+      }
+    })
+  }
+
+  const handleSave = async () => {
+    try {
+      const updatedAd = {
+        id,
+        name: name,
+        office: office,
+        description: description,
+        phone: phone,
+        whatsapp: whatsapp,
+        instagram: instagram,
+        email: email,
+        officeTypes: selectedOfficeTypes,
+        serviceTypes: selectedServiceTypes,
+        categories: selectedCategories,
+        cep: address.cep,
+        neighborhood: address.neighborhood,
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        number: address.number,
+      }
+
+      await adEdit(updatedAd)
+      console.log(updatedAd)
+
+      Toast.show({
+        type: 'success',
+        text1: 'Anúncio editado com sucesso',
+        onShow: () => navigation.navigate('Profile'),
+      })
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Não foi possível editar o anúncio',
+      })
+    }
+  }
 
   return (
     <StyledKeyboardAvoidingView
@@ -48,31 +179,48 @@ export function EditAd() {
             Informações do anúncio
           </StyledText>
           <StyledView className='flex-2 flex-col gap-2'>
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Nome' />
-            )}
-            {isLoading ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText text='Cargo' />
-            )}
-            {isLoading ? (
+            {isLoadingAllAds ? (
               <SkeletonInputText inputSize={6} />
             ) : (
               <InputText
-                text='Descrição'
+                value={editedAd.name}
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, name: text })
+                }
+                text='Nome'
+              />
+            )}
+            {isLoadingAllAds ? (
+              <SkeletonInputText inputSize={6} />
+            ) : (
+              <InputText
+                value={editedAd.office}
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, office: text })
+                }
+                text='Nome'
+              />
+            )}
+            {isLoadingAllAds ? (
+              <SkeletonInputText inputSize={6} />
+            ) : (
+              <InputText
+                value={editedAd.description}
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, description: text })
+                }
                 numberOfLines={10}
                 multiline={true}
                 textAlignVertical='top'
+                text='Descrição'
               />
             )}
           </StyledView>
+
           <StyledText className='font-bold text-xl my-4'>
-            Atendimento
+            Tipo de atendimento
           </StyledText>
-          {isLoading ? (
+          {isLoadingAllAds ? (
             <StyledView className='flex-2 flex-row'>
               <SkeletonTag />
               <SkeletonTag />
@@ -81,25 +229,30 @@ export function EditAd() {
           ) : (
             <StyledView className='flex-row gap-2'>
               <Tag
-                text='À domicílio'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+                text='Estabelecimento'
+                onPress={() => handleOfficeTypesSelected('Estabelecimento')}
+                backgroundColor={
+                  selectedOfficeTypes.includes('Estabelecimento')
+                    ? 'cyan-700'
+                    : 'gray-600'
+                }
               />
               <Tag
-                text='No estabelecimento'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
-              />
-              <Tag
-                text='Remoto'
-                onPress={() => setIsSelected(!isSelected)}
-                backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+                text='Prestador de serviços'
+                onPress={() =>
+                  handleOfficeTypesSelected('Prestador de serviços')
+                }
+                backgroundColor={
+                  selectedOfficeTypes.includes('Prestador de serviços')
+                    ? 'cyan-700'
+                    : 'gray-600'
+                }
               />
             </StyledView>
           )}
 
           <StyledText className='font-bold text-xl my-4'>Categoria</StyledText>
-          {isLoading ? (
+          {isLoadingAllAds ? (
             <StyledView className='flex-2 flex-row'>
               <SkeletonTag />
               <SkeletonTag />
@@ -111,37 +264,116 @@ export function EditAd() {
               horizontal={true}
               className='flex-row'
             >
-              {categories.map((categorie, index) => (
+              {defaultCategories.map((category, index) => (
                 <Tag
                   key={index}
-                  text={categorie}
-                  onPress={() => setIsSelected(!isSelected)}
-                  backgroundColor={isSelected ? 'cyan-700' : 'gray-600'}
+                  text={category}
+                  onPress={() => handleCategorySelected(category)}
+                  backgroundColor={
+                    selectedCategories.includes(category)
+                      ? 'cyan-700'
+                      : 'gray-600'
+                  }
                 />
               ))}
             </StyledScrollView>
           )}
+
+          <StyledText className='font-bold text-xl my-4'>
+            Local de atendimento
+          </StyledText>
+          {isLoadingAllAds ? (
+            <StyledView className='flex-2 flex-row'>
+              <SkeletonTag />
+              <SkeletonTag />
+              <SkeletonTag />
+            </StyledView>
+          ) : (
+            <StyledScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className='flex-row gap-2'
+            >
+              <Tag
+                text='À domicílio'
+                onPress={() => handleServiceTypesSelected('À domicílio')}
+                backgroundColor={
+                  selectedServiceTypes.includes('À domicílio')
+                    ? 'cyan-700'
+                    : 'gray-600'
+                }
+              />
+              <Tag
+                text='No estabelecimento'
+                onPress={() => handleServiceTypesSelected('No estabelecimento')}
+                backgroundColor={
+                  selectedServiceTypes.includes('No estabelecimento')
+                    ? 'cyan-700'
+                    : 'gray-600'
+                }
+              />
+              <Tag
+                text='Remoto'
+                onPress={() => handleServiceTypesSelected('Remoto')}
+                backgroundColor={
+                  selectedServiceTypes.includes('Remoto')
+                    ? 'cyan-700'
+                    : 'gray-600'
+                }
+              />
+            </StyledScrollView>
+          )}
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
-            {isLoading ? (
+            {isLoadingAllAds ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText text='Telefone' keyboardType='numeric' />
+              <InputText
+                text='Telefone'
+                keyboardType='numeric'
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, phone: text })
+                }
+                defaultValue={editedAd.phone as string}
+              />
             )}
-            {isLoading ? (
+            {isLoadingAllAds ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText text='WhatsApp' keyboardType='numeric' />
+              <InputText
+                text='WhatsApp'
+                keyboardType='numeric'
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, whatsapp: text })
+                }
+                defaultValue={editedAd.whatsapp as string}
+              />
             )}
-            {isLoading ? (
+            {isLoadingAllAds ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText text='Instagram' />
+              <InputText
+                text='Instagram'
+                autoCapitalize='none'
+                onChangeText={(text) =>
+                  setEditedAd({
+                    ...editedAd,
+                    instagram: text.replace(/\s/g, '').toLowerCase(),
+                  })
+                }
+                defaultValue={editedAd.instagram as string}
+              />
             )}
-            {isLoading ? (
+            {isLoadingAllAds ? (
               <SkeletonInputText inputSize={6} />
             ) : (
-              <InputText text='E-mail' />
+              <InputText
+                text='E-mail'
+                onChangeText={(text) =>
+                  setEditedAd({ ...editedAd, email: text })
+                }
+                defaultValue={editedAd.email as string}
+              />
             )}
           </StyledView>
           <StyledText className='font-bold text-xl my-4'>
@@ -164,7 +396,9 @@ export function EditAd() {
             <InputText
               text='Complemento'
               value={address.complement}
-              onChangeText={(text) => setAddress({ ...address, number: text })}
+              onChangeText={(text) =>
+                setAddress({ ...address, complement: text })
+              }
             />
             <InputText
               text='Bairro'
@@ -177,7 +411,7 @@ export function EditAd() {
         </StyledView>
       </StyledScrollView>
       <StyledView className='p-4'>
-        {isLoading ? (
+        {isLoadingAllAds ? (
           <SkeletonActionButton />
         ) : (
           <ActionButton
@@ -186,7 +420,7 @@ export function EditAd() {
             textColor='white'
             text='Editar anúncio'
             icon='id-card'
-            onPress={() => navigation.navigate('Profile')}
+            onPress={handleSave}
           />
         )}
       </StyledView>

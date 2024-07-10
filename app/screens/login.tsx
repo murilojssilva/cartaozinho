@@ -3,20 +3,21 @@ import { Platform } from 'react-native'
 import { ActionButton } from '@/components/ActionButton'
 import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
-import mapa from '@/assets/images/mapa.jpg'
 import { useNavigation } from 'expo-router'
 import {
-  StyledImage,
   StyledKeyboardAvoidingView,
   StyledScrollView,
   StyledText,
   StyledView,
 } from '../styled'
 import { TabHeader } from '@/components/TabHeader'
+import { useAuthForm } from '@/hooks/useAuthForm'
 
 export function Login() {
-  const [isLoading, setIsLoading] = useState(false)
-
+  const { formValues, isLoading, handleChange, handleLogin } = useAuthForm({
+    email: '',
+    password: '',
+  })
   const navigation = useNavigation()
 
   return (
@@ -26,19 +27,29 @@ export function Login() {
     >
       <TabHeader text='Cartãozinho' icon='home' />
       <StyledScrollView className='p-4  flex-grow'>
-        <StyledImage source={mapa} className='flex-2 w-full h-32' />
         <StyledView className=' flex-col p-4 gap-2'>
           <StyledText className='font-bold text-xl'>
             Acesse sua conta
           </StyledText>
-          <InputText text='E-mail' />
-          <InputText text='Senha' />
+          <InputText
+            text='E-mail'
+            value={formValues.email}
+            onChangeText={(text) => handleChange('email', text)}
+            keyboardType='email-address'
+          />
+
+          <InputText
+            text='Senha'
+            value={formValues.password}
+            onChangeText={(text) => handleChange('password', text)}
+            secureTextEntry
+          />
         </StyledView>
       </StyledScrollView>
-      <StyledView className='flex-2 bg-white'>
+      <StyledView className='flex-2 bg-gray-100'>
         <StyledView className='p-4'>
           <ActionButton
-            backgroundColor='white'
+            backgroundColor='gray-100'
             textColor='black'
             text='Criar conta'
             icon='log-in-outline'
@@ -56,7 +67,7 @@ export function Login() {
               iconColor='white'
               text='Acessar'
               icon='log-in'
-              onPress={() => navigation.navigate('App', { screen: 'Home' })}
+              onPress={handleLogin}
             />
           )}
         </StyledView>

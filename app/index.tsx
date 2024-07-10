@@ -36,7 +36,7 @@ export default function App() {
           translucent
         />
         <Routes />
-        <Toast position='bottom' bottomOffset={20} />
+        <Toast position='top' topOffset={40} />
       </ThemeProvider>
     </NavigationContainer>
   )

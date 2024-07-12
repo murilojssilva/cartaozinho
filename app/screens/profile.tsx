@@ -6,7 +6,7 @@ import { SkeletonText } from '@/components/Skeletons/SkeletonText'
 import { TabHeader } from '@/components/TabHeader'
 import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import { Linking } from 'react-native'
 
 import { StyledFlatList, StyledTouchableOpacity, StyledView } from '../styled'
@@ -19,7 +19,7 @@ import { useAuthForm } from '@/hooks/useAuthForm'
 
 export function Profile() {
   const navigation = useNavigation()
-  const { allAds, handleAdRemoveAll, isLoadingAllAds } = useAds()
+  const { myAds, handleAdRemoveAll, isLoadingMyAds } = useAds()
   const { user } = useUser()
   const { handleLogout } = useAuthForm({
     email: '',
@@ -40,7 +40,7 @@ export function Profile() {
         <StyledView className='flex-2 p-4 flex-col h-full'>
           <StyledView className='flex-2 mb-4 flex-col'>
             <Title text='Informações pessoais' />
-            {isLoadingAllAds ? (
+            {isLoadingMyAds ? (
               <SkeletonText />
             ) : (
               <Topic
@@ -50,7 +50,7 @@ export function Profile() {
               />
             )}
 
-            {isLoadingAllAds ? (
+            {isLoadingMyAds ? (
               <SkeletonText />
             ) : (
               <Topic
@@ -60,7 +60,7 @@ export function Profile() {
                 onPress={() => Linking.openURL(`tel:${user?.phone}`)}
               />
             )}
-            {isLoadingAllAds ? (
+            {isLoadingMyAds ? (
               <SkeletonText />
             ) : (
               <Topic
@@ -71,7 +71,7 @@ export function Profile() {
               />
             )}
           </StyledView>
-          {isLoadingAllAds ? (
+          {isLoadingMyAds ? (
             <StyledView className='flex-2 flex-row justify-between'>
               <SkeletonActionButton />
               <SkeletonActionButton />
@@ -99,13 +99,15 @@ export function Profile() {
           <StyledView className='flex-2 flex-row justify-between items-center'>
             <Title text='Meus anúncios' />
 
-            <StyledTouchableOpacity onPress={handleAdRemoveAll}>
-              <Ionicons name='trash' size={22} />
-            </StyledTouchableOpacity>
+            {myAds.length > 0 && (
+              <StyledTouchableOpacity onPress={handleAdRemoveAll}>
+                <Ionicons name='trash' size={22} />
+              </StyledTouchableOpacity>
+            )}
           </StyledView>
 
           <StyledView className='flex-2 flex-col'>
-            {isLoadingAllAds ? (
+            {isLoadingMyAds ? (
               <StyledView className='flex-2 flex-row'>
                 <SkeletonMyItemCard />
                 <SkeletonMyItemCard />
@@ -115,7 +117,8 @@ export function Profile() {
               <StyledFlatList
                 className='flex-2 my-2'
                 horizontal
-                data={allAds}
+                showsHorizontalScrollIndicator={false}
+                data={myAds}
                 renderItem={({ item }: { item: IAdProps }) => (
                   <MyItemCard
                     name={item.name}

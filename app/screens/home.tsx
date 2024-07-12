@@ -30,7 +30,6 @@ import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
 import { RefreshControl } from 'react-native'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { useAds } from '@/hooks/useAds'
-import { UserContext, useUser } from '../context/UserContext'
 
 export function Home() {
   const navigation = useNavigation()
@@ -169,6 +168,7 @@ export function Home() {
               }
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  user_id={item.user_id}
                   id={item.id as string}
                   name={item.name}
                   email={item.email}
@@ -184,6 +184,7 @@ export function Home() {
                       name: item.name,
                       email: item.email,
                       id: item.id,
+                      user_id: item.user_id,
                       office: item.office,
                       officeTypes: item.officeTypes,
                       categories: item.categories,

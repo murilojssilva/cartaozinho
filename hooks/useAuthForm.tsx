@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useNavigation } from 'expo-router'
 import Toast from 'react-native-toast-message'
 import { userCreate } from '@/app/storage/user/userCreate'
-import uuid from 'react-native-uuid'
+import { userEdit } from '@/app/storage/user/userEdit'
 import { usersGetAll } from '@/app/storage/user/usersGetAll'
+import uuid from 'react-native-uuid'
 import { useUser } from '@/app/context/UserContext'
 
 interface AuthForm {
@@ -173,7 +174,7 @@ export function useAuthForm(
     try {
       const updatedUser = { ...user, name, lastName, phone }
       // Atualizar o usuário no banco de dados
-      await userCreate(updatedUser)
+      await userEdit(updatedUser)
       setUser(updatedUser)
 
       Toast.show({
@@ -227,7 +228,7 @@ export function useAuthForm(
     try {
       const updatedUser = { ...user, password: newPassword }
       // Atualizar o usuário no banco de dados
-      await userCreate(updatedUser)
+      await userEdit(updatedUser)
       setUser(updatedUser)
 
       Toast.show({

@@ -2,6 +2,7 @@ import { TouchableOpacityProps } from 'react-native'
 
 export interface IAdProps {
   id: string | number[]
+  user_id: string
   name: string
   office: string
   officeTypes: string[]
@@ -23,6 +24,7 @@ export interface IAdProps {
 
 export interface ICardItemProps extends TouchableOpacityProps {
   id: string
+  user_id: string
   name: string
   phone: string
   email: string

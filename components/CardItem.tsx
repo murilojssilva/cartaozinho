@@ -9,12 +9,15 @@ import {
   StyledView,
 } from '@/app/styled'
 import { ICardItemProps } from '@/app/interfaces/IAdProps'
-import { Linking } from 'react-native'
+import { Alert, Linking } from 'react-native'
 
 import { useFavorites } from '@/hooks/useFavorites'
+import { useUser } from '@/app/context/UserContext'
+import { useAds } from '@/hooks/useAds'
 
 export function CardItem({
   id,
+  user_id,
   name,
   office,
   officeTypes,
@@ -30,6 +33,9 @@ export function CardItem({
     useFavorites()
 
   const favoriteList = isFavorited(id)
+
+  const { user } = useUser()
+  const { handleRemoveAd } = useAds()
 
   useLayoutEffect(() => {
     loadFavorites()
@@ -63,13 +69,35 @@ export function CardItem({
               />
             </StyledView>
           </StyledView>
-          <StyledTouchableOpacity onPress={() => toggleFavorite(id)}>
-            <Ionicons
-              name={favoriteList ? 'bookmark' : 'bookmark-outline'}
-              size={28}
-              color={favoriteList ? '#0e7490' : '#9ca3af'}
-            />
-          </StyledTouchableOpacity>
+          {user?.id === user_id ? (
+            <StyledTouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  'Remover',
+                  'Deseja remover o anúncio?',
+                  [
+                    {
+                      text: 'Não',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    { text: 'Sim', onPress: () => handleRemoveAd(id) },
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Ionicons name='trash' size={28} color='gray-300' />
+            </StyledTouchableOpacity>
+          ) : (
+            <StyledTouchableOpacity onPress={() => toggleFavorite(id)}>
+              <Ionicons
+                name={favoriteList ? 'bookmark' : 'bookmark-outline'}
+                size={28}
+                color={favoriteList ? '#0e7490' : '#9ca3af'}
+              />
+            </StyledTouchableOpacity>
+          )}
         </StyledView>
       </StyledView>
       <StyledFlatList

@@ -31,6 +31,7 @@ export function EditAd() {
 
   const {
     id,
+    user_id,
     cep,
     street,
     number,
@@ -77,6 +78,7 @@ export function EditAd() {
 
   const [editedAd, setEditedAd] = useState<IAdProps>({
     id,
+    user_id,
     name: name,
     office: office,
     description: description,
@@ -200,6 +202,15 @@ export function EditAd() {
                   setEditedAd({ ...editedAd, office: text })
                 }
                 text='Nome'
+              />
+            )}
+            {isLoadingAllAds ? (
+              <SkeletonInputText inputSize={6} />
+            ) : (
+              <InputText
+                value={editedAd.user_id}
+                editable={false}
+                text='ID do usuário'
               />
             )}
             {isLoadingAllAds ? (

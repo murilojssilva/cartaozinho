@@ -7,12 +7,15 @@ import Toast from 'react-native-toast-message'
 import { useNavigation } from 'expo-router'
 import { useFilters } from './useFilters'
 import { adRemoveAll } from '@/app/storage/ad/adRemoveAll'
+import { useUser } from '@/app/context/UserContext'
 
 export const useAds = () => {
   const [ads, setAds] = useState<IAdProps[]>([])
   const [allAds, setAllAds] = useState<IAdProps[]>([])
+  const [myAds, setMyAds] = useState<IAdProps[]>([])
   const [isLoadingAds, setIsLoadingAds] = useState(false)
   const [isLoadingAllAds, setIsLoadingAllAds] = useState(false)
+  const [isLoadingMyAds, setIsLoadingMyAds] = useState(false)
   const navigation = useNavigation()
 
   const { filters, setFilters, resetFilters } = useFilters({
@@ -21,16 +24,25 @@ export const useAds = () => {
     officeTypes: [],
     serviceTypes: [],
   })
+  const { user } = useUser()
 
   const fetchAllAds = async () => {
     try {
       setIsLoadingAllAds(true)
+      setIsLoadingMyAds(true)
       const data = await adsGetAll()
       setAllAds(data)
+
+      const userAds = allAds.filter((ad) => ad.user_id === user?.id)
+      setMyAds(userAds)
     } catch (error) {
-      console.error('Error fetching ads:', error)
-      throw error
+      Toast.show({
+        type: 'error',
+        text1: `Erro ao buscar todos os anúncios`,
+        text2: error instanceof Error ? error.message : 'Erro desconhecido.',
+      })
     } finally {
+      setIsLoadingMyAds(false)
       setIsLoadingAllAds(false)
     }
   }
@@ -47,7 +59,7 @@ export const useAds = () => {
   useFocusEffect(
     useCallback(() => {
       fetchAllAds()
-    }, [])
+    }, [allAds])
   )
 
   const fetchAds = async (city: string) => {
@@ -125,9 +137,11 @@ export const useAds = () => {
     ads,
     allAds,
     fetchAllAds,
+    myAds,
     setAds,
     isLoadingAds,
     isLoadingAllAds,
+    isLoadingMyAds,
     fetchAds,
     handleAdRemoveAll,
     handleRemoveAd,

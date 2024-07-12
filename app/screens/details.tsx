@@ -1,4 +1,3 @@
-import { TouchableOpacityProps } from 'react-native'
 import { Topic } from '@/components/Topic'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { SocialButton } from '@/components/SocialButton'
@@ -14,13 +13,14 @@ import { StyledScrollView, StyledText, StyledView } from '../styled'
 import { Linking } from 'react-native'
 import { MapScreen } from '@/components/MapScreen'
 import { useFavorites } from '@/hooks/useFavorites'
-import { useAds } from '@/hooks/useAds'
+import { useUser } from '../context/UserContext'
 
 export function Details() {
   const {
     name,
     email,
     id,
+    user_id,
     office,
     officeTypes,
     categories,
@@ -38,7 +38,11 @@ export function Details() {
     complement,
   } = useLocalSearchParams()
 
+  const { user } = useUser()
+
   const { toggleFavorite, isFavorited } = useFavorites()
+
+  const navigation = useNavigation()
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
@@ -48,8 +52,15 @@ export function Details() {
   }, [id, isFavorited])
 
   function handleFavorite(id: string) {
-    setIsFavorite(!isFavorite)
-    toggleFavorite(id)
+    setIsLoading(true)
+    try {
+      setIsFavorite(!isFavorite)
+      toggleFavorite(id)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -71,6 +82,15 @@ export function Details() {
               icon='user'
               title='Nome'
               text={name || 'Não disponível'}
+            />
+          )}
+          {isLoading ? (
+            <SkeletonProfileCard />
+          ) : (
+            <ProfileCard
+              icon='id-card'
+              title='ID do usuário'
+              text={user_id || 'Não disponível'}
             />
           )}
           {isLoading ? (
@@ -137,13 +157,13 @@ export function Details() {
               horizontal={true}
               className='flex-2 flex-row gap-2'
             >
-              {categories.map((cat: string, index: number) => (
+              {categories.map((category: string, index: number) => (
                 <StyledView
                   key={index}
                   className='flex-2 flex-row py-2 px-4 bg-gray-600 rounded-full'
                 >
                   <StyledText className='text-gray-100 text-xs'>
-                    {cat}
+                    {category}
                   </StyledText>
                 </StyledView>
               ))}
@@ -267,14 +287,47 @@ export function Details() {
         )}
       </StyledView>
       <StyledView className='p-4'>
-        <ActionButton
-          onPress={() => handleFavorite(id as string)}
-          icon={isFavorite ? 'bookmark-outline' : 'bookmark'}
-          text={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
-          textColor={isFavorite ? 'cyan-700' : 'white'}
-          iconColor={isFavorite ? '#0e7490' : 'white'}
-          backgroundColor={isFavorite ? 'white' : 'cyan-700' || '#0e7490'}
-        />
+        {user_id === user.id ? (
+          <ActionButton
+            text='Editar anúncio'
+            icon='pencil'
+            backgroundColor='cyan-700'
+            textColor='white'
+            iconColor='white'
+            onPress={() =>
+              navigation.navigate('EditAd', {
+                id: id,
+                user_id: user_id,
+                name: name,
+                office: office,
+                categories: categories,
+                description: description,
+                phone: phone,
+                whatsapp: whatsapp,
+                instagram: instagram,
+                email: email,
+                officeTypes: officeTypes,
+                serviceTypes: serviceTypes,
+                cep: cep,
+                number: number,
+                street: street,
+                complement: complement,
+                city: city,
+                state: state,
+                neighborhood: neighborhood,
+              })
+            }
+          />
+        ) : (
+          <ActionButton
+            onPress={() => handleFavorite(id as string)}
+            icon={isFavorite ? 'bookmark-outline' : 'bookmark'}
+            text={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
+            textColor={isFavorite ? 'cyan-700' : 'white'}
+            iconColor={isFavorite ? '#0e7490' : 'white'}
+            backgroundColor={isFavorite ? 'white' : 'cyan-700' || '#0e7490'}
+          />
+        )}
       </StyledView>
     </StyledScrollView>
   )

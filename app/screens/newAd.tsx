@@ -22,10 +22,13 @@ import {
   defaultOfficeTypes,
   defaultServiceTypes,
 } from '../constants'
+import { useUser } from '../context/UserContext'
 
 export function NewAd() {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
+  const { user } = useUser()
+
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
@@ -37,6 +40,7 @@ export function NewAd() {
     setAd((ad: IAdProps) => ({
       ...ad,
       id: uuid.v4(),
+      user_id: user?.id as string,
       city: address.city,
       state: address.state,
       street: address.street,
@@ -128,6 +132,12 @@ export function NewAd() {
               text='Nome'
               onChangeText={(text) => handleInputChange('name', text)}
             />
+            <InputText
+              text='ID do usuário'
+              editable={false}
+              defaultValue={user.id as string}
+            />
+
             <InputText
               text='Cargo'
               onChangeText={(text) => handleInputChange('office', text)}

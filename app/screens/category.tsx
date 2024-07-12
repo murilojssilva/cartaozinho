@@ -82,6 +82,7 @@ export function Category() {
               )}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  user_id={item.user_id}
                   id={item.id as string}
                   phone={item.phone}
                   whatsapp={item.whatsapp}

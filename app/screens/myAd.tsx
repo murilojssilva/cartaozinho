@@ -28,6 +28,7 @@ export function MyAd() {
     name,
     email,
     id,
+    user_id,
     office,
     officeTypes,
     categories,
@@ -299,6 +300,7 @@ export function MyAd() {
               onPress={() =>
                 navigation.navigate('EditAd', {
                   id: id,
+                  user_id: user_id,
                   name: name,
                   office: office,
                   categories: categories,

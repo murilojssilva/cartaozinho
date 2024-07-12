@@ -8,7 +8,9 @@ export async function adRemoveAll() {
   try {
     const storedAds = await adsGetAll()
 
-    if (storedAds.length === 0) {
+    const userAds = storedAds.filter((ad) => ad.userId === userId)
+
+    if (userAds.length === 0) {
       Toast.show({
         type: 'error',
         text1: `Nenhum anúncio encontrado para remover`,
@@ -17,7 +19,7 @@ export async function adRemoveAll() {
       return
     }
 
-    const updatedAds: [] = []
+    const updatedAds = storedAds.filter((ad) => ad.userId !== userId)
     const storage = JSON.stringify(updatedAds)
 
     await AsyncStorage.setItem(AD_COLLECTION, storage)

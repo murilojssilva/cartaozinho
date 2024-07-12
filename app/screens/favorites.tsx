@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react'
+import { useState, useLayoutEffect, useCallback } from 'react'
 import { StyledFlatList, StyledView } from '../styled'
 import { IAdProps } from '../interfaces/IAdProps'
 import { useFilters } from '@/hooks/useFilters'

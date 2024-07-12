@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { View, StyleSheet, Linking } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import axios from 'axios'

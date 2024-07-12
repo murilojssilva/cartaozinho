@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { StyledText, StyledView } from '@/app/styled'
 import { Feather } from '@expo/vector-icons'
 
@@ -17,7 +17,7 @@ export function FloatingAlert({
     if (visible) {
       const timer = setTimeout(() => {
         setVisible(false)
-      }, 30000000) // Mostra o alerta por 3 segundos
+      }, 30000000)
 
       return () => clearTimeout(timer)
     }

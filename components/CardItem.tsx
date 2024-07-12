@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { SocialButton } from './SocialButton'
 import { Tag } from './Tag'

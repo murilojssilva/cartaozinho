@@ -2,7 +2,6 @@ import { ActionButton } from '@/components/ActionButton'
 import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { Title } from '@/components/Title'
-import { useNavigation } from 'expo-router'
 import { Platform } from 'react-native'
 import {
   StyledKeyboardAvoidingView,

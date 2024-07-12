@@ -1,11 +1,5 @@
-import { IAdProps } from '@/app/interfaces/IAdProps'
-import { adRemove } from '@/app/storage/ad/adRemove'
-import { adsGetAll } from '@/app/storage/ad/AdsGetAll'
 import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useFocusEffect } from 'expo-router'
-import { useCallback, useState } from 'react'
-import Toast from 'react-native-toast-message'
 
 import { Alert, TouchableOpacityProps } from 'react-native'
 import { useAds } from '@/hooks/useAds'

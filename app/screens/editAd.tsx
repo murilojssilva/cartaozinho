@@ -150,7 +150,6 @@ export function EditAd() {
       }
 
       await adEdit(updatedAd)
-      console.log(updatedAd)
 
       Toast.show({
         type: 'success',

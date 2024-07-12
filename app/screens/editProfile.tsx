@@ -2,40 +2,30 @@ import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
 import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButton'
-import { useState } from 'react'
 import { Platform } from 'react-native'
 
-import { useNavigation } from 'expo-router'
 import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
   StyledText,
   StyledView,
 } from '../styled'
-import Toast from 'react-native-toast-message'
+import { useUser } from '../context/UserContext'
+import { useAuthForm } from '@/hooks/useAuthForm'
+import { useState } from 'react'
+import { TextInputMask } from 'react-native-masked-text'
 
 export function EditProfile() {
-  const [isLoading, setIsLoading] = useState(false)
-  const navigation = useNavigation()
+  const { user } = useUser()
 
-  function handleEditProfile() {
-    try {
-      setIsLoading(true)
-      Toast.show({
-        type: 'success',
-        text1: 'Perfil editado com sucesso.',
-      })
-      navigation.navigate('Profile')
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Erro ao editar perfil.',
-        text2: error as string,
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const { formValues, handleChange, handleEditProfile, isLoading } =
+    useAuthForm({
+      name: user?.name as string,
+      lastName: user?.lastName as string,
+      phone: user?.phone as string,
+      email: user?.email as string,
+    })
+
   return (
     <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -49,30 +39,37 @@ export function EditProfile() {
             Informações de perfil
           </StyledText>
           <StyledView className='gap-2'>
-            <InputText text='Nome' placeholder='Nome' />
             <InputText
-              text='Descrição'
-              numberOfLines={3}
-              multiline={true}
-              textAlignVertical='top'
-              placeholder='Descrição'
+              text='Nome'
+              value={formValues.name}
+              onChangeText={(text) => handleChange('name', text)}
             />
-          </StyledView>
+            <InputText
+              text='Sobrenome'
+              value={formValues.lastName}
+              onChangeText={(text) => handleChange('lastName', text)}
+            />
 
-          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
-          <StyledView className='gap-2'>
-            <InputText
-              text='Telefone'
-              keyboardType='numeric'
-              placeholder='(21)9999-9999'
+            <TextInputMask
+              placeholder='(00) 0000-0000'
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) ',
+              }}
+              keyboardType='phone-pad'
+              value={formValues.phone}
+              onChangeText={(text) => handleChange('phone', text)}
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
+
             <InputText
-              text='WhatsApp'
-              keyboardType='numeric'
-              placeholder='(21)9999-9999'
+              text='E-mail'
+              value={formValues.email}
+              onChangeText={(text) => handleChange('email', text)}
+              keyboardType='email-address'
             />
-            <InputText text='Instagram' placeholder='@meu_instagram' />
-            <InputText text='E-mail' placeholder='email@email.com' />
           </StyledView>
         </StyledView>
       </StyledScrollView>

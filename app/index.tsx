@@ -1,8 +1,8 @@
+import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
 import 'react-native-reanimated'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import Routes from './routes'
@@ -10,6 +10,7 @@ import { StatusBar } from 'react-native'
 import DarkTheme from './themes/DarkTheme'
 import DefaultTheme from './themes/DefaultTheme'
 import Toast from 'react-native-toast-message'
+import { UserProvider } from './context/UserContext'
 
 export default function App() {
   const colorScheme = useColorScheme()
@@ -30,13 +31,15 @@ export default function App() {
   return (
     <NavigationContainer independent>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <StatusBar
-          barStyle='light-content'
-          backgroundColor='transparent'
-          translucent
-        />
-        <Routes />
-        <Toast position='top' topOffset={40} />
+        <UserProvider>
+          <StatusBar
+            barStyle='light-content'
+            backgroundColor='transparent'
+            translucent
+          />
+          <Routes />
+          <Toast position='top' topOffset={40} />
+        </UserProvider>
       </ThemeProvider>
     </NavigationContainer>
   )

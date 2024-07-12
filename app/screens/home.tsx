@@ -1,6 +1,6 @@
 import { useNavigation } from 'expo-router'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
 
 import {
@@ -30,6 +30,7 @@ import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
 import { RefreshControl } from 'react-native'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { useAds } from '@/hooks/useAds'
+import { UserContext, useUser } from '../context/UserContext'
 
 export function Home() {
   const navigation = useNavigation()

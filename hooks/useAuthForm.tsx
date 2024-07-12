@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useNavigation } from 'expo-router'
 import Toast from 'react-native-toast-message'
+import { userCreate } from '@/app/storage/user/userCreate'
+import uuid from 'react-native-uuid'
+import { usersGetAll } from '@/app/storage/user/usersGetAll'
+import { useUser } from '@/app/context/UserContext'
 
 interface AuthForm {
   email: string
@@ -14,19 +18,38 @@ interface SignUpForm extends AuthForm {
   confirmPassword: string
 }
 
-export function useAuthForm(initialValues: AuthForm | SignUpForm) {
+interface EditProfileForm {
+  name: string
+  lastName: string
+  phone: string
+}
+
+interface EditPasswordForm {
+  currentPassword: string
+  newPassword: string
+  confirmNewPassword: string
+}
+
+export function useAuthForm(
+  initialValues: AuthForm | SignUpForm | EditProfileForm | EditPasswordForm
+) {
   const [formValues, setFormValues] = useState(initialValues)
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
+  const { user, setUser } = useUser()
 
   const handleChange = (
-    name: keyof AuthForm | keyof SignUpForm,
+    name:
+      | keyof AuthForm
+      | keyof SignUpForm
+      | keyof EditProfileForm
+      | keyof EditPasswordForm,
     value: string
   ) => {
     setFormValues((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const { email, password } = formValues as AuthForm
     if (!email || !password) {
       Toast.show({
@@ -40,6 +63,16 @@ export function useAuthForm(initialValues: AuthForm | SignUpForm) {
     setIsLoading(true)
 
     try {
+      const users = await usersGetAll()
+      const user = users.find(
+        (user) => user.email === email && user.password === password
+      )
+
+      if (!user) {
+        throw new Error('Usuário não encontrado ou senha incorreta.')
+      }
+      setUser(user)
+
       Toast.show({
         text1: 'Login realizado com sucesso',
         onShow: () => navigation.navigate('App', { screen: 'Home' }),
@@ -48,7 +81,7 @@ export function useAuthForm(initialValues: AuthForm | SignUpForm) {
       Toast.show({
         type: 'error',
         text1: 'Erro ao fazer login',
-        text2: error.message,
+        text2: error instanceof Error ? error.message : 'Erro desconhecido.',
       })
     } finally {
       setIsLoading(false)
@@ -87,6 +120,7 @@ export function useAuthForm(initialValues: AuthForm | SignUpForm) {
     setIsLoading(true)
 
     try {
+      userCreate({ id: uuid.v4(), name, phone, lastName, email, password })
       Toast.show({
         text1: 'Conta criada com sucesso!',
         text2: 'Sua conta foi criada com sucesso.',
@@ -96,7 +130,115 @@ export function useAuthForm(initialValues: AuthForm | SignUpForm) {
       Toast.show({
         type: 'error',
         text1: 'Erro ao criar conta',
-        text2: error.message,
+        text2: error as string,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  function handleLogout() {
+    try {
+      setIsLoading(true)
+      setUser(null)
+      Toast.show({
+        type: 'success',
+        text1: 'Usuário deslogado com sucesso.',
+        onShow: () => navigation.navigate('Auth', { screen: 'Login' }),
+      })
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao criar conta',
+        text2: error as string,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEditProfile = async () => {
+    const { name, lastName, phone } = formValues as EditProfileForm
+    if (!name || !lastName || !phone) {
+      Toast.show({
+        type: 'info',
+        text1: 'Erro ao editar perfil',
+        text2: 'Por favor, preencha todos os campos.',
+      })
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const updatedUser = { ...user, name, lastName, phone }
+      // Atualizar o usuário no banco de dados
+      await userCreate(updatedUser)
+      setUser(updatedUser)
+
+      Toast.show({
+        text1: 'Perfil editado com sucesso!',
+      })
+      navigation.navigate('Profile')
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao editar perfil',
+        text2: error instanceof Error ? error.message : 'Erro desconhecido.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEditPassword = async () => {
+    const { currentPassword, newPassword, confirmNewPassword } =
+      formValues as EditPasswordForm
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      Toast.show({
+        type: 'info',
+        text1: 'Erro ao editar senha',
+        text2: 'Por favor, preencha todos os campos.',
+      })
+      return
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      Toast.show({
+        type: 'info',
+        text1: 'Senhas não coincidem',
+        text2: 'A nova senha e a confirmação não são iguais.',
+      })
+      return
+    }
+
+    if (currentPassword !== user.password) {
+      Toast.show({
+        type: 'info',
+        text1: 'Senha atual incorreta',
+        text2: 'A senha atual fornecida está incorreta.',
+      })
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const updatedUser = { ...user, password: newPassword }
+      // Atualizar o usuário no banco de dados
+      await userCreate(updatedUser)
+      setUser(updatedUser)
+
+      Toast.show({
+        text1: 'Senha editada com sucesso!',
+      })
+      navigation.navigate('Profile')
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao editar senha',
+        text2: error instanceof Error ? error.message : 'Erro desconhecido.',
       })
     } finally {
       setIsLoading(false)
@@ -109,5 +251,8 @@ export function useAuthForm(initialValues: AuthForm | SignUpForm) {
     handleChange,
     handleLogin,
     handleSignUp,
+    handleLogout,
+    handleEditProfile,
+    handleEditPassword,
   }
 }

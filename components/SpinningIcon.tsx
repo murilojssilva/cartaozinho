@@ -1,6 +1,5 @@
-import React from 'react'
 import { Animated } from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons' // Certifique-se de ter expo/vector-icons instalado
+import { FontAwesome5 } from '@expo/vector-icons'
 import { useSpinAnimation } from '@/hooks/useSpinAnimation'
 
 export function SpinningIcon({

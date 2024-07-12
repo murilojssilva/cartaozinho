@@ -1,10 +1,11 @@
-import { useState } from 'react'
 import { Platform } from 'react-native'
 import { ActionButton } from '@/components/ActionButton'
 import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { useNavigation } from 'expo-router'
+import logo from '@/assets/images/cartaozinho-logo.png'
 import {
+  StyledImage,
   StyledKeyboardAvoidingView,
   StyledScrollView,
   StyledText,
@@ -28,6 +29,10 @@ export function Login() {
       <TabHeader text='Cartãozinho' icon='home' />
       <StyledScrollView className='p-4  flex-grow'>
         <StyledView className=' flex-col p-4 gap-2'>
+          <StyledImage
+            source={logo}
+            className='flex-2 flex-row self-center h-32 w-32'
+          />
           <StyledText className='font-bold text-xl'>
             Acesse sua conta
           </StyledText>
@@ -54,7 +59,7 @@ export function Login() {
             text='Criar conta'
             icon='log-in-outline'
             iconColor='black'
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={() => navigation.navigate('SignUp' as never)}
           />
         </StyledView>
         <StyledView className='p-4'>

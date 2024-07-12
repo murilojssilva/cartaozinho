@@ -6,8 +6,7 @@ import { SkeletonText } from '@/components/Skeletons/SkeletonText'
 import { TabHeader } from '@/components/TabHeader'
 import { Title } from '@/components/Title'
 import { Topic } from '@/components/Topic'
-import { useNavigation } from 'expo-router'
-import { useState } from 'react'
+import { useFocusEffect, useNavigation } from 'expo-router'
 import { Linking } from 'react-native'
 
 import { StyledFlatList, StyledTouchableOpacity, StyledView } from '../styled'
@@ -15,11 +14,17 @@ import { IAdProps } from '../interfaces/IAdProps'
 import { EmptyList } from '@/components/EmptyList'
 import { Ionicons } from '@expo/vector-icons'
 import { useAds } from '@/hooks/useAds'
+import { useUser } from '../context/UserContext'
+import { useAuthForm } from '@/hooks/useAuthForm'
 
 export function Profile() {
   const navigation = useNavigation()
-
   const { allAds, handleAdRemoveAll, isLoadingAllAds } = useAds()
+  const { user } = useUser()
+  const { handleLogout } = useAuthForm({
+    email: '',
+    password: '',
+  })
 
   return (
     <StyledView className='flex-1 bg-white'>
@@ -28,7 +33,7 @@ export function Profile() {
         icon='user'
         iconAction='logout'
         iconActionColor='red'
-        onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
+        onPress={handleLogout}
       />
 
       <StyledView className='flex-2 flex-col'>
@@ -38,16 +43,21 @@ export function Profile() {
             {isLoadingAllAds ? (
               <SkeletonText />
             ) : (
-              <Topic icon='user' name='Nome' content='Murilo' />
+              <Topic
+                icon='user'
+                name='Nome'
+                content={`${user?.name} ${user?.lastName}` || 'Nome completo'}
+              />
             )}
+
             {isLoadingAllAds ? (
               <SkeletonText />
             ) : (
               <Topic
                 icon='phone'
                 name='Telefone'
-                content='(21) 99999-9999'
-                onPress={() => Linking.openURL('tel:+5521992687311')}
+                content={user?.phone || '(00) 0000-0000'}
+                onPress={() => Linking.openURL(`tel:${user?.phone}`)}
               />
             )}
             {isLoadingAllAds ? (
@@ -56,10 +66,8 @@ export function Profile() {
               <Topic
                 icon='envelope'
                 name='E-mail'
-                content='email@email.com'
-                onPress={() =>
-                  Linking.openURL('mailto:murilojssilva@outlook.com')
-                }
+                content={user?.email || 'email@example.com'}
+                onPress={() => Linking.openURL(`mailto:${user?.email}`)}
               />
             )}
           </StyledView>

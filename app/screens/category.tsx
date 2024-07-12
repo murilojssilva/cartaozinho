@@ -35,7 +35,6 @@ export function Category() {
   const navigation = useNavigation()
 
   const { allAds, isLoadingAds } = useAds()
-  console.log(allAds)
 
   function fetchFilterMenu() {
     setFilterMenuVisible(true)

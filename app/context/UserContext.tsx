@@ -21,9 +21,15 @@ export const UserProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const loadUser = async () => {
-      const storedUser = await AsyncStorage.getItem('user')
-      if (storedUser) {
-        setUserState(JSON.parse(storedUser))
+      try {
+        const storedUser = await AsyncStorage.getItem('user')
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser)
+          console.log('User loaded from AsyncStorage:', parsedUser)
+          setUserState(parsedUser)
+        }
+      } catch (error) {
+        console.error('Failed to load user from storage', error)
       }
     }
     loadUser()
@@ -33,8 +39,10 @@ export const UserProvider: React.FC = ({ children }) => {
     setUserState(newUser)
     if (newUser) {
       await AsyncStorage.setItem('user', JSON.stringify(newUser))
+      console.log('User saved to AsyncStorage:', newUser)
     } else {
       await AsyncStorage.removeItem('user')
+      console.log('User removed from AsyncStorage')
     }
   }
 

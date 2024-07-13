@@ -11,7 +11,7 @@ export default function Routes() {
 
   return (
     <Navigator
-      initialRouteName={signed ? 'App' : 'Auth'}
+      initialRouteName={signed ? 'Auth' : 'App'}
       screenOptions={{ headerShown: false }}
     >
       <Screen name='Auth' component={AuthRoutes} />

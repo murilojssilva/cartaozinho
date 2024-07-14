@@ -88,6 +88,16 @@ export function Details() {
               icon='id-card'
               title='Usuário'
               text={userAd.nickname || 'Não disponível'}
+              onPress={() =>
+                navigation.navigate('UserProfile', {
+                  id: userAd.id,
+                  nickname: userAd.nickname,
+                  name: userAd.name,
+                  lastName: userAd.lastName,
+                  phone: userAd.phone,
+                  email: userAd.email,
+                })
+              }
             />
           )}
           {isLoadingAd ? (

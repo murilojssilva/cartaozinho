@@ -60,8 +60,8 @@ export const useAds = () => {
     serviceTypes: selectedServiceTypes,
     categories: selectedCategories,
     address: newAddress,
-    created_at: '',
-    updated_at: '',
+    created_at: 0,
+    updated_at: 0,
   })
   const [allAds, setAllAds] = useState<IAdProps[]>([])
   const [myAds, setMyAds] = useState<IAdProps[]>([])

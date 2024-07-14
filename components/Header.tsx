@@ -11,7 +11,7 @@ export function Header({ title, icon }: IHeaderProps) {
   const navigation = useNavigation()
 
   return (
-    <StyledView className='flex-2 flex-row justify-between items-center bg-gray-100 p-8 rounded-xl'>
+    <StyledView className='flex-2 flex-row justify-between items-center bg-gray-100 p-8 '>
       <StyledTouchableOpacity onPress={() => navigation.goBack()}>
         <FontAwesome5 name='chevron-left' size={22} color='black' />
       </StyledTouchableOpacity>

@@ -107,7 +107,6 @@ export function Home() {
   useFocusEffect(
     useCallback(() => {
       fetchAds(selectedCity)
-      console.log(filters)
     }, [selectedCity, filters])
   )
 

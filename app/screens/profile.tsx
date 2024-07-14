@@ -10,8 +10,7 @@ import { useNavigation } from 'expo-router'
 import { Linking } from 'react-native'
 
 import { StyledFlatList, StyledTouchableOpacity, StyledView } from '../styled'
-import { IAdProps } from '../interfaces/IAdProps'
-import { EmptyList } from '@/components/EmptyList'
+
 import { Ionicons } from '@expo/vector-icons'
 import { useAds } from '@/hooks/useAds'
 import { useUser } from '../context/UserContext'

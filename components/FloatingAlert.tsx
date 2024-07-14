@@ -30,7 +30,7 @@ export function FloatingAlert({
   return (
     <StyledView
       className='absolute top-4 left-4 right-4 z-50 flex-2 flex-row bg-yellow-700 p-2 items-center justify-around rounded-xl'
-      style={{ elevation: 5 }} // Para sombras em Android
+      style={{ elevation: 5 }}
     >
       <Feather name='alert-triangle' size={26} color='white' />
       <StyledText className='font-bold text-lg ml-2'>{message}</StyledText>

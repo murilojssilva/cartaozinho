@@ -82,17 +82,11 @@ export function Category() {
               )}
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  description={item.description}
                   user_id={item.user_id}
                   id={item.id as string}
                   name={item.name}
-                  contact={
-                    item.contact as {
-                      phone: string
-                      email: string
-                      whatsapp: string
-                      instagram: string
-                    }
-                  }
+                  contact={item.contact}
                   address={
                     item.address as {
                       cep: string
@@ -105,7 +99,6 @@ export function Category() {
                     }
                   }
                   office={item.office}
-                  description={item.description}
                   officeTypes={item.officeTypes}
                   serviceTypes={item.serviceTypes}
                   categories={item.categories}

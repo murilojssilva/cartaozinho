@@ -24,8 +24,8 @@ export interface IAdProps {
     state: string
     complement: string
   }
-  created_at: string
-  updated_at: string
+  created_at: number
+  updated_at: number
 }
 
 export interface ICardItemProps extends TouchableOpacityProps {
@@ -52,6 +52,6 @@ export interface ICardItemProps extends TouchableOpacityProps {
     state: string
     complement: string
   }
-  created_at: string
-  updated_at: string
+  created_at: number
+  updated_at: number
 }

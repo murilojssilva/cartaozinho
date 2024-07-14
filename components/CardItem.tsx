@@ -109,7 +109,7 @@ export function CardItem({
         keyExtractor={(item, index) => index.toString()}
       />
       <StyledView className='flex-1 flex-row'>
-        {contact.phone && (
+        {contact?.phone && (
           <SocialButton
             text='Telefone'
             backgroundColor='gray-300'
@@ -118,7 +118,7 @@ export function CardItem({
             onPress={() => Linking.openURL(`tel:${contact.phone}`)}
           />
         )}
-        {contact.whatsapp && (
+        {contact?.whatsapp && (
           <SocialButton
             text='WhatsApp'
             backgroundColor='gray-300'
@@ -129,7 +129,7 @@ export function CardItem({
             }
           />
         )}
-        {contact.instagram && (
+        {contact?.instagram && (
           <SocialButton
             text='Instagram'
             backgroundColor='gray-300'
@@ -140,7 +140,7 @@ export function CardItem({
             }
           />
         )}
-        {contact.email && (
+        {contact?.email && (
           <SocialButton
             text='E-mail'
             backgroundColor='gray-300'

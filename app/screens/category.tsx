@@ -84,35 +84,47 @@ export function Category() {
                 <CardItem
                   user_id={item.user_id}
                   id={item.id as string}
-                  phone={item.phone}
-                  whatsapp={item.whatsapp}
-                  instagram={item.instagram}
-                  email={item.email}
                   name={item.name}
+                  contact={
+                    item.contact as {
+                      phone: string
+                      email: string
+                      whatsapp: string
+                      instagram: string
+                    }
+                  }
+                  address={
+                    item.address as {
+                      cep: string
+                      street: string
+                      number: string
+                      neighborhood: string
+                      city: string
+                      state: string
+                      complement: string
+                    }
+                  }
                   office={item.office}
+                  description={item.description}
                   officeTypes={item.officeTypes}
                   serviceTypes={item.serviceTypes}
                   categories={item.categories}
+                  created_at={item.created_at}
+                  updated_at={item.updated_at}
                   onPress={() =>
                     navigation.navigate('CategoryDetails', {
                       name: item.name,
-                      email: item.email,
                       id: item.id,
+                      user_id: item.user_id,
                       office: item.office,
                       officeTypes: item.officeTypes,
                       categories: item.categories,
                       description: item.description,
                       serviceTypes: item.serviceTypes,
-                      phone: item.phone,
-                      whatsapp: item.whatsapp,
-                      instagram: item.instagram,
-                      cep: item.cep,
-                      street: item.street,
-                      number: item.number,
-                      neighborhood: item.neighborhood,
-                      city: item.city,
-                      state: item.state,
-                      complement: item.complement,
+                      contact: item.contact,
+                      address: item.address,
+                      created_at: item.created_at,
+                      updated_at: item.updated_at,
                     })
                   }
                 />

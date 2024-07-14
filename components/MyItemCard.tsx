@@ -1,6 +1,5 @@
 import { StyledText, StyledTouchableOpacity, StyledView } from '@/app/styled'
 import Ionicons from '@expo/vector-icons/Ionicons'
-
 import { Alert, TouchableOpacityProps } from 'react-native'
 import { useAds } from '@/hooks/useAds'
 
@@ -15,13 +14,13 @@ export function MyItemCard({ name, office, id, ...props }: ICardItemProps) {
 
   return (
     <StyledTouchableOpacity
-      {...props}
       className='flex-2 flex-col bg-gray-200 p-2 border-2 mx-2 border-gray-300 rounded-xl'
+      {...props}
     >
       <StyledView className='flex-2 items-center justify-center p-4 rounded-xl'>
         <Ionicons name='person' size={24} color='gray-300' />
       </StyledView>
-      <StyledView className='flex-1 flex-col'>
+      <StyledView className='flex-2 flex-col'>
         <StyledText className='text-center font-bold text-xl'>
           {name}
         </StyledText>
@@ -48,7 +47,7 @@ export function MyItemCard({ name, office, id, ...props }: ICardItemProps) {
         <Ionicons name='trash' size={24} color='red' />
         <StyledText className='text-lg font-bold text-red-500'>
           {' '}
-          {'Remover'}
+          Remover
         </StyledText>
       </StyledTouchableOpacity>
     </StyledTouchableOpacity>

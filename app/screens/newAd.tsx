@@ -12,10 +12,9 @@ import {
   StyledScrollView,
   StyledText,
   StyledView,
+  StyledTextInputMask,
 } from '../styled'
-import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
-import { adCreate } from '../storage/ad/adCreate'
 import { IAdProps } from '../interfaces/IAdProps'
 import {
   defaultCategories,
@@ -23,36 +22,40 @@ import {
   defaultServiceTypes,
 } from '../constants'
 import { useUser } from '../context/UserContext'
+import { useAds } from '@/hooks/useAds'
 
 export function NewAd() {
-  const navigation = useNavigation()
-  const [isLoading, setIsLoading] = useState(false)
   const { user } = useUser()
 
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [ad, setAd] = useState<IAdProps>({} as IAdProps)
 
-  const { address, setAddress, handleCepChange } = useGetAddress()
+  const { newAddress, setNewAddress, handleCepChange } = useGetAddress()
+
+  const {
+    ad,
+    setAd,
+    handleInputChange,
+    handleAddressChange,
+    handleContactChange,
+    isLoadingAd,
+    handleNewAd,
+  } = useAds()
 
   useEffect(() => {
     setAd((ad: IAdProps) => ({
       ...ad,
+      created_at: Date.now().toString(),
+      updated_at: Date.now().toString(),
       id: uuid.v4(),
       user_id: user?.id as string,
-      city: address.city,
-      state: address.state,
-      street: address.street,
-      neighborhood: address.neighborhood,
-      complement: address.complement,
-      number: address.number,
-      cep: address.cep,
+      address: newAddress,
       officeTypes: selectedOfficeTypes,
       categories: selectedCategories,
       serviceTypes: selectedServices,
     }))
-  }, [address, selectedOfficeTypes, selectedCategories, selectedServices])
+  }, [newAddress, selectedOfficeTypes, selectedCategories, selectedServices])
 
   const handleServiceToggle = (service: string) => {
     setSelectedServices((prevSelectedServices) => {
@@ -96,22 +99,6 @@ export function NewAd() {
     return selectedCategories.includes(category)
   }
 
-  async function handleNewAd() {
-    setIsLoading(true)
-    try {
-      await adCreate(ad)
-      navigation.navigate('Home')
-    } catch (error) {
-      throw error
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleInputChange = (field: keyof IAdProps, value: string) => {
-    setAd({ ...ad, [field]: value })
-  }
-
   return (
     <StyledKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -135,7 +122,7 @@ export function NewAd() {
             <InputText
               text='ID do usuário'
               editable={false}
-              defaultValue={user.id as string}
+              defaultValue={user?.id as string}
             />
 
             <InputText
@@ -211,25 +198,25 @@ export function NewAd() {
 
           <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
           <StyledView className='gap-2'>
-            <TextInputMask
+            <StyledTextInputMask
               placeholder='(00) 0000-0000'
               type={'cel-phone'}
               keyboardType='phone-pad'
-              onChangeText={(text) => handleInputChange('phone', text)}
+              onChangeText={(text) => handleContactChange('phone', text)}
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <TextInputMask
+            <StyledTextInputMask
               placeholder='(00) 00000-0000'
               type={'cel-phone'}
               keyboardType='numeric'
-              onChangeText={(text) => handleInputChange('whatsapp', text)}
+              onChangeText={(text) => handleContactChange('whatsapp', text)}
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
             <InputText
               text='Instagram'
               autoCapitalize='none'
               onChangeText={(text) =>
-                handleInputChange(
+                handleContactChange(
                   'instagram',
                   text.replace(/\s/g, '').toLowerCase()
                 )
@@ -238,7 +225,13 @@ export function NewAd() {
             <InputText
               text='E-mail'
               keyboardType='email-address'
-              onChangeText={(text) => handleInputChange('email', text)}
+              autoCapitalize='none'
+              onChangeText={(text) =>
+                handleContactChange(
+                  'email',
+                  text.replace(/\s/g, '').toLowerCase()
+                )
+              }
             />
           </StyledView>
 
@@ -246,57 +239,59 @@ export function NewAd() {
             Localização
           </StyledText>
           <StyledView className='gap-2 mb-4'>
-            <TextInputMask
+            <StyledTextInputMask
               type={'zip-code'}
-              value={address.cep}
+              value={newAddress.cep}
               onChangeText={(text) => handleCepChange(text)}
               placeholder='CEP'
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <InputText text='Rua' value={address.street} editable={false} />
+            <InputText text='Rua' value={newAddress.street} editable={false} />
             <InputText
               text='Número'
               keyboardType='numeric'
-              value={address.number}
-              onChangeText={(text) => setAddress({ ...address, number: text })}
+              value={newAddress.number}
+              onChangeText={(text) =>
+                setNewAddress({ ...newAddress, number: text })
+              }
             />
             <InputText
               text='Complemento'
-              value={address.complement}
+              value={newAddress.complement}
               onChangeText={(text) =>
-                setAddress({ ...address, complement: text })
+                setNewAddress({ ...newAddress, complement: text })
               }
             />
             <InputText
               text='Bairro'
-              value={address.neighborhood}
+              value={newAddress.neighborhood}
               editable={false}
-              onChangeText={(text) => handleInputChange('neighborhood', text)}
+              onChangeText={(text) => handleAddressChange('neighborhood', text)}
             />
             <InputText
               text='Cidade'
-              onChangeText={(text) => handleInputChange('city', text)}
-              value={address.city}
+              onChangeText={(text) => handleAddressChange('city', text)}
+              value={newAddress.city}
               editable={false}
             />
             <InputText
               text='Estado'
-              onChangeText={(text) => handleInputChange('state', text)}
-              value={address.state}
+              onChangeText={(text) => handleAddressChange('state', text)}
+              value={newAddress.state}
               editable={false}
             />
           </StyledView>
         </StyledView>
       </StyledScrollView>
       <StyledView className='p-4'>
-        {isLoading ? (
+        {isLoadingAd ? (
           <SpinnerButton />
         ) : (
           <ActionButton
             iconColor='white'
             backgroundColor='cyan-700'
             textColor='white'
-            onPress={() => handleNewAd()}
+            onPress={handleNewAd}
             text='Anunciar'
             icon='id-card'
           />

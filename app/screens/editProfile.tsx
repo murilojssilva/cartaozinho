@@ -8,12 +8,11 @@ import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
   StyledText,
+  StyledTextInputMask,
   StyledView,
 } from '../styled'
 import { useUser } from '../context/UserContext'
 import { useAuthForm } from '@/hooks/useAuthForm'
-import { useState } from 'react'
-import { TextInputMask } from 'react-native-masked-text'
 
 export function EditProfile() {
   const { user } = useUser()
@@ -22,6 +21,7 @@ export function EditProfile() {
     useAuthForm({
       name: user?.name as string,
       lastName: user?.lastName as string,
+      nickname: user?.nickname as string,
       phone: user?.phone as string,
       email: user?.email as string,
     })
@@ -49,8 +49,14 @@ export function EditProfile() {
               value={formValues.lastName}
               onChangeText={(text) => handleChange('lastName', text)}
             />
+            <InputText
+              text='Nome de usuário'
+              value={formValues.nickname}
+              editable={false}
+              onChangeText={(text) => handleChange('nickname', text)}
+            />
 
-            <TextInputMask
+            <StyledTextInputMask
               placeholder='(00) 0000-0000'
               type={'cel-phone'}
               options={{
@@ -67,7 +73,10 @@ export function EditProfile() {
             <InputText
               text='E-mail'
               value={formValues.email}
-              onChangeText={(text) => handleChange('email', text)}
+              autoCapitalize='none'
+              onChangeText={(text) =>
+                handleChange('email', text.replace(/\s/g, '').toLowerCase())
+              }
               keyboardType='email-address'
             />
           </StyledView>

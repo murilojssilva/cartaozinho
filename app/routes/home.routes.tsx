@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Home } from '../screens/Home'
 import { Details } from '../screens/Details'
 import { NewAd } from '../screens/NewAd'
+import { EditAd } from '../screens/EditAd'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
@@ -11,6 +12,7 @@ export default function HomeNavigator() {
       <Screen name='Home' component={Home} />
       <Screen name='Details' component={Details} />
       <Screen name='NewAd' component={NewAd} />
+      <Screen name='EditAd' component={EditAd} />
     </Navigator>
   )
 }

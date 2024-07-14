@@ -12,7 +12,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { TextInputMask } from 'react-native-masked-text'
 
+export const StyledTextInputMask = styled(TextInputMask)
 export const StyledView = styled(View)
 export const StyledModal = styled(Modal)
 export const StyledSafeAreaView = styled(SafeAreaView)

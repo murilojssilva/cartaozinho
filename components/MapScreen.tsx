@@ -90,10 +90,7 @@ export function MapScreen({ cep, number }: IMapScreenProps) {
           })
         }
       } catch (error) {
-        Toast.show({
-          type: 'error',
-          text1: `Não foi possível obter as coordenadas.`,
-        })
+        console.log(error)
       }
     }
 

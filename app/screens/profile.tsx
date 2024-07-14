@@ -21,6 +21,7 @@ export function Profile() {
   const navigation = useNavigation()
   const { myAds, handleAdRemoveAll, isLoadingMyAds } = useAds()
   const { user } = useUser()
+
   const { handleLogout } = useAuthForm({
     email: '',
     password: '',
@@ -47,6 +48,15 @@ export function Profile() {
                 icon='user'
                 name='Nome'
                 content={`${user?.name} ${user?.lastName}` || 'Nome completo'}
+              />
+            )}
+            {isLoadingMyAds ? (
+              <SkeletonText />
+            ) : (
+              <Topic
+                icon='user'
+                name='Nome de usuário'
+                content={user?.nickname || 'Nome de usuário'}
               />
             )}
 
@@ -84,7 +94,7 @@ export function Profile() {
                 iconColor='white'
                 backgroundColor='cyan-700'
                 textColor='white'
-                onPress={() => navigation.navigate('EditProfile')}
+                onPress={() => navigation.navigate('EditProfile' as never)}
               />
               <ActionButton
                 backgroundColor='cyan-700'
@@ -92,7 +102,7 @@ export function Profile() {
                 iconColor='white'
                 text='Alterar senha'
                 icon='lock-open'
-                onPress={() => navigation.navigate('EditPassword')}
+                onPress={() => navigation.navigate('EditPassword' as never)}
               />
             </StyledView>
           )}
@@ -115,42 +125,36 @@ export function Profile() {
               </StyledView>
             ) : (
               <StyledFlatList
-                className='flex-2 my-2'
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 data={myAds}
-                renderItem={({ item }: { item: IAdProps }) => (
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({
+                  item,
+                }: {
+                  item: { name: string; office: string; id: string }
+                }) => (
                   <MyItemCard
                     name={item.name}
                     office={item.office}
-                    id={item.id as string}
+                    id={item.id}
                     onPress={() =>
                       navigation.navigate('MyAd', {
                         name: item.name,
-                        email: item.email,
-                        id: item.id,
                         office: item.office,
+                        id: item.id,
+                        contact: item.contact,
                         officeTypes: item.officeTypes,
                         categories: item.categories,
                         description: item.description,
                         serviceTypes: item.serviceTypes,
-                        phone: item.phone,
-                        whatsapp: item.whatsapp,
-                        instagram: item.instagram,
-                        cep: item.cep,
-                        street: item.street,
-                        number: item.number,
-                        neighborhood: item.neighborhood,
-                        city: item.city,
-                        state: item.state,
-                        complement: item.complement,
+                        address: item.address,
+                        created_at: item.created_at,
+                        updated_at: item.updated_at,
                       })
                     }
                   />
                 )}
-                ListEmptyComponent={
-                  <EmptyList onPress={() => navigation.navigate('NewAd')} />
-                }
               />
             )}
           </StyledView>

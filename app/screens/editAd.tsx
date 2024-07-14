@@ -5,166 +5,35 @@ import { SkeletonActionButton } from '@/components/Skeletons/SkeletonActionButto
 import { SkeletonInputText } from '@/components/Skeletons/SkeletonInputText'
 import { SkeletonTag } from '@/components/Skeletons/SkeletonTag'
 import { Tag } from '@/components/Tag'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
-import { useEffect, useState } from 'react'
+
 import { Platform } from 'react-native'
-import { TextInputMask } from 'react-native-masked-text'
 import useGetAddress from '@/hooks/useGetAddress'
-import {
-  defaultCategories,
-  defaultOfficeTypes,
-  defaultServiceTypes,
-} from '../constants'
+import { defaultCategories } from '../constants'
 import { useAds } from '@/hooks/useAds'
 import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
   StyledText,
+  StyledTextInputMask,
   StyledView,
 } from '../styled'
-import Toast from 'react-native-toast-message'
-import { adEdit } from '../storage/ad/adEdit'
-import { IAdProps } from '../interfaces/IAdProps'
 
 export function EditAd() {
-  const { isLoadingAllAds } = useAds()
-
   const {
-    id,
-    user_id,
-    cep,
-    street,
-    number,
-    complement,
-    neighborhood,
-    city,
-    state,
-    name,
-    office,
-    description,
-    phone,
-    whatsapp,
-    instagram,
-    email,
-    officeTypes: selectedOfficeTypesFromParams = defaultOfficeTypes,
-    serviceTypes: selectedServiceTypesFromParams = defaultServiceTypes,
-    categories: selectedCategoriesFromParams = defaultCategories,
-  } = useLocalSearchParams()
+    isLoadingAllAds,
+    handleContactChange,
+    editedAd,
+    setEditedAd,
+    handleSaveAd,
+    handleCategorySelected,
+    handleServiceTypesSelected,
+    handleOfficeTypesSelected,
+    selectedCategories,
+    selectedOfficeTypes,
+    selectedServiceTypes,
+  } = useAds()
 
-  const navigation = useNavigation()
-  const [selectedOfficeTypes, setSelectedOfficeTypes] = useState(
-    selectedOfficeTypesFromParams
-  )
-  const [selectedServiceTypes, setSelectedServiceTypes] = useState(
-    selectedServiceTypesFromParams
-  )
-  const [selectedCategories, setSelectedCategories] = useState(
-    selectedCategoriesFromParams
-  )
-
-  useEffect(() => {
-    setAddress({
-      cep,
-      street,
-      number,
-      complement,
-      neighborhood,
-      city,
-      state,
-    })
-  }, [])
-
-  const { address, setAddress, handleCepChange } = useGetAddress()
-
-  const [editedAd, setEditedAd] = useState<IAdProps>({
-    id,
-    user_id,
-    name: name,
-    office: office,
-    description: description,
-    phone: phone,
-    whatsapp: whatsapp,
-    instagram: instagram,
-    email: email,
-    complement: complement,
-    officeTypes: selectedOfficeTypes,
-    serviceTypes: selectedServiceTypes,
-    categories: selectedCategories,
-    cep: address.cep,
-    neighborhood: address.neighborhood,
-    street: address.street,
-    city: address.city,
-    state: address.state,
-    number: address.number,
-  } as IAdProps)
-
-  const handleOfficeTypesSelected = (tag) => {
-    setSelectedOfficeTypes((prevSelected) => {
-      if (prevSelected.includes(tag)) {
-        return prevSelected.filter((item) => item !== tag)
-      } else {
-        return [...prevSelected, tag]
-      }
-    })
-  }
-
-  const handleServiceTypesSelected = (serviceType) => {
-    setSelectedServiceTypes((prevSelected) => {
-      if (prevSelected.includes(serviceType)) {
-        return prevSelected.filter((item) => item !== serviceType)
-      } else {
-        return [...prevSelected, serviceType]
-      }
-    })
-  }
-
-  const handleCategorySelected = (category) => {
-    setSelectedCategories((prevSelected) => {
-      if (prevSelected.includes(category)) {
-        return prevSelected.filter((item) => item !== category)
-      } else {
-        return [...prevSelected, category]
-      }
-    })
-  }
-
-  const handleSave = async () => {
-    try {
-      const updatedAd = {
-        id,
-        name: name,
-        office: office,
-        description: description,
-        phone: phone,
-        whatsapp: whatsapp,
-        instagram: instagram,
-        email: email,
-        complement: address.complement,
-        officeTypes: selectedOfficeTypes,
-        serviceTypes: selectedServiceTypes,
-        categories: selectedCategories,
-        cep: address.cep,
-        neighborhood: address.neighborhood,
-        street: address.street,
-        city: address.city,
-        state: address.state,
-        number: address.number,
-      }
-
-      await adEdit(updatedAd)
-
-      Toast.show({
-        type: 'success',
-        text1: 'Anúncio editado com sucesso',
-        onShow: () => navigation.navigate('Profile'),
-      })
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Não foi possível editar o anúncio',
-      })
-    }
-  }
+  const { newAddress, handleCepChange } = useGetAddress()
 
   return (
     <StyledKeyboardAvoidingView
@@ -335,107 +204,110 @@ export function EditAd() {
               />
             </StyledScrollView>
           )}
-          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
-          <StyledView className='gap-2'>
-            {isLoadingAllAds ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText
-                text='Telefone'
-                keyboardType='numeric'
-                onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, phone: text })
-                }
-                defaultValue={editedAd.phone as string}
+          <StyledText className='font-bold text-xl my-4'>Endereço</StyledText>
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <StyledTextInputMask
+              value={newAddress?.cep}
+              onChangeText={handleCepChange}
+              type='zip-code'
+              keyboardType='number-pad'
+              placeholder='CEP'
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText value={newAddress?.street} editable={false} text='Rua' />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              value={newAddress?.neighborhood}
+              editable={false}
+              text='Bairro'
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              value={newAddress?.city}
+              editable={false}
+              text='Cidade'
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              value={newAddress?.state}
+              editable={false}
+              text='Estado'
+            />
+          )}
+          <StyledText className='font-bold text-xl my-4'>
+            Informações de contato
+          </StyledText>
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <StyledView className='gap-2'>
+              <StyledTextInputMask
+                placeholder='(00) 0000-0000'
+                type={'cel-phone'}
+                keyboardType='phone-pad'
+                onChangeText={(text) => handleContactChange('phone', text)}
+                className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
               />
-            )}
-            {isLoadingAllAds ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
-              <InputText
-                text='WhatsApp'
+              <StyledTextInputMask
+                placeholder='(00) 00000-0000'
+                type={'cel-phone'}
                 keyboardType='numeric'
-                onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, whatsapp: text })
-                }
-                defaultValue={editedAd.whatsapp as string}
+                onChangeText={(text) => handleContactChange('whatsapp', text)}
+                className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
               />
-            )}
-            {isLoadingAllAds ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
               <InputText
                 text='Instagram'
                 autoCapitalize='none'
                 onChangeText={(text) =>
-                  setEditedAd({
-                    ...editedAd,
-                    instagram: text.replace(/\s/g, '').toLowerCase(),
-                  })
+                  handleContactChange(
+                    'instagram',
+                    text.replace(/\s/g, '').toLowerCase()
+                  )
                 }
-                defaultValue={editedAd.instagram as string}
               />
-            )}
-            {isLoadingAllAds ? (
-              <SkeletonInputText inputSize={6} />
-            ) : (
               <InputText
                 text='E-mail'
+                keyboardType='email-address'
+                autoCapitalize='none'
                 onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, email: text })
+                  handleContactChange(
+                    'email',
+                    text.replace(/\s/g, '').toLowerCase()
+                  )
                 }
-                defaultValue={editedAd.email as string}
               />
-            )}
-          </StyledView>
-          <StyledText className='font-bold text-xl my-4'>
-            Localização
-          </StyledText>
-          <StyledView className='gap-2 mb-4'>
-            <TextInputMask
-              type={'zip-code'}
-              value={address.cep}
-              onChangeText={(text) => handleCepChange(text)}
-              placeholder='CEP'
-              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            </StyledView>
+          )}
+        </StyledView>
+        <StyledView className='flex-1 flex-col gap-2 mt-4'>
+          {isLoadingAllAds ? (
+            <SkeletonActionButton />
+          ) : (
+            <ActionButton
+              iconColor='white'
+              backgroundColor='cyan-700'
+              textColor='white'
+              text='Salvar'
+              onPress={handleSaveAd}
+              icon='save'
             />
-            <InputText text='Rua' value={address.street} editable={false} />
-            <InputText
-              text='Número'
-              value={address.number}
-              onChangeText={(text) => setAddress({ ...address, number: text })}
-            />
-            <InputText
-              text='Complemento'
-              value={address.complement}
-              onChangeText={(text) =>
-                setAddress({ ...address, complement: text })
-              }
-            />
-            <InputText
-              text='Bairro'
-              value={address.neighborhood}
-              editable={false}
-            />
-            <InputText text='Cidade' value={address.city} editable={false} />
-            <InputText text='Estado' value={address.state} editable={false} />
-          </StyledView>
+          )}
         </StyledView>
       </StyledScrollView>
-      <StyledView className='p-4'>
-        {isLoadingAllAds ? (
-          <SkeletonActionButton />
-        ) : (
-          <ActionButton
-            iconColor='white'
-            backgroundColor='cyan-700'
-            textColor='white'
-            text='Editar anúncio'
-            icon='id-card'
-            onPress={handleSave}
-          />
-        )}
-      </StyledView>
     </StyledKeyboardAvoidingView>
   )
 }

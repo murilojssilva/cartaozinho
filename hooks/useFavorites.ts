@@ -16,7 +16,7 @@ export function useFavorites() {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false)
   const navigation = useNavigation()
 
-  const updateNavigationParams = (updatedFavorites: IAdProps) => {
+  const updateNavigationParams = (updatedFavorites: IAdProps[]) => {
     navigation.setParams({ favoritesSize: updatedFavorites.length })
   }
 
@@ -34,7 +34,7 @@ export function useFavorites() {
       Toast.show({
         type: 'error',
         text1: 'Erro ao carregar favoritos.',
-        text2: error.message,
+        text2: error as string,
       })
     } finally {
       setIsFavoriteLoading(false)

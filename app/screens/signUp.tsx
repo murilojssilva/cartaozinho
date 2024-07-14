@@ -6,15 +6,16 @@ import { Platform } from 'react-native'
 import {
   StyledKeyboardAvoidingView,
   StyledScrollView,
+  StyledTextInputMask,
   StyledView,
 } from '../styled'
-import { TextInputMask } from 'react-native-masked-text'
 import { useAuthForm } from '@/hooks/useAuthForm'
 
 export function SignUp() {
   const { formValues, isLoading, handleChange, handleSignUp } = useAuthForm({
     name: '',
     lastName: '',
+    nickname: '',
     phone: '',
     email: '',
     password: '',
@@ -39,8 +40,16 @@ export function SignUp() {
             value={formValues.lastName}
             onChangeText={(text) => handleChange('lastName', text)}
           />
+          <InputText
+            text='Nome de usuário'
+            value={formValues.nickname}
+            autoCapitalize='none'
+            onChangeText={(text) =>
+              handleChange('nickname', text.replace(/\s/g, '').toLowerCase())
+            }
+          />
 
-          <TextInputMask
+          <StyledTextInputMask
             placeholder='(00) 0000-0000'
             type={'cel-phone'}
             options={{
@@ -56,7 +65,9 @@ export function SignUp() {
           <InputText
             text='E-mail'
             value={formValues.email}
-            onChangeText={(text) => handleChange('email', text)}
+            onChangeText={(text) =>
+              handleChange('email', text.replace(/\s/g, '').toLowerCase())
+            }
             keyboardType='email-address'
           />
 

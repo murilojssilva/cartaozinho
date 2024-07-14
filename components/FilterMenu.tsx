@@ -8,7 +8,11 @@ import {
   StyledView,
 } from '@/app/styled'
 import { FilterCategoryButton } from '@/components/FilterCategoryButton'
-import { categories, serviceTypes, officeTypes } from '@/app/constants'
+import {
+  defaultCategories,
+  defaultServiceTypes,
+  defaultOfficeTypes,
+} from '@/app/constants'
 import { ActionButton } from './ActionButton'
 import {
   GestureHandlerRootView,
@@ -145,7 +149,7 @@ export function FilterMenu({
                 scrollEnabled={true}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={categories}
+                data={defaultCategories}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }: { item: string }) => (
                   <FilterCategoryButton
@@ -164,13 +168,13 @@ export function FilterMenu({
               />
 
               <StyledText className='text-lg font-semibold mt-4'>
-                Tipo
+                Tipo de Atendimento
               </StyledText>
               <StyledFlatList
                 scrollEnabled={true}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={officeTypes}
+                data={defaultOfficeTypes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }: { item: string }) => (
                   <FilterCategoryButton
@@ -195,7 +199,7 @@ export function FilterMenu({
                 scrollEnabled={true}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={serviceTypes}
+                data={defaultServiceTypes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }: { item: string }) => (
                   <FilterCategoryButton

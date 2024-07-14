@@ -25,7 +25,6 @@ export const UserProvider: React.FC = ({ children }) => {
         const storedUser = await AsyncStorage.getItem('user')
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser)
-          console.log('User loaded from AsyncStorage:', parsedUser)
           setUserState(parsedUser)
         }
       } catch (error) {
@@ -39,10 +38,8 @@ export const UserProvider: React.FC = ({ children }) => {
     setUserState(newUser)
     if (newUser) {
       await AsyncStorage.setItem('user', JSON.stringify(newUser))
-      console.log('User saved to AsyncStorage:', newUser)
     } else {
       await AsyncStorage.removeItem('user')
-      console.log('User removed from AsyncStorage')
     }
   }
 

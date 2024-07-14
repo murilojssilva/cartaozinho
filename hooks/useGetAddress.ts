@@ -3,7 +3,7 @@ import axios from 'axios'
 import Toast from 'react-native-toast-message'
 
 export default function useGetAddress() {
-  const [address, setAddress] = useState({
+  const [newAddress, setNewAddress] = useState({
     cep: '',
     street: '',
     number: '',
@@ -16,7 +16,7 @@ export default function useGetAddress() {
   const handleCepChange = async (cep: string) => {
     const cleanedCep = cep.replace('-', '')
 
-    setAddress((prevAddress) => ({ ...prevAddress, cep }))
+    setNewAddress((prevAddress) => ({ ...prevAddress, cep }))
 
     if (cleanedCep.length === 8) {
       try {
@@ -25,7 +25,7 @@ export default function useGetAddress() {
         )
         const { logradouro, bairro, localidade, uf } = response.data
 
-        setAddress((prevAddress) => ({
+        setNewAddress((prevAddress) => ({
           ...prevAddress,
           street: logradouro,
           neighborhood: bairro,
@@ -43,8 +43,8 @@ export default function useGetAddress() {
   }
 
   return {
-    address,
-    setAddress,
+    newAddress,
+    setNewAddress,
     handleCepChange,
   }
 }

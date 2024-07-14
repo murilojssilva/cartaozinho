@@ -6,6 +6,7 @@ import { userEdit } from '@/app/storage/user/userEdit'
 import { usersGetAll } from '@/app/storage/user/usersGetAll'
 import uuid from 'react-native-uuid'
 import { useUser } from '@/app/context/UserContext'
+import { userGetById } from '@/app/storage/user/userGetById'
 
 interface AuthForm {
   email: string
@@ -15,6 +16,7 @@ interface AuthForm {
 interface SignUpForm extends AuthForm {
   name: string
   lastName: string
+  nickname: string
   phone: string
   confirmPassword: string
 }
@@ -22,6 +24,7 @@ interface SignUpForm extends AuthForm {
 interface EditProfileForm {
   name: string
   lastName: string
+  nickname: string
   phone: string
 }
 
@@ -36,6 +39,9 @@ export function useAuthForm(
 ) {
   const [formValues, setFormValues] = useState(initialValues)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingUserAd, setIsLoadingUserAd] = useState(false)
+  const [userAd, setUserAd] = useState({})
+
   const navigation = useNavigation()
   const { user, setUser } = useUser()
 
@@ -90,11 +96,19 @@ export function useAuthForm(
   }
 
   const handleSignUp = () => {
-    const { name, lastName, phone, email, password, confirmPassword } =
-      formValues as SignUpForm
+    const {
+      name,
+      lastName,
+      nickname,
+      phone,
+      email,
+      password,
+      confirmPassword,
+    } = formValues as SignUpForm
     if (
       !name ||
       !lastName ||
+      !nickname ||
       !phone ||
       !email ||
       !password ||
@@ -121,7 +135,15 @@ export function useAuthForm(
     setIsLoading(true)
 
     try {
-      userCreate({ id: uuid.v4(), name, phone, lastName, email, password })
+      userCreate({
+        id: uuid.v4(),
+        name,
+        phone,
+        lastName,
+        nickname,
+        email,
+        password,
+      })
       Toast.show({
         text1: 'Conta criada com sucesso!',
         text2: 'Sua conta foi criada com sucesso.',
@@ -159,8 +181,8 @@ export function useAuthForm(
   }
 
   const handleEditProfile = async () => {
-    const { name, lastName, phone } = formValues as EditProfileForm
-    if (!name || !lastName || !phone) {
+    const { name, lastName, nickname, phone } = formValues as EditProfileForm
+    if (!name || !lastName || !nickname || !phone) {
       Toast.show({
         type: 'info',
         text1: 'Erro ao editar perfil',
@@ -172,7 +194,7 @@ export function useAuthForm(
     setIsLoading(true)
 
     try {
-      const updatedUser = { ...user, name, lastName, phone }
+      const updatedUser = { ...user, name, lastName, nickname, phone }
       // Atualizar o usuário no banco de dados
       await userEdit(updatedUser)
       setUser(updatedUser)
@@ -246,9 +268,29 @@ export function useAuthForm(
     }
   }
 
+  async function handleGetUserAd(id: string): Promise<IAdProps | null> {
+    setIsLoadingUserAd(true)
+    try {
+      const ad = await userGetById(id)
+      if (ad) setUserAd(ad)
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao buscar dados.',
+        text2: error as string,
+      })
+    } finally {
+      setIsLoadingUserAd(false)
+    }
+  }
+
   return {
     formValues,
     isLoading,
+    isLoadingUserAd,
+    userAd,
+    handleGetUserAd,
+    setIsLoadingUserAd,
     handleChange,
     handleLogin,
     handleSignUp,

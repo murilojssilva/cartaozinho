@@ -20,3 +20,10 @@ export const defaultServiceTypes = [
   'No estabelecimento',
   'Remoto',
 ]
+
+export const defaultFilter = {
+  categories: [],
+  name: '',
+  officeTypes: [],
+  serviceTypes: [],
+}

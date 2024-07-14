@@ -23,14 +23,13 @@ export function CardItem({
   officeTypes,
   serviceTypes,
   categories,
-  phone,
-  whatsapp,
-  instagram,
-  email,
+  contact,
+  address,
+  created_at,
+  updated_at,
   ...props
 }: ICardItemProps) {
-  const { toggleFavorite, isFavorited, loadFavorites, favorites } =
-    useFavorites()
+  const { toggleFavorite, isFavorited, loadFavorites } = useFavorites()
 
   const favoriteList = isFavorited(id)
 
@@ -110,44 +109,44 @@ export function CardItem({
         keyExtractor={(item, index) => index.toString()}
       />
       <StyledView className='flex-1 flex-row'>
-        {phone && (
+        {contact.phone && (
           <SocialButton
             text='Telefone'
             backgroundColor='gray-300'
             textColor='black'
             icon='phone'
-            onPress={() => Linking.openURL(`tel:${phone}`)}
+            onPress={() => Linking.openURL(`tel:${contact.phone}`)}
           />
         )}
-        {whatsapp && (
+        {contact.whatsapp && (
           <SocialButton
             text='WhatsApp'
             backgroundColor='gray-300'
             textColor='black'
             icon='whatsapp'
             onPress={() =>
-              Linking.openURL(`whatsapp://send?phone=55${whatsapp}`)
+              Linking.openURL(`whatsapp://send?phone=55${contact.whatsapp}`)
             }
           />
         )}
-        {instagram && (
+        {contact.instagram && (
           <SocialButton
             text='Instagram'
             backgroundColor='gray-300'
             textColor='black'
             icon='instagram'
             onPress={() =>
-              Linking.openURL(`https://instagram.com/${instagram}`)
+              Linking.openURL(`https://instagram.com/${contact.instagram}`)
             }
           />
         )}
-        {email && (
+        {contact.email && (
           <SocialButton
             text='E-mail'
             backgroundColor='gray-300'
             textColor='black'
             icon='envelope'
-            onPress={() => Linking.openURL(`mailto:${email}`)}
+            onPress={() => Linking.openURL(`mailto:${contact.email}`)}
           />
         )}
       </StyledView>

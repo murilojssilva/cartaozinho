@@ -1,7 +1,7 @@
 import { useNavigation } from 'expo-router'
 
-import { useState, useEffect, useCallback, useContext } from 'react'
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons'
+import { useState, useEffect, useCallback } from 'react'
+import { FontAwesome5, FontAwesome, FontAwesome6 } from '@expo/vector-icons'
 
 import {
   StyledFlatList,
@@ -30,6 +30,7 @@ import { SkeletonChangeCity } from '@/components/Skeletons/SkeletonChangeCity'
 import { RefreshControl } from 'react-native'
 import useOrderMenu from '@/hooks/useOrderMenu'
 import { useAds } from '@/hooks/useAds'
+import { defaultFilter } from '../constants'
 
 export function Home() {
   const navigation = useNavigation()
@@ -46,6 +47,23 @@ export function Home() {
   const [filterMenuVisible, setFilterMenuVisible] = useState(false)
 
   const { ads, isLoadingAds, fetchAds, filters, setFilters, setAds } = useAds()
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    filters.categories || []
+  )
+  const [selectedOfficeTypes, setSelectedOfficeTypes] = useState<string[]>(
+    filters.officeTypes || []
+  )
+  const [selectedServiceTypes, setSelectedServiceTypes] = useState<string[]>(
+    filters.serviceTypes || []
+  )
+
+  const handleClearFilters = () => {
+    setSelectedCategories([])
+    setSelectedOfficeTypes([])
+    setSelectedServiceTypes([])
+    setFilters(defaultFilter)
+  }
 
   const [orderMenuVisible, setOrderMenuVisible] = useState(false)
   const { orderMenu, setOrderMenu } = useOrderMenu()
@@ -89,7 +107,8 @@ export function Home() {
   useFocusEffect(
     useCallback(() => {
       fetchAds(selectedCity)
-    }, [selectedCity])
+      console.log(filters)
+    }, [selectedCity, filters])
   )
 
   return (
@@ -99,7 +118,7 @@ export function Home() {
         icon='home'
         iconAction='pluscircleo'
         iconActionColor='#0e7490'
-        onPress={() => navigation.navigate('NewAd')}
+        onPress={() => navigation.navigate('NewAd' as never)}
       />
 
       <StyledView className='flex-2 p-4'>
@@ -154,35 +173,61 @@ export function Home() {
                   onRefresh={() => fetchAds(selectedCity)}
                 />
               }
-              data={ads.filter((adsCity) => adsCity.city === city)}
+              data={ads.filter((adsCity) => adsCity.address.city === city)}
               ListHeaderComponent={
                 <StyledView className='flex-2 flex-row justify-between items-center'>
                   <Title text='Anúncios' />
 
-                  <StyledTouchableOpacity
-                    onPress={() => fetchAds(selectedCity)}
-                  >
-                    <FontAwesome size={20} name='refresh' color='white' />
-                  </StyledTouchableOpacity>
+                  <StyledView className='flex-2 flex-row gap-2'>
+                    {!(
+                      filters.categories.length === 0 &&
+                      filters.name.length === 0 &&
+                      filters.officeTypes.length === 0 &&
+                      filters.serviceTypes.length === 0
+                    ) && (
+                      <StyledTouchableOpacity onPress={handleClearFilters}>
+                        <FontAwesome6
+                          size={20}
+                          name='filter-circle-xmark'
+                          color='white'
+                        />
+                      </StyledTouchableOpacity>
+                    )}
+                    <StyledTouchableOpacity
+                      onPress={() => fetchAds(selectedCity)}
+                    >
+                      <FontAwesome size={20} name='refresh' color='white' />
+                    </StyledTouchableOpacity>
+                  </StyledView>
                 </StyledView>
               }
               renderItem={({ item }: { item: IAdProps }) => (
                 <CardItem
+                  description={item.description}
                   user_id={item.user_id}
                   id={item.id as string}
                   name={item.name}
-                  email={item.email}
-                  whatsapp={item.whatsapp}
-                  instagram={item.instagram}
-                  phone={item.phone}
+                  contact={item.contact}
+                  address={
+                    item.address as {
+                      cep: string
+                      street: string
+                      number: string
+                      neighborhood: string
+                      city: string
+                      state: string
+                      complement: string
+                    }
+                  }
                   office={item.office}
                   officeTypes={item.officeTypes}
                   serviceTypes={item.serviceTypes}
                   categories={item.categories}
+                  created_at={item.created_at}
+                  updated_at={item.updated_at}
                   onPress={() =>
                     navigation.navigate('Details', {
                       name: item.name,
-                      email: item.email,
                       id: item.id,
                       user_id: item.user_id,
                       office: item.office,
@@ -190,22 +235,18 @@ export function Home() {
                       categories: item.categories,
                       description: item.description,
                       serviceTypes: item.serviceTypes,
-                      phone: item.phone,
-                      whatsapp: item.whatsapp,
-                      instagram: item.instagram,
-                      cep: item.cep,
-                      street: item.street,
-                      number: item.number,
-                      neighborhood: item.neighborhood,
-                      city: item.city,
-                      state: item.state,
-                      complement: item.complement,
+                      contact: item.contact,
+                      address: item.address,
+                      created_at: item.created_at,
+                      updated_at: item.updated_at,
                     })
                   }
                 />
               )}
               ListEmptyComponent={
-                <EmptyList onPress={() => navigation.navigate('NewAd')} />
+                <EmptyList
+                  onPress={() => navigation.navigate('NewAd' as never)}
+                />
               }
               ListFooterComponent={<StyledView style={{ height: 350 }} />}
               keyExtractor={(item, index) => index.toString()}

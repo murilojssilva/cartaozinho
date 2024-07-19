@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 
 import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
@@ -20,6 +20,8 @@ import {
 } from '../styled'
 import { useFocusEffect } from 'expo-router'
 import { Platform } from 'react-native'
+import { usersGetAll } from '../storage/user/usersGetAll'
+import { IUserProps } from '../interfaces/IUserProps'
 
 export function EditAd() {
   const {
@@ -39,13 +41,24 @@ export function EditAd() {
 
   const { newAddress, handleCepChange, setNewAddress } = useGetAddress()
 
+  const [user, setUser] = useState<IUserProps>({} as IUserProps)
+
   useFocusEffect(
     useCallback(() => {
+      async function fetchUser() {
+        const users = await usersGetAll()
+        setUser(
+          users.find((user) => user.id === editedAd.user_id) as IUserProps
+        )
+      }
+
       handleGetEditedAd(id as string)
       setNewAddress((prevAddress) => ({
         ...prevAddress,
         ...editedAd.address,
       }))
+
+      fetchUser()
     }, [id, editedAd.address])
   )
 
@@ -134,9 +147,9 @@ export function EditAd() {
               <SkeletonInputText inputSize={6} />
             ) : (
               <InputText
-                value={editedAd.user_id}
+                value={`@${user?.nickname}`}
                 editable={false}
-                text='ID do usuário'
+                text='Usuário'
               />
             )}
             {isLoadingAllAds ? (
@@ -371,12 +384,19 @@ export function EditAd() {
           {isLoadingAllAds ? (
             <SkeletonInputText inputSize={6} />
           ) : (
-            <InputText
-              text='Whatsapp'
+            <StyledTextInputMask
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) ',
+              }}
+              placeholder='WhatsApp'
               value={editedAd.contact?.whatsapp}
               onChangeText={(text) =>
                 handleContactInputChange('whatsapp', text)
               }
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
           )}
           {isLoadingAllAds ? (
@@ -391,13 +411,20 @@ export function EditAd() {
           {isLoadingAllAds ? (
             <SkeletonInputText inputSize={6} />
           ) : (
-            <InputText
-              text='Instagram'
-              value={editedAd.contact?.instagram}
-              onChangeText={(text) =>
-                handleContactInputChange('instagram', text)
-              }
-            />
+            <StyledView className='flex-2 flex-row items-center bg-gray-200 rounded-xl'>
+              <StyledView className='border-r-2 border-gray-500 px-3 py-5'>
+                <StyledText className='text-sx text-gray-400 font-bold'>
+                  instagram.com
+                </StyledText>
+              </StyledView>
+              <InputText
+                text='Instagram'
+                value={editedAd.contact?.instagram}
+                onChangeText={(text) =>
+                  handleContactInputChange('instagram', text)
+                }
+              />
+            </StyledView>
           )}
         </StyledView>
       </StyledScrollView>

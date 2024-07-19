@@ -213,16 +213,23 @@ export function NewAd() {
               onChangeText={(text) => handleContactChange('whatsapp', text)}
               className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
             />
-            <InputText
-              text='Instagram'
-              autoCapitalize='none'
-              onChangeText={(text) =>
-                handleContactChange(
-                  'instagram',
-                  text.replace(/\s/g, '').toLowerCase()
-                )
-              }
-            />
+            <StyledView className='flex-2 flex-row items-center bg-gray-200 rounded-xl'>
+              <StyledView className='border-r-2 border-gray-500 px-3 py-5'>
+                <StyledText className='text-sx text-gray-400 font-bold'>
+                  instagram.com
+                </StyledText>
+              </StyledView>
+              <InputText
+                text='@usuario'
+                autoCapitalize='none'
+                onChangeText={(text) =>
+                  handleContactChange(
+                    'instagram',
+                    text.replace(/\s/g, '').toLowerCase()
+                  )
+                }
+              />
+            </StyledView>
             <InputText
               text='E-mail'
               keyboardType='email-address'

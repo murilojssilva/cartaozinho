@@ -1,3 +1,5 @@
+import React, { useEffect, useCallback } from 'react'
+
 import { ActionButton } from '@/components/ActionButton'
 import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
@@ -6,7 +8,6 @@ import { SkeletonInputText } from '@/components/Skeletons/SkeletonInputText'
 import { SkeletonTag } from '@/components/Skeletons/SkeletonTag'
 import { Tag } from '@/components/Tag'
 
-import { Platform } from 'react-native'
 import useGetAddress from '@/hooks/useGetAddress'
 import { defaultCategories } from '../constants'
 import { useAds } from '@/hooks/useAds'
@@ -17,12 +18,15 @@ import {
   StyledTextInputMask,
   StyledView,
 } from '../styled'
+import { useFocusEffect } from 'expo-router'
+import { Platform } from 'react-native'
 
 export function EditAd() {
   const {
     isLoadingAllAds,
-    handleContactChange,
     editedAd,
+    handleGetEditedAd,
+    id,
     setEditedAd,
     handleSaveAd,
     handleCategorySelected,
@@ -33,7 +37,64 @@ export function EditAd() {
     selectedServiceTypes,
   } = useAds()
 
-  const { newAddress, handleCepChange } = useGetAddress()
+  const { newAddress, handleCepChange, setNewAddress } = useGetAddress()
+
+  useFocusEffect(
+    useCallback(() => {
+      handleGetEditedAd(id as string)
+      setNewAddress((prevAddress) => ({
+        ...prevAddress,
+        ...editedAd.address,
+      }))
+    }, [id, editedAd.address])
+  )
+
+  useEffect(() => {
+    setNewAddress((prevAddress) => ({
+      ...prevAddress,
+      ...editedAd.address,
+    }))
+  }, [editedAd.address])
+
+  const handleInputChange = useCallback(
+    (field, value) => {
+      setEditedAd((prevAd) => ({
+        ...prevAd,
+        [field]: value,
+      }))
+    },
+    [setEditedAd]
+  )
+
+  const handleContactInputChange = useCallback(
+    (field, value) => {
+      setEditedAd((prevAd) => ({
+        ...prevAd,
+        contact: {
+          ...prevAd.contact,
+          [field]: value,
+        },
+      }))
+    },
+    [setEditedAd]
+  )
+
+  const handleAddressInputChange = useCallback(
+    (field, value) => {
+      setEditedAd((prevAd) => ({
+        ...prevAd,
+        address: {
+          ...prevAd.address,
+          [field]: value,
+        },
+      }))
+      setNewAddress((prevAddress) => ({
+        ...prevAddress,
+        [field]: value,
+      }))
+    },
+    [setEditedAd, setNewAddress]
+  )
 
   return (
     <StyledKeyboardAvoidingView
@@ -56,9 +117,7 @@ export function EditAd() {
             ) : (
               <InputText
                 value={editedAd.name}
-                onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, name: text })
-                }
+                onChangeText={(text) => handleInputChange('name', text)}
                 text='Nome'
               />
             )}
@@ -67,9 +126,7 @@ export function EditAd() {
             ) : (
               <InputText
                 value={editedAd.office}
-                onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, office: text })
-                }
+                onChangeText={(text) => handleInputChange('office', text)}
                 text='Nome'
               />
             )}
@@ -87,9 +144,7 @@ export function EditAd() {
             ) : (
               <InputText
                 value={editedAd.description}
-                onChangeText={(text) =>
-                  setEditedAd({ ...editedAd, description: text })
-                }
+                onChangeText={(text) => handleInputChange('description', text)}
                 numberOfLines={10}
                 multiline={true}
                 textAlignVertical='top'
@@ -204,110 +259,162 @@ export function EditAd() {
               />
             </StyledScrollView>
           )}
-          <StyledText className='font-bold text-xl my-4'>Endereço</StyledText>
-          {isLoadingAllAds ? (
-            <SkeletonInputText inputSize={6} />
-          ) : (
-            <StyledTextInputMask
-              value={newAddress?.cep}
-              onChangeText={handleCepChange}
-              type='zip-code'
-              keyboardType='number-pad'
-              placeholder='CEP'
-            />
-          )}
-          {isLoadingAllAds ? (
-            <SkeletonInputText inputSize={6} />
-          ) : (
-            <InputText value={newAddress?.street} editable={false} text='Rua' />
-          )}
-          {isLoadingAllAds ? (
-            <SkeletonInputText inputSize={6} />
-          ) : (
-            <InputText
-              value={newAddress?.neighborhood}
-              editable={false}
-              text='Bairro'
-            />
-          )}
-          {isLoadingAllAds ? (
-            <SkeletonInputText inputSize={6} />
-          ) : (
-            <InputText
-              value={newAddress?.city}
-              editable={false}
-              text='Cidade'
-            />
-          )}
-          {isLoadingAllAds ? (
-            <SkeletonInputText inputSize={6} />
-          ) : (
-            <InputText
-              value={newAddress?.state}
-              editable={false}
-              text='Estado'
-            />
-          )}
           <StyledText className='font-bold text-xl my-4'>
-            Informações de contato
+            Localização
           </StyledText>
           {isLoadingAllAds ? (
             <SkeletonInputText inputSize={6} />
           ) : (
-            <StyledView className='gap-2'>
-              <StyledTextInputMask
-                placeholder='(00) 0000-0000'
-                type={'cel-phone'}
-                keyboardType='phone-pad'
-                onChangeText={(text) => handleContactChange('phone', text)}
-                className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
-              />
-              <StyledTextInputMask
-                placeholder='(00) 00000-0000'
-                type={'cel-phone'}
-                keyboardType='numeric'
-                onChangeText={(text) => handleContactChange('whatsapp', text)}
-                className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
-              />
-              <InputText
-                text='Instagram'
-                autoCapitalize='none'
-                onChangeText={(text) =>
-                  handleContactChange(
-                    'instagram',
-                    text.replace(/\s/g, '').toLowerCase()
-                  )
-                }
-              />
-              <InputText
-                text='E-mail'
-                keyboardType='email-address'
-                autoCapitalize='none'
-                onChangeText={(text) =>
-                  handleContactChange(
-                    'email',
-                    text.replace(/\s/g, '').toLowerCase()
-                  )
-                }
-              />
-            </StyledView>
+            <StyledTextInputMask
+              type={'zip-code'}
+              value={newAddress?.cep}
+              onChangeText={(text) => {
+                handleCepChange(text)
+                handleAddressInputChange('cep', text)
+              }}
+              placeholder='CEP'
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            />
           )}
-        </StyledView>
-        <StyledView className='flex-1 flex-col gap-2 mt-4'>
           {isLoadingAllAds ? (
-            <SkeletonActionButton />
+            <SkeletonInputText inputSize={6} />
           ) : (
-            <ActionButton
-              iconColor='white'
-              backgroundColor='cyan-700'
-              textColor='white'
-              text='Salvar'
-              onPress={handleSaveAd}
-              icon='save'
+            <InputText
+              text='Rua'
+              value={newAddress?.street}
+              onChangeText={(text) =>
+                handleAddressInputChange('street', text ?? '')
+              }
+              editable={false}
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Número'
+              keyboardType='numeric'
+              value={newAddress?.number}
+              onChangeText={(text) => handleAddressInputChange('number', text)}
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Complemento'
+              value={newAddress?.complement}
+              onChangeText={(text) =>
+                handleAddressInputChange('complement', text)
+              }
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Bairro'
+              value={newAddress?.neighborhood}
+              onChangeText={(text) =>
+                handleAddressInputChange('neighborhood', text! ?? '')
+              }
+              style={{ overflow: 'hidden' }}
+            />
+          )}
+
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Cidade'
+              value={newAddress?.city}
+              onChangeText={(text) => {
+                handleAddressInputChange('city', text! ?? '')
+              }}
+              editable={false}
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Estado'
+              value={newAddress?.state ?? ''}
+              onChangeText={(text) =>
+                handleAddressInputChange('state', text ?? '')
+              }
+              editable={false}
+            />
+          )}
+
+          <StyledText className='font-bold text-xl my-4'>
+            Informações de contato
+          </StyledText>
+
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <StyledTextInputMask
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) ',
+              }}
+              placeholder='Telefone'
+              value={editedAd.contact?.phone}
+              onChangeText={(text) => handleContactInputChange('phone', text)}
+              className='bg-gray-200 p-4 justify-start rounded-xl flex-1 font-bold text-gray-900'
+            />
+          )}
+
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Whatsapp'
+              value={editedAd.contact?.whatsapp}
+              onChangeText={(text) =>
+                handleContactInputChange('whatsapp', text)
+              }
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='E-mail'
+              value={editedAd.contact?.email}
+              onChangeText={(text) => handleContactInputChange('email', text)}
+            />
+          )}
+          {isLoadingAllAds ? (
+            <SkeletonInputText inputSize={6} />
+          ) : (
+            <InputText
+              text='Instagram'
+              value={editedAd.contact?.instagram}
+              onChangeText={(text) =>
+                handleContactInputChange('instagram', text)
+              }
             />
           )}
         </StyledView>
       </StyledScrollView>
+      <StyledView className='p-4'>
+        {isLoadingAllAds ? (
+          <SkeletonActionButton />
+        ) : (
+          <ActionButton
+            iconColor='white'
+            backgroundColor='cyan-700'
+            textColor='white'
+            text='Salvar'
+            onPress={handleSaveAd}
+            icon='save'
+          />
+        )}
+      </StyledView>
     </StyledKeyboardAvoidingView>
   )
 }

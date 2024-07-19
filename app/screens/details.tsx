@@ -22,6 +22,7 @@ import { useUser } from '../context/UserContext'
 import { useAds } from '@/hooks/useAds'
 import { useAuthForm } from '@/hooks/useAuthForm'
 import { formatDate } from '../utils/formatDate'
+import { TimeCard } from './TimeCard'
 
 export function Details() {
   const params = useLocalSearchParams()
@@ -105,7 +106,7 @@ export function Details() {
           ) : (
             <ProfileCard
               icon='suitcase'
-              title='Cargo'
+              title='Função'
               text={(ad.office as string) || 'Não disponível'}
             />
           )}
@@ -316,27 +317,21 @@ export function Details() {
         {isLoadingAd ? (
           <SkeletonCategoryCard heightSize={40} />
         ) : (
-          <StyledView className='bg-gray-200 p-4 rounded-xl mb-4'>
-            <StyledText className='font-bold text-xl mb-4'>
-              Criado em
-            </StyledText>
-            <StyledText className='text-sm text-gray-700 '>
-              {formatDate(ad.created_at) || 'Não disponível'}
-            </StyledText>
-          </StyledView>
+          <TimeCard
+            text='Criado em'
+            value={formatDate(ad.created_at) || 'Não disponível'}
+            icon='clock'
+          />
         )}
 
         {isLoadingAd ? (
           <SkeletonCategoryCard heightSize={40} />
         ) : (
-          <StyledView className='bg-gray-200 p-4 rounded-xl mb-4'>
-            <StyledText className='font-bold text-xl mb-4'>
-              Editado em
-            </StyledText>
-            <StyledText className='text-sm text-gray-700 '>
-              {formatDate(ad.updated_at) || 'Não disponível'}
-            </StyledText>
-          </StyledView>
+          <TimeCard
+            text='Editado em'
+            value={formatDate(ad.updated_at) || 'Não disponível'}
+            icon='pen'
+          />
         )}
       </StyledView>
 

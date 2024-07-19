@@ -17,16 +17,13 @@ import {
 } from '@/app/constants'
 import useGetAddress from './useGetAddress'
 import { adGetById } from '@/app/storage/ad/adGetById'
+import axios from 'axios'
 
 export const useAds = () => {
   const {
-    name,
     id,
-    office,
-    description,
     contact,
     address,
-    created_at,
     officeTypes: selectedOfficeTypesFromParams = defaultOfficeTypes,
     serviceTypes: selectedServiceTypesFromParams = defaultServiceTypes,
     categories: selectedCategoriesFromParams = defaultCategories,
@@ -41,32 +38,15 @@ export const useAds = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     selectedCategoriesFromParams
   )
-  const { newAddress, setNewAddress, handleCepChange } = useGetAddress()
+  const { newAddress, setNewAddress } = useGetAddress()
 
   const [ads, setAds] = useState<IAdProps[]>([])
-  const [editedAd, setEditedAd] = useState<IAdProps>({
-    id: '',
-    user_id: '',
-    name: '',
-    office: '',
-    description: '',
-    contact: {
-      phone: '',
-      email: '',
-      whatsapp: '',
-      instagram: '',
-    },
-    officeTypes: selectedOfficeTypes,
-    serviceTypes: selectedServiceTypes,
-    categories: selectedCategories,
-    address: newAddress,
-    created_at: 0,
-    updated_at: 0,
-  })
+  const [ad, setAd] = useState({} as IAdProps)
+  const [editedAd, setEditedAd] = useState<IAdProps>(ad as IAdProps)
   const [allAds, setAllAds] = useState<IAdProps[]>([])
   const [myAds, setMyAds] = useState<IAdProps[]>([])
   const [isLoadingAds, setIsLoadingAds] = useState(false)
-  const [ad, setAd] = useState({} as IAdProps)
+
   const [isLoadingAd, setIsLoadingAd] = useState(false)
   const [isLoadingAllAds, setIsLoadingAllAds] = useState(false)
   const [isLoadingMyAds, setIsLoadingMyAds] = useState(false)
@@ -79,6 +59,8 @@ export const useAds = () => {
     serviceTypes: [],
   })
   const { user } = useUser()
+
+  const { handleCepChange } = useGetAddress()
 
   const fetchAllAds = async () => {
     try {
@@ -226,10 +208,6 @@ export const useAds = () => {
     }
   }
 
-  useEffect(() => {
-    setNewAddress(address as any)
-  }, [address, setNewAddress])
-
   const handleOfficeTypesSelected = (tag: string) => {
     setSelectedOfficeTypes((prevSelected) => {
       if (prevSelected.includes(tag)) {
@@ -266,6 +244,7 @@ export const useAds = () => {
       const ad = await adGetById(id)
       if (ad) {
         setAd(ad)
+        setEditedAd(ad)
       } else {
         Toast.show({
           type: 'info',
@@ -284,28 +263,65 @@ export const useAds = () => {
     }
   }
 
+  async function handleGetEditedAd(id: string): Promise<IAdProps | null> {
+    setIsLoadingAd(true)
+    try {
+      const edtitableAd = await adGetById(id)
+
+      setEditedAd(edtitableAd as IAdProps)
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao buscar dados.',
+        text2: error as string,
+      })
+    } finally {
+      setIsLoadingAd(false)
+    }
+  }
+
   const handleSaveAd = async () => {
     try {
+      const response = await axios.get(
+        `https://viacep.com.br/ws/${editedAd.address.cep}/json/`
+      )
+      const { logradouro, bairro, localidade, uf, erro } = response.data
+      console.log(editedAd)
       const updatedAd = {
+        ...editedAd,
         id,
-        name,
-        office,
-        description,
-        contact,
+        user_id: user?.id,
+        name: editedAd.name,
+        office: editedAd.office,
+        description: editedAd.description,
+        contact: {
+          email: editedAd.contact.email,
+          phone: editedAd.contact.phone,
+          whatsapp: editedAd.contact.whatsapp,
+          instagram: editedAd.contact.instagram,
+        },
         officeTypes: selectedOfficeTypes,
         serviceTypes: selectedServiceTypes,
         categories: selectedCategories,
-        address: newAddress,
-        created_at,
+        address: {
+          cep: editedAd.address.cep,
+          number: editedAd.address.number,
+          neighborhood: bairro,
+          street: logradouro,
+          city: localidade,
+          state: uf,
+          complement: editedAd.address.complement,
+        },
+        created_at: editedAd.created_at,
         updated_at: Date.now().toString(),
       }
 
-      await adEdit(updatedAd)
+      await adEdit(updatedAd as IAdProps)
 
       Toast.show({
         type: 'success',
         text1: 'Anúncio editado com sucesso',
-        onShow: () => navigation.navigate('Profile' as never),
+        onShow: () => navigation.navigate('Home' as never),
       })
     } catch (error) {
       Toast.show({
@@ -318,6 +334,10 @@ export const useAds = () => {
   useEffect(() => {
     fetchAllAds()
   }, [user])
+
+  useEffect(() => {
+    setNewAddress(address as any)
+  }, [address, setNewAddress, handleSaveAd])
 
   return {
     handleGetAd,
@@ -351,6 +371,8 @@ export const useAds = () => {
     handleOfficeTypesSelected,
     handleNewAd,
     ad,
+    id,
+    handleGetEditedAd,
     setAd,
     editedAd,
     setEditedAd,

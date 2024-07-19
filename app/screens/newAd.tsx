@@ -3,7 +3,6 @@ import { Header } from '@/components/Header'
 import { InputText } from '@/components/InputText'
 import { SpinnerButton } from '@/components/SpinnerButton'
 import { Tag } from '@/components/Tag'
-import { useNavigation } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import uuid from 'react-native-uuid'
@@ -122,11 +121,11 @@ export function NewAd() {
             <InputText
               text='ID do usuário'
               editable={false}
-              defaultValue={user?.id as string}
+              defaultValue={user?.nickname as string}
             />
 
             <InputText
-              text='Cargo'
+              text='Função'
               onChangeText={(text) => handleInputChange('office', text)}
             />
             <InputText
@@ -196,7 +195,9 @@ export function NewAd() {
             ))}
           </StyledScrollView>
 
-          <StyledText className='font-bold text-xl my-4'>Contato</StyledText>
+          <StyledText className='font-bold text-xl my-4'>
+            Informações de Contato
+          </StyledText>
           <StyledView className='gap-2'>
             <StyledTextInputMask
               placeholder='(00) 0000-0000'
@@ -235,9 +236,7 @@ export function NewAd() {
             />
           </StyledView>
 
-          <StyledText className='font-bold text-xl my-4'>
-            Localização
-          </StyledText>
+          <StyledText className='font-bold text-xl my-4'>Endereço</StyledText>
           <StyledView className='gap-2 mb-4'>
             <StyledTextInputMask
               type={'zip-code'}
